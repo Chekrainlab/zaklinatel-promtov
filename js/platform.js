@@ -3,6 +3,8 @@
 // Пока идёт реклама, звук игры на паузе (требование Яндекса).
 window.Platform = (function () {
   const KEY = "zaklinatel-save-v1";
+  // Таблица лидеров по звёздам. Её нужно создать в консоли разработчика с этим техническим именем.
+  const LEADERBOARD = "stars";
   let ysdk = null, player = null;
 
   function onYandex() {
@@ -18,14 +20,61 @@ window.Platform = (function () {
   }
 
   async function init() {
-    if (!onYandex()) return;
+    // В архиве для Яндекса загрузчик /sdk.js уже подключён в index.html (см. tools/build.py).
+    if (!window.YaGames && !onYandex()) return;
     try {
-      await loadScript("/sdk.js");
+      if (!window.YaGames) await loadScript("/sdk.js");
       ysdk = await window.YaGames.init();
       player = await ysdk.getPlayer({ scopes: false });
+      // Яндекс сам сообщает о паузе: реклама, окно покупки, свёрнутая вкладка.
+      ysdk.on?.("game_api_pause", () => window.Sound?.pause("sdk"));
+      ysdk.on?.("game_api_resume", () => window.Sound?.resume("sdk"));
     } catch (e) {
       console.warn("Yandex SDK недоступен, работаем без него", e);
     }
+  }
+
+  // Разметка геймплея: start — игрок управляет героем, stop — меню, окна, реклама.
+  let playing = false;
+  function gameplay(on) {
+    if (on === playing) return;
+    playing = on;
+    const api = ysdk?.features?.GameplayAPI;
+    on ? api?.start() : api?.stop();
+  }
+
+  const isAuthorized = () => !!player && (player.isAuthorized ? player.isAuthorized() : player.getMode?.() !== "lite");
+
+  // Вход через Яндекс только по кнопке игрока (требование 1.2). После входа отправляем рекорд.
+  async function login() {
+    if (!ysdk) return false;
+    try {
+      await ysdk.auth.openAuthDialog();
+      player = await ysdk.getPlayer({ scopes: false });
+    } catch { return false; }
+    return isAuthorized();
+  }
+
+  let lastScore = -1;
+  async function submitScore(score) {
+    if (!ysdk || !isAuthorized() || score <= lastScore) return;
+    try {
+      if (!(await ysdk.isAvailableMethod("leaderboards.setScore"))) return;
+      await ysdk.leaderboards.setScore(LEADERBOARD, score);
+      lastScore = score;
+    } catch (e) { console.warn("Рекорд не отправлен", e); }
+  }
+
+  // null — таблицы нет (игра открыта не в Яндекс Играх или таблица не создана).
+  async function topScores() {
+    if (!ysdk) return null;
+    try {
+      const res = await ysdk.leaderboards.getEntries(LEADERBOARD, { quantityTop: 10, includeUser: isAuthorized(), quantityAround: 1 });
+      return {
+        me: res.userRank || 0,
+        rows: res.entries.map(e => ({ rank: e.rank, score: e.score, name: e.player.publicName || "Игрок", me: e.rank === res.userRank })),
+      };
+    } catch (e) { console.warn("Таблица лидеров недоступна", e); return null; }
   }
 
   function ready() {
@@ -74,5 +123,6 @@ window.Platform = (function () {
     } });
   }
 
-  return { init, ready, load, save, rewarded, interstitial };
+  const hasSdk = () => !!ysdk;
+  return { init, ready, load, save, rewarded, interstitial, gameplay, hasSdk, isAuthorized, login, submitScore, topScores };
 })();

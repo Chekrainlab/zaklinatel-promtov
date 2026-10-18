@@ -3,8 +3,9 @@
   const { World, CHAPTERS, Platform, Sound } = window;
   const { TS, W, H } = World;
 
-  // ch — номер главы, met — вступление главы уже показано, done — пройденные квесты всех глав.
-  let save = { v: 3, ch: 0, met: false, done: [], pos: null };
+  // ch — номер главы, met — вступление главы уже показано, done — пройденные квесты всех глав,
+  // stars — лучший результат за каждый квест (3 — с первой попытки).
+  let save = { v: 3, ch: 0, met: false, done: [], pos: null, stars: {} };
   let chapter, grid, npcs, theme;
   const hero = { x: 0, y: 0, px: 0, py: 0, dir: [0, 1], moving: false };
   let busy = true, held = null, sparks = [];
@@ -13,6 +14,25 @@
   const isDone = id => save.done.includes(id);
   const currentQuest = () => chapter.quests.find(q => !isDone(q.id));
   function persist() { save.pos = { x: hero.x, y: hero.y }; Platform.save(save); }
+
+  const MAX_STARS = CHAPTERS.reduce((n, c) => n + c.quests.length * 3, 0);
+  const totalStars = () => Object.values(save.stars).reduce((a, b) => a + b, 0);
+  const chapterStars = c => c.quests.reduce((n, q) => n + (save.stars[q.id] || 0), 0);
+  const starRow = (n, max = 3) => "★".repeat(n) + `<i>${"★".repeat(max - n)}</i>`;
+  function updateStars() { $("stars").textContent = `★ ${totalStars()}`; }
+
+  // Холст целиком помещается в окно с сохранением пропорций 4:3 — без прокрутки страницы.
+  function fit() {
+    const r = $("stage").getBoundingClientRect();
+    const k = Math.max(1, Math.min(r.width / 4, r.height / 3));
+    cv.style.width = `${Math.floor(k * 4)}px`; cv.style.height = `${Math.floor(k * 3)}px`;
+    document.querySelector(".goal").style.maxWidth = `${Math.max(300, Math.floor(k * 4))}px`;
+  }
+  // Следим за самой областью сцены: её размер меняется и при повороте, и когда догружаются шрифты.
+  if (window.ResizeObserver) new ResizeObserver(fit).observe($("stage"));
+  addEventListener("resize", fit);
+  addEventListener("orientationchange", () => setTimeout(fit, 200));
+  addEventListener("contextmenu", e => e.preventDefault());
 
   function loadChapter(ch) {
     chapter = CHAPTERS[ch];
@@ -112,9 +132,10 @@
   }
   function loop(t) { step(); draw(t); requestAnimationFrame(loop); }
 
-  const KEYS = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] };
-  addEventListener("keydown", e => { const k = KEYS[e.key]; if (k && !busy) { e.preventDefault(); held = k; } });
-  addEventListener("keyup", e => { if (KEYS[e.key]) held = null; });
+  // e.code не зависит от раскладки: WASD работает и на русской клавиатуре.
+  const KEYS = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], KeyW: [0, -1], KeyS: [0, 1], KeyA: [-1, 0], KeyD: [1, 0] };
+  addEventListener("keydown", e => { const k = KEYS[e.code]; if (k && !busy) { e.preventDefault(); held = k; } });
+  addEventListener("keyup", e => { if (KEYS[e.code]) held = null; });
   for (const b of document.querySelectorAll("#pad button")) {
     const d = b.dataset.d.split(",").map(Number);
     b.addEventListener("pointerdown", e => { e.preventDefault(); held = d; });
@@ -162,7 +183,7 @@
   function openBuilder(q) {
     busy = true; held = null;
     const picks = [];
-    let hintSlot = -1;
+    let hintSlot = -1, mistakes = 0;
     const shuffled = q.slots.map(s => [...s.opts].sort(() => Math.random() - .5));
     const render = fail => {
       const parts = q.slots.map((s, i) => picks[i] != null
@@ -178,15 +199,15 @@
         ${fail ? `<div class="result">${fail}</div>` : ""}
         <div class="row">
           <button class="grow" id="b-cast" ${ready ? "" : "disabled"}>Попросить Духа</button>
-          <button class="ad" id="b-hint">Подсказка</button>
+          <button class="ad" id="b-hint">Подсказка за рекламу</button>
           <button class="ghost" id="b-later">Позже</button>
         </div></div>`;
       for (const b of sheetBody.querySelectorAll(".card")) b.onclick = () => { Sound.sfx("click"); picks[+b.dataset.s] = +b.dataset.o; render(); };
       $("b-cast").onclick = () => {
         const bad = picks.map((p, i) => shuffled[i][p]).find(o => !o.ok);
-        if (bad) { Sound.sfx("fail"); return render(bad.fail); }
+        if (bad) { mistakes++; Sound.sfx("fail"); return render(bad.fail); }
         sheet.hidden = true;
-        complete(q);
+        complete(q, mistakes === 0 ? 3 : mistakes === 1 ? 2 : 1);
       };
       $("b-hint").onclick = () => rewarded(() => {
         hintSlot = q.slots.findIndex((_, i) => picks[i] == null || !shuffled[i][picks[i]].ok);
@@ -197,11 +218,14 @@
     sheet.hidden = false; render();
   }
 
-  function complete(q) {
-    save.done.push(q.id); persist();
+  function complete(q, stars) {
+    save.done.push(q.id);
+    save.stars[q.id] = Math.max(save.stars[q.id] || 0, stars);
+    persist(); updateStars(); Platform.submitScore(totalStars());
     applyEffect(q.effect, true); Sound.sfx("magic");
     setTimeout(() => Sound.sfx(q.final ? "fanfare" : "win"), 700);
-    setTimeout(() => modal(`<h2>Получилось!</h2><div class="lesson">${q.lesson}</div><button id="m-ok">Дальше</button>`, () => {
+    setTimeout(() => modal(`<h2>Получилось!</h2><div class="big-stars">${starRow(stars)}</div>
+      <p>${stars === 3 ? "С первой попытки!" : stars === 2 ? "Почти идеально: одна ошибка." : "Получилось, хоть и не сразу."}</p><div class="lesson">${q.lesson}</div><button id="m-ok">Дальше</button>`, () => {
       say(q.after, () => {
         updateGoal();
         if (q.final) ending(); else Platform.interstitial();
@@ -212,10 +236,10 @@
   // ---------- Окна и реклама ----------
   const overlay = $("overlay");
   function modal(html, onOk) {
-    busy = true;
+    busy = true; Platform.gameplay(false);
     $("modal").innerHTML = html; overlay.hidden = false;
     const ok = $("m-ok");
-    if (ok) { ok.focus(); ok.onclick = () => { overlay.hidden = true; busy = false; onOk?.(); }; }
+    if (ok) { ok.focus(); ok.onclick = () => { overlay.hidden = true; busy = false; Platform.gameplay(true); onOk?.(); }; }
   }
   // Вне Яндекса вместо ролика показываем обратный отсчёт.
   function mockAd(done) {
@@ -229,10 +253,12 @@
   }
   const rewarded = cb => Platform.rewarded(cb, mockAd);
 
-  // В конце главы сразу сохраняем переход в следующую, чтобы после перезагрузки игрок оказался там.
+  // В конце главы сразу сохраняем переход дальше, чтобы после перезагрузки игрок оказался там.
+  // «Дальше» — первая непройденная глава: после повтора старой главы игрок возвращается к своему прогрессу.
   function ending() {
-    const e = chapter.story.ending, next = CHAPTERS[save.ch + 1];
-    if (next) { save.ch++; save.met = false; save.pos = null; Platform.save(save); }
+    const e = chapter.story.ending;
+    const ni = CHAPTERS.findIndex(c => c.quests.some(q => !isDone(q.id))), next = CHAPTERS[ni];
+    if (next) { save.ch = ni; save.met = next.quests.some(q => isDone(q.id)); save.pos = null; Platform.save(save); }
     modal(`<h2>${e.title}</h2><div class="lesson">${e.lesson}</div><p>${e.next}</p>
       <button id="m-ok">${next ? `Глава ${next.n}: ${next.name}` : "Гулять дальше"}</button>`, () => {
       if (!next) return;
@@ -240,35 +266,85 @@
     });
   }
 
+  // ---------- Главное меню: главы, шпаргалка, рекорды ----------
+  const unlocked = i => i === 0 || CHAPTERS[i - 1].quests.every(q => isDone(q.id));
+  function backToTitle() { busy = true; Platform.gameplay(false); showTitle(); }
+
+  function chaptersMenu() {
+    $("title").hidden = true;
+    modal(`<h2>Главы</h2><div class="chapters">${CHAPTERS.map((c, i) => `
+      <button data-i="${i}" class="${i === save.ch ? "cur" : ""}" ${unlocked(i) ? "" : "disabled"}>
+        ${c.n}. ${unlocked(i) ? c.name : "Закрыто"}<span>★ ${chapterStars(c)}/${c.quests.length * 3}</span></button>`).join("")}</div>
+      <p>Пройденную главу можно переиграть и собрать все звёзды.</p><button id="m-ok" class="ghost">Назад</button>`, backToTitle);
+    for (const b of document.querySelectorAll(".chapters button")) b.onclick = () => {
+      const i = +b.dataset.i, c = CHAPTERS[i];
+      overlay.hidden = true;
+      if (i !== save.ch) {
+        // Повтор главы: её квесты снова открыты, звёзды остаются лучшими.
+        if (c.quests.every(q => isDone(q.id))) save.done = save.done.filter(id => !c.quests.some(q => q.id === id));
+        save.ch = i; save.met = c.quests.some(q => isDone(q.id)); save.pos = null; Platform.save(save);
+        loadChapter(i);
+      }
+      Platform.gameplay(true); startChapter();
+    };
+  }
+
+  function notesMenu() {
+    const items = CHAPTERS.flatMap(c => c.quests.filter(q => isDone(q.id) || save.stars[q.id]).map(q => `<li><b>${q.title}.</b> ${q.lesson}</li>`));
+    $("title").hidden = true;
+    modal(`<h2>Шпаргалка вайбкодера</h2><ol class="notes">${items.join("")}</ol><button id="m-ok">Назад</button>`, backToTitle);
+  }
+
+  async function topMenu() {
+    $("title").hidden = true;
+    modal(`<h2>Рекорды</h2><p>Загружаем таблицу…</p>`);
+    const top = await Platform.topScores();
+    const login = !Platform.isAuthorized()
+      ? `<p>Войдите через Яндекс, чтобы ваши звёзды попали в таблицу, а прогресс сохранялся на всех устройствах.</p><button id="m-login">Войти через Яндекс</button>` : "";
+    const list = top && top.rows.length
+      ? `<ol class="top">${top.rows.map(r => `<li class="${r.me ? "me" : ""}"><b>${r.rank}</b><span>${r.name}</span>★ ${r.score}</li>`).join("")}</ol>`
+      : `<p>${top ? "В таблице пока никого нет. Будьте первым!" : "Таблица рекордов работает, когда игра открыта в Яндекс Играх."}</p>`;
+    modal(`<h2>Рекорды</h2><p>Ваши звёзды: ★ ${totalStars()} из ${MAX_STARS}</p>${list}${top ? login : ""}<button id="m-ok" class="ghost">Назад</button>`, backToTitle);
+    const lb = $("m-login");
+    if (lb) lb.onclick = async () => { if (await Platform.login()) { await Platform.submitScore(totalStars()); topMenu(); } };
+  }
+
+  function showTitle() {
+    const play = $("t-play"), any = save.done.length > 0 || Object.keys(save.stars).length > 0;
+    play.textContent = save.met || save.ch > 0 ? "Продолжить" : "Играть";
+    $("t-stars").hidden = !any;
+    $("t-stars").textContent = `★ ${totalStars()} из ${MAX_STARS}`;
+    $("t-chapters").hidden = !any;
+    $("t-notes").hidden = !any;
+    $("t-top").hidden = !Platform.hasSdk() && !any;
+    $("title").hidden = false; play.focus();
+  }
+
   // ---------- Запуск ----------
   (async () => {
     await Platform.init();
     const data = await Platform.load();
-    if (data && data.v === 3) save = { ...save, ...data };
+    if (data && data.v === 3) save = { ...save, ...data, stars: data.stars || {} };
     else if (data && data.v === 2) save = { ...save, done: data.done || [], pos: data.pos, met: !!data.metAda };
     if (!CHAPTERS[save.ch]) save.ch = 0;
     // Глава пройдена, а переход не сохранился (старые сохранения) — сразу в следующую.
     while (CHAPTERS[save.ch + 1] && CHAPTERS[save.ch].quests.every(q => save.done.includes(q.id))) { save.ch++; save.met = false; save.pos = null; }
     loadChapter(save.ch);
+    fit(); updateStars();
     Platform.ready();
     const snd = $("snd"), showSnd = () => { snd.classList.toggle("off", !Sound.on); snd.setAttribute("aria-label", Sound.on ? "Выключить звук" : "Включить звук"); };
     snd.onclick = () => { Sound.unlock(); Sound.toggle(); showSnd(); };
     showSnd();
     requestAnimationFrame(loop);
     const play = $("t-play");
-    play.textContent = save.met || save.ch > 0 ? "Продолжить" : "Играть";
-    $("title").hidden = false; play.focus();
-    // Шпаргалка: уроки всех пройденных квестов, чтобы перечитать правила в любой момент.
-    const notes = $("t-notes");
-    notes.hidden = !save.done.length;
-    notes.onclick = () => {
-      const items = CHAPTERS.flatMap(c => c.quests.filter(q => isDone(q.id)).map(q => `<li><b>${q.title}.</b> ${q.lesson}</li>`));
-      $("title").hidden = true;
-      modal(`<h2>Шпаргалка вайбкодера</h2><ol class="notes">${items.join("")}</ol><button id="m-ok">Назад</button>`, () => { busy = true; $("title").hidden = false; play.focus(); });
-    };
+    $("t-chapters").onclick = chaptersMenu;
+    $("t-notes").onclick = notesMenu;
+    $("t-top").onclick = topMenu;
+    showTitle();
     play.onclick = () => {
       Sound.unlock();
       $("title").hidden = true;
+      Platform.gameplay(true);
       startChapter();
     };
   })();

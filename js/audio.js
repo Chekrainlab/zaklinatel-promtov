@@ -174,7 +174,10 @@ window.Sound = (function () {
 
   function pause(why) { paused.add(why); ac?.suspend(); }
   function resume(why) { paused.delete(why); if (ac && !paused.size) ac.resume(); }
+  // Требование Яндекса: звук замолкает, когда игра теряет фокус или вкладка скрыта.
   document.addEventListener("visibilitychange", () => document.hidden ? pause("hidden") : resume("hidden"));
+  addEventListener("blur", () => pause("blur"));
+  addEventListener("focus", () => resume("blur"));
 
   function toggle() {
     on = !on;

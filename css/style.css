@@ -22,7 +22,7 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
 body {
   background:
     radial-gradient(900px 500px at 15% -10%, rgba(108, 92, 255, .35), transparent 60%),
@@ -30,10 +30,15 @@ body {
     var(--bg);
   background-attachment: fixed;
   color: #eef1ff; font-family: var(--body); font-size: 15px;
-  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) 24px max(12px, env(safe-area-inset-left, 0px));
+  padding: max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) max(10px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
   -webkit-tap-highlight-color: transparent;
+  /* Требование Яндекс Игр: долгое нажатие не выделяет текст и не открывает меню. */
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation;
 }
-.wrap { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+/* Игра всегда целиком помещается в окно: прокрутки страницы нет, холст подгоняется скриптом. */
+.wrap { height: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.wrap > .goal { width: 100%; }
+.stage { flex: 1; min-height: 0; width: 100%; display: grid; place-items: center; position: relative; overflow: hidden; }
 
 /* Цель — «стеклянная» плашка */
 .goal {
@@ -57,7 +62,7 @@ body {
 .snd.off .wave { display: none; }
 
 canvas#cv {
-  display: block; width: 100%; height: auto; aspect-ratio: 4 / 3;
+  display: block; width: 320px; height: 240px; /* точный размер задаёт fit() в game.js */
   border-radius: 22px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .1), 0 24px 60px rgba(0, 0, 0, .45);
   background: #2d6b3a; touch-action: none;
 }
@@ -71,7 +76,19 @@ canvas#cv {
 .pad .u { grid-column: 2; grid-row: 1; } .pad .l { grid-column: 1; grid-row: 2; }
 .pad .r { grid-column: 3; grid-row: 2; } .pad .d { grid-column: 2; grid-row: 3; }
 .help { text-align: center; color: #9aa3c7; font-size: .85rem; margin: 0; }
-@media (min-width: 760px) { .pad { display: none; } }
+.pad { display: none; }
+.stars { flex: none; font-family: var(--head); font-weight: 900; color: var(--gold); font-size: 1rem; white-space: nowrap; }
+/* Кнопки-стрелки только на сенсорных экранах. В альбомной ориентации они лежат поверх мира слева внизу. */
+@media (hover: none) and (pointer: coarse) {
+  .pad { display: grid; }
+  .help { display: none; }
+}
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+  .wrap { gap: 6px; }
+  .pad { position: fixed; left: max(10px, env(safe-area-inset-left, 0px)); bottom: 10px; z-index: 5; margin: 0; opacity: .85; }
+}
+@media (max-width: 480px) { .goal { gap: 8px; padding: 8px 10px 8px 8px; } .goal span { font-size: .88rem; } .goal small { padding: 6px 9px; font-size: .66rem; } .snd { width: 34px; height: 34px; } }
+@media (max-height: 520px) { .help { display: none; } .goal { padding-top: 6px; padding-bottom: 6px; } }
 
 button {
   font-family: var(--head); font-weight: 800; font-size: 1rem; line-height: 1.2; border: 0; cursor: pointer; border-radius: 14px;
@@ -104,6 +121,20 @@ button.ghost { background: var(--card-2); color: var(--ink-soft); box-shadow: no
 }
 .title-card p { margin: 0; line-height: 1.55; color: var(--ink-soft); }
 .title-card button { font-size: 1.1rem; padding: 16px; margin-top: 6px; }
+.title-card .t-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.title-card .t-row button { flex: 1; font-size: .95rem; padding: 12px 10px; margin: 0; min-width: 100px; }
+.t-stars { font-family: var(--head); font-weight: 900; color: var(--gold-2) !important; font-size: 1.05rem; }
+.chapters { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.chapters button { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--card-2); color: var(--ink); box-shadow: none; font-size: 1rem; }
+.chapters button.cur { background: var(--brand-soft); color: #3b2fc9; }
+.chapters button span { color: var(--gold-2); white-space: nowrap; }
+.top { list-style: none; margin: 0; padding: 0; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+.top li { display: flex; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--card-2); }
+.top li.me { background: var(--brand-soft); font-weight: 700; }
+.top li b { width: 28px; color: var(--ink-soft); }
+.top li span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.big-stars { font-size: 2.2rem; letter-spacing: .1em; color: var(--gold); line-height: 1; }
+.big-stars i { font-style: normal; color: #dfe3ee; }
 
 /* Нижняя панель: диалоги и сборка промта */
 .sheet {
