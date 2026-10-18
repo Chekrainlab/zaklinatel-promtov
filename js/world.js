@@ -1,38 +1,65 @@
-// Карта мира и векторная отрисовка: мягкие формы, градиенты и свет вместо пикселей.
-// Буквы карты: . трава, p тропа, T дерево, ~ река, b место для моста, # скала,
-// d тёмная пещера, G ворота, H дом. A F M B — жители (на их месте трава/пещера).
+// Карты глав и векторная отрисовка: мягкие формы, градиенты и свет вместо пикселей.
+// Буквы карты: . трава, p тропа, T дерево, ~ вода, b место для моста, # скала,
+// d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка.
+// Жители: A F M B (глава 1), S K Q Z (глава 2); на их месте трава или то, что указано в under.
 window.World = (function () {
-  const MAP = [
-    "TTTTTTTTT~~TTTT#G#TT",
-    "TH....T..~~.TTT#B#TT",
-    "T.p......~~...##d##T",
-    "T.p..T...~~...#ddd#T",
-    "T.ppppp..~~...#d#d#T",
-    "T.....p..~~...#ddd#T",
-    "T..T..p..~~...##d##T",
-    "T.....pppbbppppp.M.T",
-    "T..T....F~~.......TT",
-    "T........~~..T.....T",
-    "T..A.....~~....T...T",
-    "T........~~........T",
-    "T..T.....~~...T....T",
-    "T........~~........T",
-    "TTTTTTTTT~~TTTTTTTTT",
+  const MAPS = [
+    { theme: "forest", start: { x: 4, y: 11 }, under: { B: "d" }, rows: [
+      "TTTTTTTTT~~TTTT#G#TT",
+      "TH....T..~~.TTT#B#TT",
+      "T.p......~~...##d##T",
+      "T.p..T...~~...#ddd#T",
+      "T.ppppp..~~...#d#d#T",
+      "T.....p..~~...#ddd#T",
+      "T..T..p..~~...##d##T",
+      "T.....pppbbppppp.M.T",
+      "T..T....F~~.......TT",
+      "T........~~..T.....T",
+      "T..A.....~~....T...T",
+      "T........~~........T",
+      "T..T.....~~...T....T",
+      "T........~~........T",
+      "TTTTTTTTT~~TTTTTTTTT",
+    ] },
+    { theme: "swamp", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTTTTTTTTTTTTTT",
+      "TT~~~~~~~~~~~#G#~~TT",
+      "T~~~~~~~~~~~~#Z#~~~T",
+      "T~~~~~~~~~~~~...~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T.~~~~~~~~~~~~~~~~.T",
+      "T.....n...ppppp.Q..T",
+      "T..T....ppp...n..T.T",
+      "TTTTTTffffTTTTTTTTTT",
+      "T....npppp.N.T.....T",
+      "T..S..p...K....T...T",
+      "T....pp.......T....T",
+      "T..T......T........T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
   ];
-  const TS = 48, W = 20, H = 15;
-  const START = { x: 4, y: 11 };
-  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G"]);
-  const WATER = new Set(["~", "b", "="]);
+  const THEMES = {
+    forest: { grass: ["#9bd86f", "#6cbd58"], tuft: "rgba(40,110,45,.45)", water: ["#5ab8f0", "#3d9be0"], bank: "#ecd9a4",
+      leaf: ["#2e8b47", "#3fa956", "#4bb862"], flowers: ["#ffffff", "#ffd54f", "#ff9ec4"] },
+    swamp: { grass: ["#8fbf7c", "#4f8a63"], tuft: "rgba(30,80,50,.5)", water: ["#6aa58a", "#3f7a66"], bank: "#a9b97c",
+      leaf: ["#245e4f", "#327a64", "#3f8f74"], flowers: ["#e8f5a0", "#c9b6ff", "#ffffff"], lily: true, fireflies: true },
+  };
+  const TS = 48, W = 20, H = 15, CHAPTERS = MAPS.length;
+  const NPC = "AFMBSKQZ";
+  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N"]);
+  const WATER = new Set(["~", "b", "=", "k"]);
   const PATHS = new Set(["p", "="]);
   const CAVE = new Set(["#", "d", "l", "G", "O"]);
 
-  function build() {
-    const grid = MAP.map(r => r.split(""));
+  function build(ch = 0) {
+    const m = MAPS[ch];
+    const grid = m.rows.map(r => r.split(""));
     const npcs = {};
     grid.forEach((row, y) => row.forEach((c, x) => {
-      if ("AFMB".includes(c)) { npcs[c] = { x, y, id: c }; row[x] = c === "B" ? "d" : "."; }
+      if (NPC.includes(c)) { npcs[c] = { x, y, id: c }; row[x] = m.under[c] || "."; }
     }));
-    return { grid, npcs };
+    return { grid, npcs, start: { ...m.start }, theme: THEMES[m.theme] };
   }
 
   const rnd = (x, y, k) => ((x * 73856093) ^ (y * 19349663) ^ (k * 83492791)) >>> 0;
@@ -46,10 +73,11 @@ window.World = (function () {
   }
 
   // ---------- Земля: трава, тропы, вода, камень ----------
-  function drawGround(ctx, grid, t) {
+  function drawGround(ctx, grid, t, th) {
     const at = (x, y) => (grid[y] && grid[y][x]) || "T";
+    const wet = (x, y) => x < 0 || y < 0 || x >= W || y >= H || WATER.has(grid[y][x]);
     const g = ctx.createLinearGradient(0, 0, W * TS, H * TS);
-    g.addColorStop(0, "#9bd86f"); g.addColorStop(1, "#6cbd58");
+    g.addColorStop(0, th.grass[0]); g.addColorStop(1, th.grass[1]);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W * TS, H * TS);
 
     // Пятна света и тени на траве, кустики и цветы.
@@ -59,35 +87,50 @@ window.World = (function () {
       const X = x * TS, Y = y * TS, r = rnd(x, y, 1);
       ellipse(ctx, X + r % TS, Y + (r >> 7) % TS, 22, 12, r % 2 ? "rgba(255,255,230,.10)" : "rgba(30,90,40,.08)");
       if (c !== "." && c !== "T") continue;
-      ctx.strokeStyle = "rgba(40,110,45,.45)"; ctx.lineWidth = 2; ctx.lineCap = "round";
+      ctx.strokeStyle = th.tuft; ctx.lineWidth = 2; ctx.lineCap = "round";
       const tx = X + 8 + rnd(x, y, 2) % 30, ty = Y + 14 + rnd(x, y, 3) % 26;
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.quadraticCurveTo(tx - 2, ty - 6, tx - 4, ty - 9);
       ctx.moveTo(tx + 3, ty); ctx.quadraticCurveTo(tx + 4, ty - 7, tx + 7, ty - 10); ctx.stroke();
       const f = rnd(x, y, 4) % 7;
       if (f < 2 && c === ".") {
-        const fx = X + 10 + rnd(x, y, 5) % 28, fy = Y + 10 + rnd(x, y, 6) % 28, col = ["#ffffff", "#ffd54f", "#ff9ec4"][rnd(x, y, 7) % 3];
+        const fx = X + 10 + rnd(x, y, 5) % 28, fy = Y + 10 + rnd(x, y, 6) % 28, col = th.flowers[rnd(x, y, 7) % 3];
         for (let i = 0; i < 5; i++) circle(ctx, fx + Math.cos(i * 1.26) * 3.5, fy + Math.sin(i * 1.26) * 3.5, 3, col);
         circle(ctx, fx, fy, 2.4, "#f4a62a");
       }
     }
 
-    // Река с берегами и бликами.
+    // Вода с берегами, бликами и кувшинками.
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       if (!WATER.has(grid[y][x])) continue;
       const X = x * TS, Y = y * TS;
       const wg = ctx.createLinearGradient(X, 0, X + TS, 0);
-      const left = !WATER.has(at(x - 1, y)), right = !WATER.has(at(x + 1, y));
-      wg.addColorStop(0, left ? "#5ab8f0" : "#3d9be0"); wg.addColorStop(1, right ? "#5ab8f0" : "#3d9be0");
+      const left = !wet(x - 1, y), right = !wet(x + 1, y), top = !wet(x, y - 1), bottom = !wet(x, y + 1);
+      wg.addColorStop(0, left ? th.water[0] : th.water[1]); wg.addColorStop(1, right ? th.water[0] : th.water[1]);
       ctx.fillStyle = wg; ctx.fillRect(X, Y, TS, TS);
-      ctx.strokeStyle = "rgba(255,255,255,.45)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+      ctx.strokeStyle = "rgba(255,255,255,.4)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
       for (let k = 0; k < 2; k++) {
         const wy = Y + ((t / 30 + rnd(x, y, k + 8) % TS + k * 24) % TS);
         const wx = X + 8 + rnd(x, y, k + 10) % 24;
         ctx.beginPath(); ctx.moveTo(wx, wy); ctx.quadraticCurveTo(wx + 5, wy + 3, wx + 10, wy); ctx.stroke();
       }
+      if (th.lily && grid[y][x] === "~" && rnd(x, y, 14) % 4 === 0) {
+        const lx = X + 12 + rnd(x, y, 15) % 24, ly = Y + 12 + rnd(x, y, 16) % 24, a = rnd(x, y, 17) % 6;
+        ctx.beginPath(); ctx.moveTo(lx, ly); ctx.arc(lx, ly, 8, a + .5, a + Math.PI * 2 - .2); ctx.closePath();
+        ctx.fillStyle = "#5fae5a"; ctx.fill();
+        if (rnd(x, y, 18) % 3 === 0) circle(ctx, lx + 2, ly - 1, 3, "#ffb3d1");
+      }
       const foam = .55 + Math.sin(t / 500 + y) * .2;
-      if (left) { ctx.fillStyle = "#ecd9a4"; ctx.fillRect(X - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + 4, Y, 3, TS); }
-      if (right) { ctx.fillStyle = "#ecd9a4"; ctx.fillRect(X + TS - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + TS - 7, Y, 3, TS); }
+      if (left) { ctx.fillStyle = th.bank; ctx.fillRect(X - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + 4, Y, 3, TS); }
+      if (right) { ctx.fillStyle = th.bank; ctx.fillRect(X + TS - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + TS - 7, Y, 3, TS); }
+      if (top) { ctx.fillStyle = th.bank; ctx.fillRect(X, Y - 4, TS, 8); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X, Y + 4, TS, 3); }
+      if (bottom) { ctx.fillStyle = th.bank; ctx.fillRect(X, Y + TS - 4, TS, 8); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X, Y + TS - 7, TS, 3); }
+      // Кочка: мшистый островок, по которому можно пройти.
+      if (grid[y][x] === "k") {
+        ellipse(ctx, X + 24, Y + 30, 20, 11, "rgba(20,50,40,.3)");
+        ellipse(ctx, X + 24, Y + 26, 19, 12, "#6b8a3e");
+        ellipse(ctx, X + 24, Y + 23, 16, 9, "#8fb556");
+        ellipse(ctx, X + 18, Y + 20, 5, 2.5, "rgba(255,255,255,.25)");
+      }
     }
 
     // Тропы: круги и перемычки к соседям дают плавную извилистую дорожку.
@@ -100,6 +143,8 @@ window.World = (function () {
         if (PATHS.has(at(x + 1, y)) || CAVE.has(at(x + 1, y))) ctx.fillRect(cx, cy - r, TS, r * 2);
         if (PATHS.has(at(x, y + 1)) || at(x, y + 1) === "d" || at(x, y + 1) === "l") ctx.fillRect(cx - r, cy, r * 2, TS);
         if (CAVE.has(at(x, y - 1))) ctx.fillRect(cx - r, cy - TS, r * 2, TS);
+        // Широкая тропа: заполняем середину квадрата из четырёх клеток.
+        if (at(x + 1, y) === "p" && at(x, y + 1) === "p" && at(x + 1, y + 1) === "p") ctx.fillRect(cx, cy, TS, TS);
       }
     };
     pathPass("#d9b878", 4); pathPass("#efd8a4", 8);
@@ -136,14 +181,15 @@ window.World = (function () {
   }
 
   // ---------- Объекты с глубиной: деревья, дом, ворота, факелы ----------
-  function drawTree(ctx, x, y, t) {
+  function drawTree(ctx, x, y, t, th) {
     const cx = x * TS + TS / 2, by = y * TS + TS - 2, sway = Math.sin(t / 1200 + x * .7 + y) * 1.5;
     ellipse(ctx, cx + 4, by - 2, 20, 7, "rgba(20,60,30,.28)");
     rr(ctx, cx - 5, by - 22, 10, 20, 4); ctx.fillStyle = "#8a5a33"; ctx.fill();
     const big = 0.9 + (rnd(x, y, 20) % 30) / 100;
     const blob = (dx, dy, r, c) => circle(ctx, cx + dx * big + sway, by + dy * big, r * big, c);
-    blob(-13, -26, 15, "#2e8b47"); blob(13, -26, 15, "#2e8b47"); blob(0, -38, 20, "#2e8b47");
-    blob(-10, -30, 12, "#3fa956"); blob(8, -32, 13, "#3fa956"); blob(-2, -42, 14, "#4bb862");
+    const [l0, l1, l2] = th.leaf;
+    blob(-13, -26, 15, l0); blob(13, -26, 15, l0); blob(0, -38, 20, l0);
+    blob(-10, -30, 12, l1); blob(8, -32, 13, l1); blob(-2, -42, 14, l2);
     blob(-6, -46, 6, "rgba(255,255,255,.22)");
   }
   function drawHouse(ctx, x, y) {
@@ -181,6 +227,40 @@ window.World = (function () {
     ellipse(ctx, X, Y - 1, 2.5, 4, "#fff3b0");
   }
 
+  // Туман: клубы, которые медленно дышат.
+  function drawFog(ctx, x, y, t) {
+    const X = x * TS + TS / 2, Y = y * TS + TS / 2;
+    for (let i = 0; i < 4; i++) {
+      const a = t / 1400 + i * 1.7 + x, r = 22 + (i % 2) * 6;
+      ctx.fillStyle = radial(ctx, X + Math.cos(a) * 12, Y + Math.sin(a) * 8 - 6, r * 1.4, [[0, "rgba(240,248,245,.85)"], [1, "rgba(240,248,245,0)"]]);
+      ctx.fillRect(X - 60, Y - 60, 120, 120);
+    }
+  }
+  function drawLantern(ctx, x, y, lit, t) {
+    const X = x * TS + TS / 2, Y = y * TS + 14;
+    ellipse(ctx, X + 3, Y + 30, 10, 4, "rgba(20,50,40,.3)");
+    if (lit) {
+      ctx.save(); ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = radial(ctx, X, Y, 60 + Math.sin(t / 400 + x) * 4, [[0, "rgba(180,255,160,.55)"], [1, "rgba(120,220,140,0)"]]);
+      ctx.fillRect(X - 64, Y - 64, 128, 128); ctx.restore();
+    }
+    rr(ctx, X - 2, Y + 4, 4, 28, 2); ctx.fillStyle = "#4b4038"; ctx.fill();
+    rr(ctx, X - 9, Y - 10, 18, 18, 7); ctx.fillStyle = lit ? "#c9ff9e" : "#7d8f86"; ctx.fill();
+    ctx.strokeStyle = "#3a332d"; ctx.lineWidth = 2; ctx.stroke();
+    ellipse(ctx, X, Y - 12, 10, 3.5, "#3a332d");
+    if (lit) ellipse(ctx, X, Y - 1, 3.5, 5, "#fffbe0");
+  }
+  function drawFireflies(ctx, t) {
+    ctx.save(); ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < 16; i++) {
+      const fx = (rnd(i, 1, 30) % (W * TS)) + Math.sin(t / 1700 + i) * 40, fy = (rnd(i, 2, 31) % (H * TS)) + Math.cos(t / 1300 + i * 2) * 30;
+      const a = .4 + .4 * Math.sin(t / 300 + i * 3);
+      ctx.fillStyle = radial(ctx, fx, fy, 9, [[0, `rgba(230,255,150,${a})`], [1, "rgba(230,255,150,0)"]]);
+      ctx.fillRect(fx - 9, fy - 9, 18, 18);
+    }
+    ctx.restore();
+  }
+
   // ---------- Персонажи в стиле «чиби» ----------
   const LOOKS = {
     hero: { skin: "#ffd8b8", body: "#6c4ff5", body2: "#5136d6" },
@@ -189,8 +269,12 @@ window.World = (function () {
     M: { skin: "#f2c39b", body: "#8a8fa3", body2: "#6d7286" },
     B: { skin: "#4a2a5e", body: "#5b1f4a", body2: "#3d1233" },
     S: { skin: "#9ff7d6", body: "#7cf5c8", body2: "#4fd4a8" },
+    K: { skin: "#d9f0c9", body: "#3d8a78", body2: "#2a6657" },
+    Q: { skin: "#7fd36b", body: "#7fd36b", body2: "#5cb04c" },
   };
+  const ALIAS = { Z: "B" };
   function drawCharacter(ctx, id, cx, by, t, o = {}) {
+    id = ALIAS[id] || id;
     const s = (o.scale || 1) * (id === "B" ? 1.2 : 1), L = LOOKS[id];
     const b = o.walk ? Math.abs(Math.sin(t / 85)) * 4 : Math.sin(t / 500 + cx) * 1.2;
     const look = o.flip ? -1 : 1;
@@ -211,6 +295,21 @@ window.World = (function () {
       ctx.quadraticCurveTo(10, -4 + fy, 6, -10 + fy); ctx.quadraticCurveTo(0, -4 + fy, -6, -10 + fy); ctx.quadraticCurveTo(-10, -4 + fy, -16, -10 + fy);
       ctx.fillStyle = "#b8ffe6"; ctx.fill();
       ellipse(ctx, -5, -30 + fy, 2.6, 3.6, "#1d4d45"); ellipse(ctx, 5, -30 + fy, 2.6, 3.6, "#1d4d45");
+      ctx.restore(); return;
+    }
+
+    if (id === "Q") {
+      const g = ctx.createLinearGradient(0, -40 - b, 0, -2); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
+      if (!o.portrait) { ellipse(ctx, -11, -4, 7, 4, L.body2); ellipse(ctx, 11, -4, 7, 4, L.body2); }
+      ellipse(ctx, 0, -20 - b, 18, 17, g);
+      ellipse(ctx, 0, -14 - b, 11, 9, "#d8f5b8");
+      for (const sx of [-8, 8]) {
+        circle(ctx, sx, -36 - b, 7.5, L.body); circle(ctx, sx, -36 - b, 5, "#fff");
+        circle(ctx, sx + look * 1.2, -36 - b, 2.8, "#1d2a1a"); circle(ctx, sx + look * 1.2 + 1, -37.2 - b, 1, "#fff");
+      }
+      ctx.strokeStyle = "#2d5a24"; ctx.lineWidth = 1.6; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.arc(look, -27 - b, 7, 0.25, Math.PI - 0.25); ctx.stroke();
+      ellipse(ctx, -12, -25 - b, 3, 2, "rgba(255,120,120,.35)"); ellipse(ctx, 12, -25 - b, 3, 2, "rgba(255,120,120,.35)");
       ctx.restore(); return;
     }
 
@@ -264,6 +363,13 @@ window.World = (function () {
       ctx.strokeStyle = "#6a5a7a"; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
     }
+    if (id === "K") {
+      ctx.fillStyle = "#5c9e4a";
+      ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI * 1.05, -0.05); ctx.fill();
+      rr(ctx, -16, hy - 6, 6, 24, 3); ctx.fill(); rr(ctx, 10, hy - 6, 6, 24, 3); ctx.fill();
+      for (let i = 0; i < 5; i++) circle(ctx, -10 + i * 5, hy - 13 + (i % 2) * 2, 4, "#6fb85a");
+      circle(ctx, 9, hy - 14, 3.5, "#ffb3d1"); circle(ctx, 9, hy - 14, 1.5, "#ffe08a");
+    }
     if (id === "F") {
       ellipse(ctx, 0, hy - 9, 22, 6, "#f0c75a");
       ctx.beginPath(); ctx.arc(0, hy - 10, 11, Math.PI, 0); ctx.fillStyle = "#f6d675"; ctx.fill();
@@ -295,12 +401,14 @@ window.World = (function () {
   }
 
   // actors: [{ id, px, py, flip, walk, marker }], px/py — левый верхний угол клетки.
-  function drawScene(ctx, grid, actors, t) {
-    drawGround(ctx, grid, t);
+  function drawScene(ctx, grid, actors, t, th = THEMES.forest) {
+    drawGround(ctx, grid, t, th);
     const items = [];
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       const c = grid[y][x];
-      if (c === "T") items.push({ z: y * TS + TS, d: () => drawTree(ctx, x, y, t) });
+      if (c === "T") items.push({ z: y * TS + TS, d: () => drawTree(ctx, x, y, t, th) });
+      else if (c === "f") items.push({ z: y * TS + TS + 2, d: () => drawFog(ctx, x, y, t) });
+      else if (c === "n" || c === "N") items.push({ z: y * TS + TS - 2, d: () => drawLantern(ctx, x, y, c === "N", t) });
       else if (c === "H") items.push({ z: y * TS + TS, d: () => drawHouse(ctx, x, y) });
       else if (c === "G" || c === "O") items.push({ z: y * TS, d: () => drawGate(ctx, x, y, c === "O", t) });
       else if (c === "l" && (x + y) % 2 === 0) items.push({ z: y * TS + 20, d: () => drawTorch(ctx, x, y, t) });
@@ -310,6 +418,7 @@ window.World = (function () {
       if (a.marker) drawMarker(ctx, a.px + TS / 2, a.py + TS - 4, t);
     } });
     items.sort((a, b) => a.z - b.z).forEach(i => i.d());
+    if (th.fireflies) drawFireflies(ctx, t);
   }
 
   function drawPortrait(ctx, id, size, t = 0) {
@@ -318,5 +427,5 @@ window.World = (function () {
     drawCharacter(ctx, id, size / 2, size * .5 + 42 * s, t, { scale: s, portrait: true });
   }
 
-  return { TS, W, H, START, SOLID, build, drawScene, drawPortrait, radial };
+  return { TS, W, H, CHAPTERS, SOLID, build, drawScene, drawPortrait, radial };
 })();

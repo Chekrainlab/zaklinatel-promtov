@@ -1,17 +1,36 @@
 (function () {
   const $ = id => document.getElementById(id);
-  const { World, STORY, QUESTS, Platform } = window;
+  const { World, CHAPTERS, Platform } = window;
   const { TS, W, H } = World;
 
-  const { grid, npcs } = World.build();
-  const hero = { x: World.START.x, y: World.START.y, px: 0, py: 0, dir: [0, 1], moving: false };
-  let save = { v: 2, metAda: false, done: [], pos: null };
+  // ch — номер главы, met — вступление главы уже показано, done — пройденные квесты всех глав.
+  let save = { v: 3, ch: 0, met: false, done: [], pos: null };
+  let chapter, grid, npcs, theme;
+  const hero = { x: 0, y: 0, px: 0, py: 0, dir: [0, 1], moving: false };
   let busy = true, held = null, sparks = [];
 
-  const quest = id => QUESTS.find(q => q.id === id);
+  const quest = id => chapter.quests.find(q => q.id === id);
   const isDone = id => save.done.includes(id);
-  const currentQuest = () => QUESTS.find(q => !isDone(q.id));
+  const currentQuest = () => chapter.quests.find(q => !isDone(q.id));
   function persist() { save.pos = { x: hero.x, y: hero.y }; Platform.save(save); }
+
+  function loadChapter(ch) {
+    chapter = CHAPTERS[ch];
+    const built = World.build(ch), start = built.start;
+    ({ grid, npcs, theme } = built);
+    for (const q of chapter.quests) if (isDone(q.id)) applyEffect(q.effect, false);
+    const p = save.pos;
+    const ok = p && !World.SOLID.has(grid[p.y][p.x]) && !npcAt(p.x, p.y);
+    hero.x = ok ? p.x : start.x; hero.y = ok ? p.y : start.y;
+    hero.px = hero.x * TS; hero.py = hero.y * TS; hero.dir = [0, 1]; hero.moving = false;
+    sparks = [];
+    $("chap").textContent = `Глава ${chapter.n}`;
+    updateGoal();
+  }
+  function startChapter() {
+    if (save.met) { busy = false; return; }
+    say(chapter.story.intro, () => { save.met = true; persist(); updateGoal(); });
+  }
 
   // ---------- Отрисовка ----------
   const cv = $("cv"), ctx = cv.getContext("2d");
@@ -22,10 +41,10 @@
   function draw(t) {
     const cur = currentQuest();
     const actors = Object.values(npcs).filter(n => !n.gone).map(n => ({
-      id: n.id, px: n.x * TS, py: n.y * TS, marker: save.metAda && cur && cur.id === n.id,
+      id: n.id, px: n.x * TS, py: n.y * TS, marker: save.met && cur && cur.id === n.id,
     }));
     actors.push({ id: "hero", px: hero.px, py: hero.py, flip: hero.dir[0] < 0, walk: hero.moving });
-    World.drawScene(ctx, grid, actors, t);
+    World.drawScene(ctx, grid, actors, t, theme);
     // Искры — мягкие светящиеся точки.
     sparks = sparks.filter(s => (s.life -= 1 / 60) > 0);
     ctx.globalCompositeOperation = "lighter";
@@ -46,7 +65,8 @@
   }
 
   // ---------- Изменения мира после квеста ----------
-  function applyEffect(e, animate) {
+  function applyEffect(effect, animate) { [].concat(effect).forEach(e => applyOne(e, animate)); }
+  function applyOne(e, animate) {
     const cells = e.set ? [...e.set] : [];
     if (e.replace) grid.forEach((r, y) => r.forEach((c, x) => { if (c === e.replace) cells.push([x, y]); }));
     cells.sort((a, b) => b[1] - a[1]);
@@ -71,9 +91,10 @@
   }
   let lastBump = 0;
   function bump(c) {
-    if (!STORY.bump[c] || Date.now() - lastBump < 1500) return;
+    const text = chapter.story.bump[c];
+    if (!text || Date.now() - lastBump < 1500) return;
     lastBump = Date.now(); held = null;
-    say([{ who: "Кодомаг", text: STORY.bump[c] }]);
+    say([{ who: "Кодомаг", text }]);
   }
   let lastSave = 0;
   function step() {
@@ -101,7 +122,8 @@
 
   // ---------- Диалоги ----------
   const sheet = $("sheet"), sheetBody = $("sheet-body");
-  const FACES = { "Бабушка Ада": "A", "Рыбак Фёдор": "F", "Шахтёр Михей": "M", "Повелитель Багов": "B", "Кодомаг": "hero", "Дух Кода": "S" };
+  const FACES = { "Бабушка Ада": "A", "Рыбак Фёдор": "F", "Шахтёр Михей": "M", "Повелитель Багов": "B", "Кодомаг": "hero", "Дух Кода": "S",
+    "Кикимора Кира": "K", "Лягушонок Квак": "Q" };
   function say(lines, done) {
     let i = 0; busy = true; held = null;
     const render = () => {
@@ -120,13 +142,13 @@
 
   function updateGoal() {
     const q = currentQuest();
-    $("goal").textContent = !save.metAda ? STORY.findAda : q ? q.goal : STORY.freed;
+    $("goal").textContent = !save.met ? chapter.story.find : q ? q.goal : chapter.story.freed;
   }
 
   function talkTo(id) {
-    if (id === "A") {
+    if (id === chapter.guide) {
       const q = currentQuest();
-      return say([{ who: "Бабушка Ада", text: q ? `Не забывай: ${q.goal.charAt(0).toLowerCase() + q.goal.slice(1)}` : "Ты справился, внучек! Я горжусь тобой." }]);
+      return say([{ who: chapter.guideName, text: q ? `Не забывай: ${q.goal.charAt(0).toLowerCase() + q.goal.slice(1)}` : chapter.story.guideDone }]);
     }
     const q = quest(id);
     if (isDone(id)) return say(q.after.slice(0, 1));
@@ -204,29 +226,35 @@
   }
   const rewarded = cb => Platform.rewarded(cb, mockAd);
 
+  // В конце главы сразу сохраняем переход в следующую, чтобы после перезагрузки игрок оказался там.
   function ending() {
-    const e = STORY.ending;
-    modal(`<h2>${e.title}</h2><div class="lesson">${e.lesson}</div><p>${e.next}</p><button id="m-ok">Гулять дальше</button>`);
+    const e = chapter.story.ending, next = CHAPTERS[save.ch + 1];
+    if (next) { save.ch++; save.met = false; save.pos = null; Platform.save(save); }
+    modal(`<h2>${e.title}</h2><div class="lesson">${e.lesson}</div><p>${e.next}</p>
+      <button id="m-ok">${next ? `Глава ${next.n}: ${next.name}` : "Гулять дальше"}</button>`, () => {
+      if (!next) return;
+      loadChapter(save.ch); busy = true; startChapter();
+    });
   }
 
   // ---------- Запуск ----------
   (async () => {
     await Platform.init();
     const data = await Platform.load();
-    if (data && data.v === 2) save = { ...save, ...data };
-    for (const id of save.done) applyEffect(quest(id).effect, false);
-    if (save.pos && !World.SOLID.has(grid[save.pos.y][save.pos.x]) && !npcAt(save.pos.x, save.pos.y)) { hero.x = save.pos.x; hero.y = save.pos.y; }
-    hero.px = hero.x * TS; hero.py = hero.y * TS;
-    updateGoal();
+    if (data && data.v === 3) save = { ...save, ...data };
+    else if (data && data.v === 2) save = { ...save, done: data.done || [], pos: data.pos, met: !!data.metAda };
+    if (!CHAPTERS[save.ch]) save.ch = 0;
+    // Глава пройдена, а переход не сохранился (старые сохранения) — сразу в следующую.
+    while (CHAPTERS[save.ch + 1] && CHAPTERS[save.ch].quests.every(q => save.done.includes(q.id))) { save.ch++; save.met = false; save.pos = null; }
+    loadChapter(save.ch);
     Platform.ready();
     requestAnimationFrame(loop);
     const play = $("t-play");
-    play.textContent = save.metAda ? "Продолжить" : "Играть";
+    play.textContent = save.met || save.ch > 0 ? "Продолжить" : "Играть";
     $("title").hidden = false; play.focus();
     play.onclick = () => {
       $("title").hidden = true;
-      if (!save.metAda) say(STORY.intro, () => { save.metAda = true; persist(); updateGoal(); });
-      else busy = false;
+      startChapter();
     };
   })();
 })();
