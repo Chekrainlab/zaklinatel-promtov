@@ -15,32 +15,33 @@
 
   // ---------- Отрисовка ----------
   const cv = $("cv"), ctx = cv.getContext("2d");
-  const at = (x, y) => (grid[y] && grid[y][x]) || "T";
   // Лёгкое затемнение по краям, чтобы мир смотрелся как сцена.
-  const vignette = ctx.createRadialGradient(160, 120, 90, 160, 120, 230);
-  vignette.addColorStop(0, "rgba(10,6,30,0)"); vignette.addColorStop(1, "rgba(10,6,30,.45)");
+  const SW = W * TS, SH = H * TS;
+  const vignette = ctx.createRadialGradient(SW / 2, SH / 2, SH * .4, SW / 2, SH / 2, SH * .95);
+  vignette.addColorStop(0, "rgba(10,6,30,0)"); vignette.addColorStop(1, "rgba(10,6,30,.4)");
   function draw(t) {
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) World.drawTile(ctx, grid[y][x], x, y, t, at);
     const cur = currentQuest();
-    for (const n of Object.values(npcs)) {
-      if (n.gone) continue;
-      const bob = Math.floor(t / 400 + n.x) % 2;
-      World.drawSprite(ctx, n.id, n.x * TS, n.y * TS - bob, false);
-      // Восклицательный знак над тем, кто ждёт помощи сейчас.
-      if (save.metAda && cur && cur.id === n.id) {
-        ctx.fillStyle = "#ffcf4a"; ctx.fillRect(n.x * TS + 7, n.y * TS - 6 - bob, 2, 4); ctx.fillRect(n.x * TS + 7, n.y * TS - 1 - bob, 2, 1);
-      }
-    }
-    World.drawSprite(ctx, "hero", hero.px, hero.py - (hero.moving ? Math.floor(t / 120) % 2 : 0), hero.dir[0] < 0);
+    const actors = Object.values(npcs).filter(n => !n.gone).map(n => ({
+      id: n.id, px: n.x * TS, py: n.y * TS, marker: save.metAda && cur && cur.id === n.id,
+    }));
+    actors.push({ id: "hero", px: hero.px, py: hero.py, flip: hero.dir[0] < 0, walk: hero.moving });
+    World.drawScene(ctx, grid, actors, t);
+    // Искры — мягкие светящиеся точки.
     sparks = sparks.filter(s => (s.life -= 1 / 60) > 0);
-    for (const s of sparks) { s.x += s.vx; s.y += s.vy; ctx.globalAlpha = Math.min(1, s.life * 2); ctx.fillStyle = s.c; ctx.fillRect(s.x, s.y, 2, 2); }
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = vignette; ctx.fillRect(0, 0, 320, 240);
+    ctx.globalCompositeOperation = "lighter";
+    for (const s of sparks) {
+      s.x += s.vx; s.y += s.vy; s.vy += .04;
+      ctx.globalAlpha = Math.min(1, s.life * 2);
+      ctx.fillStyle = World.radial(ctx, s.x, s.y, 7, [[0, "#fff"], [.35, s.c], [1, s.c + "00"]]);
+      ctx.beginPath(); ctx.arc(s.x, s.y, 7, 0, 7); ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+    ctx.fillStyle = vignette; ctx.fillRect(0, 0, SW, SH);
   }
   function burst(x, y, c, n = 14) {
     for (let i = 0; i < n; i++) {
-      const a = Math.random() * 6.3, v = .3 + Math.random() * 1.2;
-      sparks.push({ x: x * TS + 8, y: y * TS + 8, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: .6 + Math.random() * .5, c });
+      const a = Math.random() * 6.3, v = 1 + Math.random() * 3;
+      sparks.push({ x: x * TS + TS / 2, y: y * TS + TS / 2, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1, life: .6 + Math.random() * .5, c });
     }
   }
 
@@ -78,8 +79,8 @@
   function step() {
     if (hero.moving) {
       const tx = hero.x * TS, ty = hero.y * TS;
-      hero.px += Math.sign(tx - hero.px) * Math.min(2, Math.abs(tx - hero.px));
-      hero.py += Math.sign(ty - hero.py) * Math.min(2, Math.abs(ty - hero.py));
+      hero.px += Math.sign(tx - hero.px) * Math.min(6, Math.abs(tx - hero.px));
+      hero.py += Math.sign(ty - hero.py) * Math.min(6, Math.abs(ty - hero.py));
       if (hero.px === tx && hero.py === ty) {
         hero.moving = false;
         if (Date.now() - lastSave > 3000) { lastSave = Date.now(); persist(); }
@@ -105,10 +106,10 @@
     let i = 0; busy = true; held = null;
     const render = () => {
       const face = FACES[lines[i].who];
-      sheetBody.innerHTML = `<div class="talk" tabindex="0">${face ? `<canvas class="face" width="32" height="32"></canvas>` : ""}
+      sheetBody.innerHTML = `<div class="talk" tabindex="0">${face ? `<canvas class="face" width="128" height="128"></canvas>` : ""}
         <div class="talk-text"><b>${lines[i].who}</b><p>${lines[i].text}</p><i>Нажмите, чтобы продолжить ▸</i></div></div>`;
       const el = sheetBody.firstChild;
-      if (face) World.drawSprite(el.querySelector(".face").getContext("2d"), face, 0, 0, false, 2);
+      if (face) World.drawPortrait(el.querySelector(".face").getContext("2d"), face, 128, performance.now());
       el.onclick = next;
       el.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); } };
       el.focus();
