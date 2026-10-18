@@ -3,90 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Заклинатель промтов</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>Кодолесье</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Golos+Text:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <main class="wrap">
-    <!-- Титульный экран -->
-    <section id="screen-title" class="screen">
-      <div class="title-art" aria-hidden="true"></div>
-      <h1>Заклинатель промтов</h1>
-      <p class="sub">Победи Повелителя Багов точными промтами и научись вайбкодингу.</p>
-      <button id="btn-play" class="big-btn">Играть</button>
-    </section>
+<div class="wrap">
+  <div class="goal paper"><small>ЦЕЛЬ</small><span id="goal"></span></div>
+  <div class="stage"><canvas id="cv" width="320" height="240" aria-label="Мир Кодолесья"></canvas></div>
+  <div class="pad" id="pad">
+    <button class="u" data-d="0,-1" aria-label="Вверх">▲</button>
+    <button class="l" data-d="-1,0" aria-label="Влево">◀</button>
+    <button class="r" data-d="1,0" aria-label="Вправо">▶</button>
+    <button class="d" data-d="0,1" aria-label="Вниз">▼</button>
+  </div>
+  <p class="help">Ходите стрелками или кнопками. Чтобы поговорить, подойдите к жителю вплотную.</p>
+</div>
 
-    <!-- Карта мира -->
-    <section id="screen-map" class="screen" hidden>
-      <header class="bar-top">
-        <h2>Карта мира</h2>
-        <span class="stars-total" id="stars-total"></span>
-      </header>
-      <div id="map" class="map"></div>
-    </section>
+<div class="title" id="title" hidden>
+  <div class="title-card">
+    <p class="kicker">Приключение о вайбкодинге</p>
+    <h1>Кодолесье</h1>
+    <p>Повелитель Багов украл Духа Кода. Верните его, научившись просить точно.</p>
+    <button id="t-play">Играть</button>
+  </div>
+</div>
+<div class="sheet" id="sheet" hidden><div id="sheet-body"></div></div>
+<div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
 
-    <!-- Диалог -->
-    <section id="screen-dialog" class="screen" hidden>
-      <div class="dialog" id="dialog" tabindex="0">
-        <div class="dialog-who" id="dialog-who"></div>
-        <p class="dialog-text" id="dialog-text"></p>
-        <div class="dialog-next">Нажмите, чтобы продолжить ▸</div>
-      </div>
-    </section>
-
-    <!-- Бой -->
-    <section id="screen-battle" class="screen" hidden>
-      <header class="bar-top">
-        <button id="btn-back" class="ghost small">← Карта</button>
-        <span class="lvl" id="lvl-label"></span>
-      </header>
-
-      <div class="arena" id="arena">
-        <div class="who hero" id="hero">
-          <div class="hearts" id="hearts"></div>
-          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-label="Кодомаг">
-            <rect x="5" y="0" width="6" height="2" fill="#7b5cff"/><rect x="4" y="2" width="8" height="2" fill="#7b5cff"/>
-            <rect x="3" y="4" width="10" height="1" fill="#7b5cff"/><rect x="5" y="5" width="6" height="3" fill="#f2c9a0"/>
-            <rect x="6" y="6" width="1" height="1" fill="#140f24"/><rect x="9" y="6" width="1" height="1" fill="#140f24"/>
-            <rect x="4" y="8" width="8" height="5" fill="#4a35b8"/><rect x="9" y="9" width="5" height="3" fill="#2b2b3a"/>
-            <rect x="10" y="10" width="3" height="1" fill="#7cf5c8"/><rect x="5" y="13" width="2" height="3" fill="#2a1f47"/>
-            <rect x="9" y="13" width="2" height="3" fill="#2a1f47"/>
-          </svg>
-          <div class="name">Кодомаг</div>
-        </div>
-        <div class="who enemy" id="enemy">
-          <div class="hpbar"><i id="hp"></i></div>
-          <svg id="enemy-svg" viewBox="0 0 16 16" shape-rendering="crispEdges"></svg>
-          <div class="name" id="enemy-name"></div>
-        </div>
-      </div>
-
-      <section class="quest">
-        <small id="quest-title">ЗАДАНИЕ</small>
-        <p id="quest-text"></p>
-      </section>
-
-      <form class="console" id="form">
-        <label for="prompt">Ваш промт для ИИ. Чем точнее, тем сильнее заклинание.</label>
-        <div class="chips" id="chips"></div>
-        <textarea id="prompt" placeholder="Например: «В моей игре на JavaScript…»"></textarea>
-        <div class="row">
-          <button id="btn-cast" type="submit">Произнести промт</button>
-          <button id="btn-hint" type="button" class="ad">Подсказка</button>
-        </div>
-      </form>
-
-      <section class="log" id="log"></section>
-    </section>
-  </main>
-
-  <div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
-
-  <script src="js/grader.js"></script>
-  <script src="js/levels.js"></script>
-  <script src="js/platform.js"></script>
-  <script src="js/game.js"></script>
+<script src="js/world.js"></script>
+<script src="js/quests.js"></script>
+<script src="js/platform.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>
