@@ -45,7 +45,16 @@ body {
   font-family: var(--head); font-weight: 900; font-size: .72rem; letter-spacing: .08em; color: #fff;
   background: linear-gradient(135deg, var(--brand), var(--brand-2)); padding: 7px 12px; border-radius: 999px; white-space: nowrap;
 }
-.goal span { line-height: 1.4; min-width: 0; font-weight: 500; }
+.goal span { line-height: 1.4; min-width: 0; font-weight: 500; flex: 1; }
+.snd {
+  flex: none; width: 40px; height: 40px; padding: 0; display: grid; place-items: center; border-radius: 50%;
+  background: rgba(255, 255, 255, .1); color: #fff; box-shadow: none;
+}
+.snd:hover { background: rgba(255, 255, 255, .18); }
+.snd .mute { display: none; }
+.snd.off { color: #9aa3c7; }
+.snd.off .mute { display: inline; }
+.snd.off .wave { display: none; }
 
 canvas#cv {
   display: block; width: 100%; height: auto; aspect-ratio: 4 / 3;

@@ -1,5 +1,6 @@
 // Обёртка над Яндекс Игры SDK. Вне Яндекса работает заглушка:
 // сохранения в localStorage, реклама — экран с обратным отсчётом.
+// Пока идёт реклама, звук игры на паузе (требование Яндекса).
 window.Platform = (function () {
   const KEY = "zaklinatel-save-v1";
   let ysdk = null, player = null;
@@ -53,9 +54,10 @@ window.Platform = (function () {
     if (ysdk) {
       let got = false;
       ysdk.adv.showRewardedVideo({ callbacks: {
+        onOpen: () => window.Sound?.pause("ad"),
         onRewarded: () => { got = true; },
-        onClose: () => { if (got) onReward(); },
-        onError: () => {},
+        onClose: () => { window.Sound?.resume("ad"); if (got) onReward(); },
+        onError: () => window.Sound?.resume("ad"),
       } });
     } else mock(onReward);
   }
@@ -65,7 +67,11 @@ window.Platform = (function () {
   function interstitial() {
     if (!ysdk || Date.now() - lastInterstitial < 180000) return;
     lastInterstitial = Date.now();
-    ysdk.adv.showFullscreenAdv({ callbacks: {} });
+    ysdk.adv.showFullscreenAdv({ callbacks: {
+      onOpen: () => window.Sound?.pause("ad"),
+      onClose: () => window.Sound?.resume("ad"),
+      onError: () => window.Sound?.resume("ad"),
+    } });
   }
 
   return { init, ready, load, save, rewarded, interstitial };

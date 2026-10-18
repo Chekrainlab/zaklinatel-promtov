@@ -1,6 +1,6 @@
 (function () {
   const $ = id => document.getElementById(id);
-  const { World, CHAPTERS, Platform } = window;
+  const { World, CHAPTERS, Platform, Sound } = window;
   const { TS, W, H } = World;
 
   // ch — номер главы, met — вступление главы уже показано, done — пройденные квесты всех глав.
@@ -25,6 +25,7 @@
     hero.px = hero.x * TS; hero.py = hero.y * TS; hero.dir = [0, 1]; hero.moving = false;
     sparks = [];
     $("chap").textContent = `Глава ${chapter.n}`;
+    Sound.play(ch);
     updateGoal();
   }
   function startChapter() {
@@ -93,7 +94,7 @@
   function bump(c) {
     const text = chapter.story.bump[c];
     if (!text || Date.now() - lastBump < 1500) return;
-    lastBump = Date.now(); held = null;
+    lastBump = Date.now(); held = null; Sound.sfx("bump");
     say([{ who: "Кодомаг", text }]);
   }
   let lastSave = 0;
@@ -136,7 +137,7 @@
       el.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); } };
       el.focus();
     };
-    const next = () => { i++; if (i < lines.length) render(); else { sheet.hidden = true; busy = false; done?.(); } };
+    const next = () => { Sound.sfx("blip"); i++; if (i < lines.length) render(); else { sheet.hidden = true; busy = false; done?.(); } };
     sheet.hidden = false; render();
   }
 
@@ -179,10 +180,10 @@
           <button class="ad" id="b-hint">Подсказка</button>
           <button class="ghost" id="b-later">Позже</button>
         </div></div>`;
-      for (const b of sheetBody.querySelectorAll(".card")) b.onclick = () => { picks[+b.dataset.s] = +b.dataset.o; render(); };
+      for (const b of sheetBody.querySelectorAll(".card")) b.onclick = () => { Sound.sfx("click"); picks[+b.dataset.s] = +b.dataset.o; render(); };
       $("b-cast").onclick = () => {
         const bad = picks.map((p, i) => shuffled[i][p]).find(o => !o.ok);
-        if (bad) return render(bad.fail);
+        if (bad) { Sound.sfx("fail"); return render(bad.fail); }
         sheet.hidden = true;
         complete(q);
       };
@@ -197,7 +198,8 @@
 
   function complete(q) {
     save.done.push(q.id); persist();
-    applyEffect(q.effect, true);
+    applyEffect(q.effect, true); Sound.sfx("magic");
+    setTimeout(() => Sound.sfx(q.final ? "fanfare" : "win"), 700);
     setTimeout(() => modal(`<h2>Получилось!</h2><div class="lesson">${q.lesson}</div><button id="m-ok">Дальше</button>`, () => {
       say(q.after, () => {
         updateGoal();
@@ -216,12 +218,12 @@
   }
   // Вне Яндекса вместо ролика показываем обратный отсчёт.
   function mockAd(done) {
-    let s = 3;
+    let s = 3; Sound.pause("ad");
     $("modal").innerHTML = `<div class="adbox">Здесь будет реклама Яндекса<b id="ac">${s}</b></div>`;
     overlay.hidden = false;
     const iv = setInterval(() => {
       s--; const el = $("ac"); if (el) el.textContent = s;
-      if (s <= 0) { clearInterval(iv); overlay.hidden = true; done(); }
+      if (s <= 0) { clearInterval(iv); overlay.hidden = true; Sound.resume("ad"); done(); }
     }, 1000);
   }
   const rewarded = cb => Platform.rewarded(cb, mockAd);
@@ -248,11 +250,15 @@
     while (CHAPTERS[save.ch + 1] && CHAPTERS[save.ch].quests.every(q => save.done.includes(q.id))) { save.ch++; save.met = false; save.pos = null; }
     loadChapter(save.ch);
     Platform.ready();
+    const snd = $("snd"), showSnd = () => { snd.classList.toggle("off", !Sound.on); snd.setAttribute("aria-label", Sound.on ? "Выключить звук" : "Включить звук"); };
+    snd.onclick = () => { Sound.unlock(); Sound.toggle(); showSnd(); };
+    showSnd();
     requestAnimationFrame(loop);
     const play = $("t-play");
     play.textContent = save.met || save.ch > 0 ? "Продолжить" : "Играть";
     $("title").hidden = false; play.focus();
     play.onclick = () => {
+      Sound.unlock();
       $("title").hidden = true;
       startChapter();
     };
