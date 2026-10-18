@@ -66,7 +66,7 @@ for (const [ch, chapter] of CHAPTERS.entries()) {
 
   test(`${name}: у препятствий на пути есть подсказка`, () => {
     const { grid } = build(ch);
-    const blockers = new Set(grid.flat().filter(c => ["~", "d", "G", "f"].includes(c)));
+    const blockers = new Set(grid.flat().filter(c => ["~", "d", "G", "f", "m", "c"].includes(c)));
     for (const c of blockers) assert.ok(chapter.story.bump[c], `нет подсказки для «${c}»`);
   });
 }

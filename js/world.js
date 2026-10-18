@@ -1,7 +1,9 @@
 // Карты глав и векторная отрисовка: мягкие формы, градиенты и свет вместо пикселей.
 // Буквы карты: . трава, p тропа, T дерево, ~ вода, b место для моста, # скала,
-// d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка.
-// Жители: A F M B (глава 1), S K Q Z (глава 2); на их месте трава или то, что указано в under.
+// d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка или ступень,
+// m мираж, c ящики. Вода по теме главы может быть звёздной пропастью или лавой.
+// Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5);
+// на их месте трава или то, что указано в under.
 window.World = (function () {
   const MAPS = [
     { theme: "forest", start: { x: 4, y: 11 }, under: { B: "d" }, rows: [
@@ -38,16 +40,76 @@ window.World = (function () {
       "T..T......T........T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
+    { theme: "stars", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTT#####TTTTTTTT",
+      "TTTTTTT##G##TTTTTTTT",
+      "T~~~~~~##X##~~~~~~~T",
+      "T~~~~~~~...~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T.N....pppp....V..NT",
+      "T..T..pp...T.......T",
+      "TTTTTmmmTTTTTTTTTTTT",
+      "T....ppp....T......T",
+      "T..S.p...W.....T...T",
+      "T....p.........N...T",
+      "T..T......T........T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "city", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTTT#G#TTTTTTTT",
+      "T.......N#U#N......T",
+      "T..N.....ppp....N..T",
+      "T.........p........T",
+      "THHHHHHHHcccHHHHHHHT",
+      "T....N...ppp...N...T",
+      "T....P....p........T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T.........p...R....T",
+      "T..H..N..pp.....H..T",
+      "T.H......p....N....T",
+      "T..S..pppp.........T",
+      "T....pp....H....H..T",
+      "T.H.......N.....H..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "lava", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTT##G##TTTTTTT",
+      "T~~~~~~~#.J.#~~~~~~T",
+      "T~~~~~~~#...#~~~~~~T",
+      "T~~~~~~~##d##~~~~~~T",
+      "T~~~~~~~~#d#~~~~~~~T",
+      "T#.....D..p....#...T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T.....N...p..C.....T",
+      "T..#......p.....#..T",
+      "T.....ppppp....N...T",
+      "T..S..p.......#....T",
+      "T....pp.....#......T",
+      "T..#.......N....#..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
   ];
   const THEMES = {
     forest: { grass: ["#9bd86f", "#6cbd58"], tuft: "rgba(40,110,45,.45)", water: ["#5ab8f0", "#3d9be0"], bank: "#ecd9a4",
       leaf: ["#2e8b47", "#3fa956", "#4bb862"], flowers: ["#ffffff", "#ffd54f", "#ff9ec4"] },
     swamp: { grass: ["#8fbf7c", "#4f8a63"], tuft: "rgba(30,80,50,.5)", water: ["#6aa58a", "#3f7a66"], bank: "#a9b97c",
       leaf: ["#245e4f", "#327a64", "#3f8f74"], flowers: ["#e8f5a0", "#c9b6ff", "#ffffff"], lily: true, fireflies: true },
+    stars: { grass: ["#5b5aa8", "#36357a"], tuft: "rgba(180,170,255,.35)", water: ["#1c1946", "#0e0c2a"], bank: "#8c86d6",
+      leaf: ["#7a3fa8", "#a457c9", "#d27fe6"], trunk: "#4b3566", flowers: ["#bfe9ff", "#ffd1f3", "#fff6b0"],
+      void: true, kStyle: "star", lampGlass: "#e6d8ff", lamp: "rgba(190,160,255,.55)", path: ["#8f86d9", "#b8b0f0"], rock: ["#8a7fd0", "#5a4f9c", "#3a3270"], fireflies: true },
+    city: { grass: ["#cfd6dd", "#aeb8c4"], stone: true, lampGlass: "#ffe7a0", water: ["#5fc3d6", "#3a9fbf"], bank: "#8b97a6",
+      leaf: ["#3f9c5a", "#55b56d", "#7ccb86"], roofs: [["#ff7a5c", "#d9483a"], ["#5c8dff", "#3a63d6"], ["#ffc04d", "#e08a1f"], ["#6fcf97", "#3c9d68"]],
+      path: ["#c9a876", "#e3c899"], lamp: "rgba(255,220,140,.5)" },
+    lava: { grass: ["#5a4a52", "#2f262c"], stone: true, lampGlass: "#ffb070", water: ["#ff8a2a", "#d8461a"], bank: "#3a2d30", lavaGlow: true,
+      leaf: ["#3c2f34", "#55424a", "#6e5560"], trunk: "#2a2024", path: ["#7d6a5c", "#a08a77"], bridge: "stone",
+      rock: ["#6e6370", "#4a4050", "#2c2530"], lamp: "rgba(255,150,80,.5)", embers: true },
   };
   const TS = 48, W = 20, H = 15, CHAPTERS = MAPS.length;
-  const NPC = "AFMBSKQZ";
-  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N"]);
+  const NPC = "AFMBSKQZWVXRPUCDJ";
+  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N", "m", "c"]);
   const WATER = new Set(["~", "b", "=", "k"]);
   const PATHS = new Set(["p", "="]);
   const CAVE = new Set(["#", "d", "l", "G", "O"]);
@@ -85,6 +147,13 @@ window.World = (function () {
       const c = grid[y][x];
       if (WATER.has(c) || CAVE.has(c)) continue;
       const X = x * TS, Y = y * TS, r = rnd(x, y, 1);
+      if (th.stone) {
+        // Мощёная площадь: плиты чуть разного оттенка.
+        rr(ctx, X + 2, Y + 2, TS - 4, TS - 4, 8);
+        ctx.fillStyle = r % 3 === 0 ? "rgba(255,255,255,.10)" : r % 3 === 1 ? "rgba(0,0,0,.06)" : "rgba(255,255,255,.04)"; ctx.fill();
+        ctx.strokeStyle = "rgba(0,0,0,.08)"; ctx.lineWidth = 1.5; ctx.stroke();
+        continue;
+      }
       ellipse(ctx, X + r % TS, Y + (r >> 7) % TS, 22, 12, r % 2 ? "rgba(255,255,230,.10)" : "rgba(30,90,40,.08)");
       if (c !== "." && c !== "T") continue;
       ctx.strokeStyle = th.tuft; ctx.lineWidth = 2; ctx.lineCap = "round";
@@ -107,11 +176,23 @@ window.World = (function () {
       const left = !wet(x - 1, y), right = !wet(x + 1, y), top = !wet(x, y - 1), bottom = !wet(x, y + 1);
       wg.addColorStop(0, left ? th.water[0] : th.water[1]); wg.addColorStop(1, right ? th.water[0] : th.water[1]);
       ctx.fillStyle = wg; ctx.fillRect(X, Y, TS, TS);
-      ctx.strokeStyle = "rgba(255,255,255,.4)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
-      for (let k = 0; k < 2; k++) {
-        const wy = Y + ((t / 30 + rnd(x, y, k + 8) % TS + k * 24) % TS);
-        const wx = X + 8 + rnd(x, y, k + 10) % 24;
-        ctx.beginPath(); ctx.moveTo(wx, wy); ctx.quadraticCurveTo(wx + 5, wy + 3, wx + 10, wy); ctx.stroke();
+      if (th.void) {
+        // Звёздная пропасть: мерцающие звёзды вместо волн.
+        for (let k = 0; k < 3; k++) {
+          const a = .3 + .7 * Math.abs(Math.sin(t / 700 + rnd(x, y, k + 40)));
+          circle(ctx, X + rnd(x, y, k + 41) % TS, Y + rnd(x, y, k + 44) % TS, 1 + (k === 0) * 1.2, `rgba(255,255,255,${a})`);
+        }
+      } else {
+        ctx.strokeStyle = th.lavaGlow ? "rgba(255,230,120,.75)" : "rgba(255,255,255,.4)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+        for (let k = 0; k < 2; k++) {
+          const wy = Y + ((t / (th.lavaGlow ? 90 : 30) + rnd(x, y, k + 8) % TS + k * 24) % TS);
+          const wx = X + 8 + rnd(x, y, k + 10) % 24;
+          ctx.beginPath(); ctx.moveTo(wx, wy); ctx.quadraticCurveTo(wx + 5, wy + 3, wx + 10, wy); ctx.stroke();
+        }
+        if (th.lavaGlow && rnd(x, y, 50) % 3 === 0) {
+          const ph = (t / 1500 + rnd(x, y, 51) % 100 / 100) % 1;
+          circle(ctx, X + 10 + rnd(x, y, 52) % 28, Y + 10 + rnd(x, y, 53) % 28, 2 + ph * 5, `rgba(255,220,120,${.8 * (1 - ph)})`);
+        }
       }
       if (th.lily && grid[y][x] === "~" && rnd(x, y, 14) % 4 === 0) {
         const lx = X + 12 + rnd(x, y, 15) % 24, ly = Y + 12 + rnd(x, y, 16) % 24, a = rnd(x, y, 17) % 6;
@@ -119,13 +200,24 @@ window.World = (function () {
         ctx.fillStyle = "#5fae5a"; ctx.fill();
         if (rnd(x, y, 18) % 3 === 0) circle(ctx, lx + 2, ly - 1, 3, "#ffb3d1");
       }
-      const foam = .55 + Math.sin(t / 500 + y) * .2;
+      const foam = th.void || th.lavaGlow ? 0 : .55 + Math.sin(t / 500 + y) * .2;
       if (left) { ctx.fillStyle = th.bank; ctx.fillRect(X - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + 4, Y, 3, TS); }
       if (right) { ctx.fillStyle = th.bank; ctx.fillRect(X + TS - 4, Y, 8, TS); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X + TS - 7, Y, 3, TS); }
       if (top) { ctx.fillStyle = th.bank; ctx.fillRect(X, Y - 4, TS, 8); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X, Y + 4, TS, 3); }
       if (bottom) { ctx.fillStyle = th.bank; ctx.fillRect(X, Y + TS - 4, TS, 8); ctx.fillStyle = `rgba(255,255,255,${foam})`; ctx.fillRect(X, Y + TS - 7, TS, 3); }
       // Кочка: мшистый островок, по которому можно пройти.
-      if (grid[y][x] === "k") {
+      if (grid[y][x] === "k" && th.kStyle === "star") {
+        // Звёздная ступень: парящая светящаяся платформа.
+        const fy = Math.sin(t / 400 + y) * 2;
+        ctx.save(); ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = radial(ctx, X + 24, Y + 24 + fy, 34, [[0, "rgba(255,230,140,.5)"], [1, "rgba(255,230,140,0)"]]);
+        ctx.fillRect(X - 10, Y - 10, 68, 68); ctx.restore();
+        ellipse(ctx, X + 24, Y + 26 + fy, 19, 10, "#ffd76a");
+        ellipse(ctx, X + 24, Y + 23 + fy, 16, 7, "#fff2b8");
+        ctx.save(); ctx.translate(X + 24, Y + 23 + fy); ctx.beginPath();
+        for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr2 = i % 2 ? 2.5 : 6; ctx.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2 * .6); }
+        ctx.closePath(); ctx.fillStyle = "#ffb92e"; ctx.fill(); ctx.restore();
+      } else if (grid[y][x] === "k") {
         ellipse(ctx, X + 24, Y + 30, 20, 11, "rgba(20,50,40,.3)");
         ellipse(ctx, X + 24, Y + 26, 19, 12, "#6b8a3e");
         ellipse(ctx, X + 24, Y + 23, 16, 9, "#8fb556");
@@ -147,16 +239,21 @@ window.World = (function () {
         if (at(x + 1, y) === "p" && at(x, y + 1) === "p" && at(x + 1, y + 1) === "p") ctx.fillRect(cx, cy, TS, TS);
       }
     };
-    pathPass("#d9b878", 4); pathPass("#efd8a4", 8);
+    const pc = th.path || ["#d9b878", "#efd8a4"];
+    pathPass(pc[0], 4); pathPass(pc[1], 8);
 
     // Мост.
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       if (grid[y][x] !== "=") continue;
-      const X = x * TS, Y = y * TS;
-      ctx.fillStyle = "rgba(0,40,80,.25)"; ctx.fillRect(X, Y + 12, TS, 30);
-      for (let i = 0; i < 6; i++) { rr(ctx, X + i * 8 + .5, Y + 8, 7, 32, 2); ctx.fillStyle = i % 2 ? "#c48b4f" : "#b47c42"; ctx.fill(); }
-      rr(ctx, X - 2, Y + 4, TS + 4, 6, 3); ctx.fillStyle = "#8a5a2b"; ctx.fill();
-      rr(ctx, X - 2, Y + 38, TS + 4, 6, 3); ctx.fill();
+      // Мост поворачивается поперёк воды: если вода слева и справа, по нему идут вертикально.
+      const vertical = wet(x - 1, y) && wet(x + 1, y);
+      const stone = th.bridge === "stone", c1 = stone ? "#8a7f86" : "#c48b4f", c2 = stone ? "#766b73" : "#b47c42", rail = stone ? "#5a5058" : "#8a5a2b";
+      ctx.save(); ctx.translate(x * TS + TS / 2, y * TS + TS / 2); if (vertical) ctx.rotate(Math.PI / 2); ctx.translate(-TS / 2, -TS / 2);
+      ctx.fillStyle = "rgba(0,40,80,.25)"; ctx.fillRect(0, 12, TS, 30);
+      for (let i = 0; i < 6; i++) { rr(ctx, i * 8 + .5, 8, 7, 32, 2); ctx.fillStyle = i % 2 ? c1 : c2; ctx.fill(); }
+      rr(ctx, -2, 4, TS + 4, 6, 3); ctx.fillStyle = rail; ctx.fill();
+      rr(ctx, -2, 38, TS + 4, 6, 3); ctx.fill();
+      ctx.restore();
     }
 
     // Каменная пещера, тьма и освещённый пол.
@@ -171,9 +268,10 @@ window.World = (function () {
         }
       }
       if (c === "#") {
-        ctx.fillStyle = "#4a4258"; ctx.fillRect(X, Y, TS, TS);
+        const rk = th.rock || ["#a49cb8", "#6e6684", "#4a4258"];
+        ctx.fillStyle = rk[2]; ctx.fillRect(X, Y, TS, TS);
         rr(ctx, X + 2, Y + 2, TS - 4, TS - 4, 12);
-        const sg = ctx.createLinearGradient(X, Y, X, Y + TS); sg.addColorStop(0, "#a49cb8"); sg.addColorStop(1, "#6e6684");
+        const sg = ctx.createLinearGradient(X, Y, X, Y + TS); sg.addColorStop(0, rk[0]); sg.addColorStop(1, rk[1]);
         ctx.fillStyle = sg; ctx.fill();
         ellipse(ctx, X + 16, Y + 12, 9, 4, "rgba(255,255,255,.22)");
       }
@@ -184,7 +282,7 @@ window.World = (function () {
   function drawTree(ctx, x, y, t, th) {
     const cx = x * TS + TS / 2, by = y * TS + TS - 2, sway = Math.sin(t / 1200 + x * .7 + y) * 1.5;
     ellipse(ctx, cx + 4, by - 2, 20, 7, "rgba(20,60,30,.28)");
-    rr(ctx, cx - 5, by - 22, 10, 20, 4); ctx.fillStyle = "#8a5a33"; ctx.fill();
+    rr(ctx, cx - 5, by - 22, 10, 20, 4); ctx.fillStyle = th.trunk || "#8a5a33"; ctx.fill();
     const big = 0.9 + (rnd(x, y, 20) % 30) / 100;
     const blob = (dx, dy, r, c) => circle(ctx, cx + dx * big + sway, by + dy * big, r * big, c);
     const [l0, l1, l2] = th.leaf;
@@ -192,13 +290,14 @@ window.World = (function () {
     blob(-10, -30, 12, l1); blob(8, -32, 13, l1); blob(-2, -42, 14, l2);
     blob(-6, -46, 6, "rgba(255,255,255,.22)");
   }
-  function drawHouse(ctx, x, y) {
+  function drawHouse(ctx, x, y, th) {
+    const roof = th.roofs ? th.roofs[rnd(x, y, 60) % th.roofs.length] : ["#ff7a5c", "#d9483a"];
     const X = x * TS, Y = y * TS;
     ellipse(ctx, X + 26, Y + 44, 26, 6, "rgba(20,60,30,.25)");
     rr(ctx, X + 4, Y + 18, 40, 26, 4); ctx.fillStyle = "#fbefd8"; ctx.fill();
     rr(ctx, X + 30, Y - 2, 8, 14, 2); ctx.fillStyle = "#b9634b"; ctx.fill();
     ctx.beginPath(); ctx.moveTo(X - 2, Y + 22); ctx.quadraticCurveTo(X + 24, Y - 14, X + 50, Y + 22); ctx.closePath();
-    const rg = ctx.createLinearGradient(X, Y, X, Y + 22); rg.addColorStop(0, "#ff7a5c"); rg.addColorStop(1, "#d9483a");
+    const rg = ctx.createLinearGradient(X, Y, X, Y + 22); rg.addColorStop(0, roof[0]); rg.addColorStop(1, roof[1]);
     ctx.fillStyle = rg; ctx.fill();
     rr(ctx, X + 20, Y + 28, 10, 16, [5, 5, 0, 0]); ctx.fillStyle = "#8a5a33"; ctx.fill();
     rr(ctx, X + 8, Y + 26, 9, 9, 3); ctx.fillStyle = "#ffe08a"; ctx.fill();
@@ -236,26 +335,55 @@ window.World = (function () {
       ctx.fillRect(X - 60, Y - 60, 120, 120);
     }
   }
-  function drawLantern(ctx, x, y, lit, t) {
+  function drawLantern(ctx, x, y, lit, t, th) {
     const X = x * TS + TS / 2, Y = y * TS + 14;
     ellipse(ctx, X + 3, Y + 30, 10, 4, "rgba(20,50,40,.3)");
     if (lit) {
       ctx.save(); ctx.globalCompositeOperation = "lighter";
-      ctx.fillStyle = radial(ctx, X, Y, 60 + Math.sin(t / 400 + x) * 4, [[0, "rgba(180,255,160,.55)"], [1, "rgba(120,220,140,0)"]]);
+      ctx.fillStyle = radial(ctx, X, Y, 60 + Math.sin(t / 400 + x) * 4, [[0, th.lamp || "rgba(180,255,160,.55)"], [1, "rgba(0,0,0,0)"]]);
       ctx.fillRect(X - 64, Y - 64, 128, 128); ctx.restore();
     }
     rr(ctx, X - 2, Y + 4, 4, 28, 2); ctx.fillStyle = "#4b4038"; ctx.fill();
-    rr(ctx, X - 9, Y - 10, 18, 18, 7); ctx.fillStyle = lit ? "#c9ff9e" : "#7d8f86"; ctx.fill();
+    rr(ctx, X - 9, Y - 10, 18, 18, 7); ctx.fillStyle = lit ? th.lampGlass || "#c9ff9e" : "#7d8f86"; ctx.fill();
     ctx.strokeStyle = "#3a332d"; ctx.lineWidth = 2; ctx.stroke();
     ellipse(ctx, X, Y - 12, 10, 3.5, "#3a332d");
     if (lit) ellipse(ctx, X, Y - 1, 3.5, 5, "#fffbe0");
   }
-  function drawFireflies(ctx, t) {
+  // Мираж: дорога, которая дрожит и переливается, но её на самом деле нет.
+  function drawMirage(ctx, x, y, t) {
+    const X = x * TS, Y = y * TS;
+    ctx.save();
+    for (let i = 0; i < 3; i++) {
+      const dx = Math.sin(t / 300 + i * 2 + x) * 4, hue = (t / 20 + x * 40 + i * 60) % 360;
+      ctx.globalAlpha = .35;
+      rr(ctx, X + 4 + dx, Y + 6 + i * 12, TS - 8, 10, 5); ctx.fillStyle = `hsl(${hue},90%,75%)`; ctx.fill();
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < 4; i++) {
+      const sx = X + rnd(x, y, 70 + i) % TS, sy = Y + rnd(x, y, 75 + i) % TS, a = Math.max(0, Math.sin(t / 250 + i * 1.7 + x));
+      circle(ctx, sx, sy, 2.2, `rgba(255,255,255,${a})`);
+    }
+    ctx.restore();
+  }
+  function drawCrates(ctx, x, y) {
+    const X = x * TS, Y = y * TS;
+    ellipse(ctx, X + 26, Y + 44, 22, 5, "rgba(0,0,0,.2)");
+    const box = (bx, by, w, h) => {
+      rr(ctx, bx, by, w, h, 4); ctx.fillStyle = "#c98d4f"; ctx.fill();
+      ctx.strokeStyle = "#8a5a2b"; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bx + 3, by + 3); ctx.lineTo(bx + w - 3, by + h - 3); ctx.stroke();
+      rr(ctx, bx + w / 2 - 5, by + 4, 10, 4, 2); ctx.fillStyle = "#fff3d6"; ctx.fill();
+    };
+    box(X + 4, Y + 20, 24, 24); box(X + 24, Y + 24, 20, 20); box(X + 12, Y + 2, 22, 20);
+  }
+  function drawFireflies(ctx, t, th) {
     ctx.save(); ctx.globalCompositeOperation = "lighter";
     for (let i = 0; i < 16; i++) {
-      const fx = (rnd(i, 1, 30) % (W * TS)) + Math.sin(t / 1700 + i) * 40, fy = (rnd(i, 2, 31) % (H * TS)) + Math.cos(t / 1300 + i * 2) * 30;
-      const a = .4 + .4 * Math.sin(t / 300 + i * 3);
-      ctx.fillStyle = radial(ctx, fx, fy, 9, [[0, `rgba(230,255,150,${a})`], [1, "rgba(230,255,150,0)"]]);
+      let fx = (rnd(i, 1, 30) % (W * TS)) + Math.sin(t / 1700 + i) * 40, fy = (rnd(i, 2, 31) % (H * TS)) + Math.cos(t / 1300 + i * 2) * 30;
+      // Искры над лавой поднимаются вверх и гаснут.
+      if (th.embers) fy = H * TS - ((t / 25 + rnd(i, 3, 32)) % (H * TS));
+      const a = .4 + .4 * Math.sin(t / 300 + i * 3), col = th.embers ? "255,170,80" : th.void ? "220,200,255" : "230,255,150";
+      ctx.fillStyle = radial(ctx, fx, fy, 9, [[0, `rgba(${col},${a})`], [1, `rgba(${col},0)`]]);
       ctx.fillRect(fx - 9, fy - 9, 18, 18);
     }
     ctx.restore();
@@ -271,8 +399,14 @@ window.World = (function () {
     S: { skin: "#9ff7d6", body: "#7cf5c8", body2: "#4fd4a8" },
     K: { skin: "#d9f0c9", body: "#3d8a78", body2: "#2a6657" },
     Q: { skin: "#7fd36b", body: "#7fd36b", body2: "#5cb04c" },
+    W: { skin: "#b98a5e", body: "#a0724a", body2: "#7d5536" },
+    V: { skin: "#ffd8b8", body: "#3b3f9e", body2: "#272a78" },
+    R: { skin: "#cfd8e3", body: "#aab6c6", body2: "#8593a8" },
+    P: { skin: "#f2c39b", body: "#3f6fd8", body2: "#2c55b0" },
+    C: { skin: "#ffd8b8", body: "#9aa3b5", body2: "#737c90" },
+    D: { skin: "#f2c39b", body: "#e07a3a", body2: "#b85d26" },
   };
-  const ALIAS = { Z: "B" };
+  const ALIAS = { Z: "B", X: "B", U: "B", J: "B" };
   function drawCharacter(ctx, id, cx, by, t, o = {}) {
     id = ALIAS[id] || id;
     const s = (o.scale || 1) * (id === "B" ? 1.2 : 1), L = LOOKS[id];
@@ -298,6 +432,38 @@ window.World = (function () {
       ctx.restore(); return;
     }
 
+    if (id === "W") {
+      // Сова: круглое пёрышко-тело, большие глаза и очки библиотекаря.
+      const g = ctx.createLinearGradient(0, -48 - b, 0, -2); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
+      if (!o.portrait) { ellipse(ctx, -6, -3, 5, 3, "#f0a830"); ellipse(ctx, 6, -3, 5, 3, "#f0a830"); }
+      ellipse(ctx, 0, -24 - b, 17, 21, g);
+      ellipse(ctx, 0, -16 - b, 10, 11, "#e8d2b0");
+      ctx.beginPath(); ctx.moveTo(-14, -38 - b); ctx.lineTo(-11, -50 - b); ctx.lineTo(-5, -41 - b); ctx.fillStyle = L.body2; ctx.fill();
+      ctx.beginPath(); ctx.moveTo(14, -38 - b); ctx.lineTo(11, -50 - b); ctx.lineTo(5, -41 - b); ctx.fill();
+      for (const sx of [-7, 7]) {
+        circle(ctx, sx, -32 - b, 7, "#fff8e6");
+        circle(ctx, sx + look, -32 - b, 3.6, "#2a1d1a"); circle(ctx, sx + look + 1.2, -33.4 - b, 1.1, "#fff");
+      }
+      ctx.strokeStyle = "#5a4030"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(-7, -32 - b, 8, 0, 7); ctx.moveTo(15, -32 - b); ctx.arc(7, -32 - b, 8, 0, 7); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-3, -26 - b); ctx.lineTo(3, -26 - b); ctx.lineTo(0, -21 - b); ctx.closePath(); ctx.fillStyle = "#f0a830"; ctx.fill();
+      ctx.restore(); return;
+    }
+    if (id === "R") {
+      // Робот: корпус-коробка, экран с глазами и антенна с огоньком.
+      if (!o.portrait) { rr(ctx, -10, -8, 7, 6, 2); ctx.fillStyle = "#5d6878"; ctx.fill(); rr(ctx, 3, -8, 7, 6, 2); ctx.fill(); }
+      const g = ctx.createLinearGradient(0, -30 - b, 0, -4 - b); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
+      rr(ctx, -13, -30 - b, 26, 24, 6); ctx.fillStyle = g; ctx.fill();
+      circle(ctx, -5, -20 - b, 2.5, "#ff6b6b"); circle(ctx, 2, -20 - b, 2.5, "#ffd54f"); circle(ctx, 9 - 9, -13 - b, 2.5, "#4fd1c5");
+      rr(ctx, -15, -56 - b, 30, 24, 8); ctx.fillStyle = L.skin; ctx.fill();
+      rr(ctx, -11, -52 - b, 22, 15, 5); ctx.fillStyle = "#1d2a3a"; ctx.fill();
+      const blink = Math.sin(t / 900 + cx) > .97 ? 1 : 4;
+      rr(ctx, -7 + look * 1.5, -47 - b, 4, blink, 2); ctx.fillStyle = "#7cf5c8"; ctx.fill();
+      rr(ctx, 3 + look * 1.5, -47 - b, 4, blink, 2); ctx.fill();
+      ctx.strokeStyle = "#8593a8"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -56 - b); ctx.lineTo(0, -63 - b); ctx.stroke();
+      circle(ctx, 0, -65 - b, 3.2, Math.sin(t / 300) > 0 ? "#ff6b6b" : "#ffb3b3");
+      ctx.restore(); return;
+    }
     if (id === "Q") {
       const g = ctx.createLinearGradient(0, -40 - b, 0, -2); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
       if (!o.portrait) { ellipse(ctx, -11, -4, 7, 4, L.body2); ellipse(ctx, 11, -4, 7, 4, L.body2); }
@@ -322,6 +488,10 @@ window.World = (function () {
     rr(ctx, -13, -30 - b, 26, 26, [12, 12, 9, 9]); ctx.fillStyle = bg; ctx.fill();
     if (id === "A") { rr(ctx, -7, -24 - b, 14, 16, 4); ctx.fillStyle = "#fffaf0"; ctx.fill(); }
     if (id === "F") { ctx.fillStyle = "#cfe0ff"; ctx.fillRect(-8, -30 - b, 3, 12); ctx.fillRect(5, -30 - b, 3, 12); }
+    if (id === "P") { ctx.strokeStyle = "#8a5a2b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-11, -28 - b); ctx.lineTo(9, -10 - b); ctx.stroke(); rr(ctx, 4, -14 - b, 12, 10, 3); ctx.fillStyle = "#b47c42"; ctx.fill(); }
+    if (id === "D") { ctx.fillStyle = "#3f6fd8"; ctx.fillRect(-9, -22 - b, 18, 18); ctx.fillRect(-8, -30 - b, 3, 9); ctx.fillRect(5, -30 - b, 3, 9); }
+    if (id === "C") { rr(ctx, -9, -26 - b, 18, 14, 4); ctx.fillStyle = "#c0c8d8"; ctx.fill(); circle(ctx, 0, -19 - b, 3, "#e24b5b"); }
+    if (id === "V") { for (let i = 0; i < 3; i++) circle(ctx, -6 + i * 6, -12 - b - (i % 2) * 6, 1.6, "#ffe066"); }
     if (id === "hero") { rr(ctx, -13, -16 - b, 26, 4, 2); ctx.fillStyle = "#ffcf4a"; ctx.fill(); }
     if (id === "B") { ctx.beginPath(); ctx.moveTo(-18, -4 - b); ctx.lineTo(-13, -30 - b); ctx.lineTo(13, -30 - b); ctx.lineTo(18, -4 - b); ctx.closePath(); ctx.fillStyle = "#3d1233"; ctx.fill(); }
 
@@ -362,6 +532,33 @@ window.World = (function () {
       circle(ctx, 0, hy - 17, 7, "#eeeaf6");
       ctx.strokeStyle = "#6a5a7a"; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
+    }
+    if (id === "V") {
+      // Звездочёт: синий колпак со звёздами.
+      ctx.beginPath(); ctx.moveTo(-14, hy - 8); ctx.quadraticCurveTo(-2, hy - 34, -10 * look, hy - 44); ctx.quadraticCurveTo(4, hy - 24, 14, hy - 8); ctx.closePath();
+      ctx.fillStyle = "#2c2f8a"; ctx.fill();
+      ellipse(ctx, 0, hy - 8, 17, 4.5, "#3b3f9e");
+      circle(ctx, -3, hy - 20, 2.2, "#ffe066"); circle(ctx, 3, hy - 13, 1.6, "#ffe066"); circle(ctx, -6 * look, hy - 31, 1.8, "#ffe066");
+      ctx.beginPath(); ctx.moveTo(-7, hy + 6); ctx.quadraticCurveTo(0, hy + 22, 7, hy + 6); ctx.fillStyle = "#eef0ff"; ctx.fill();
+    }
+    if (id === "P") {
+      // Почтальон: фуражка и сумка через плечо.
+      ctx.beginPath(); ctx.arc(0, hy - 5, 14, Math.PI, 0); ctx.fillStyle = "#2c55b0"; ctx.fill();
+      rr(ctx, -4 + look * 6, hy - 8, 16, 4, 2); ctx.fillStyle = "#1d3b80"; ctx.fill();
+      circle(ctx, 0, hy - 12, 2.5, "#ffd54f");
+    }
+    if (id === "C") {
+      // Стражница: шлем с гребнем.
+      ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI, 0); ctx.fillStyle = "#c0c8d8"; ctx.fill();
+      rr(ctx, -2, hy - 24, 4, 10, 2); ctx.fillStyle = "#e24b5b"; ctx.fill();
+      ellipse(ctx, 0, hy - 24, 6, 3, "#e24b5b");
+      ctx.strokeStyle = "#8a93a6"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI, 0); ctx.stroke();
+    }
+    if (id === "D") {
+      // Механик: кудри и очки-гогглы на лбу.
+      for (let i = 0; i < 6; i++) circle(ctx, -12 + i * 4.8, hy - 11 + (i % 2) * 2, 5, "#7a3e1d");
+      rr(ctx, -13, hy - 10, 26, 4, 2); ctx.fillStyle = "#4a4a55"; ctx.fill();
+      circle(ctx, -5, hy - 8, 4, "#9fe3ff"); circle(ctx, 5, hy - 8, 4, "#9fe3ff");
     }
     if (id === "K") {
       ctx.fillStyle = "#5c9e4a";
@@ -408,8 +605,10 @@ window.World = (function () {
       const c = grid[y][x];
       if (c === "T") items.push({ z: y * TS + TS, d: () => drawTree(ctx, x, y, t, th) });
       else if (c === "f") items.push({ z: y * TS + TS + 2, d: () => drawFog(ctx, x, y, t) });
-      else if (c === "n" || c === "N") items.push({ z: y * TS + TS - 2, d: () => drawLantern(ctx, x, y, c === "N", t) });
-      else if (c === "H") items.push({ z: y * TS + TS, d: () => drawHouse(ctx, x, y) });
+      else if (c === "n" || c === "N") items.push({ z: y * TS + TS - 2, d: () => drawLantern(ctx, x, y, c === "N", t, th) });
+      else if (c === "m") items.push({ z: y * TS + TS + 2, d: () => drawMirage(ctx, x, y, t) });
+      else if (c === "c") items.push({ z: y * TS + TS - 1, d: () => drawCrates(ctx, x, y) });
+      else if (c === "H") items.push({ z: y * TS + TS, d: () => drawHouse(ctx, x, y, th) });
       else if (c === "G" || c === "O") items.push({ z: y * TS, d: () => drawGate(ctx, x, y, c === "O", t) });
       else if (c === "l" && (x + y) % 2 === 0) items.push({ z: y * TS + 20, d: () => drawTorch(ctx, x, y, t) });
     }
@@ -418,7 +617,7 @@ window.World = (function () {
       if (a.marker) drawMarker(ctx, a.px + TS / 2, a.py + TS - 4, t);
     } });
     items.sort((a, b) => a.z - b.z).forEach(i => i.d());
-    if (th.fireflies) drawFireflies(ctx, t);
+    if (th.fireflies || th.embers) drawFireflies(ctx, t, th);
   }
 
   function drawPortrait(ctx, id, size, t = 0) {

@@ -124,7 +124,8 @@
   // ---------- Диалоги ----------
   const sheet = $("sheet"), sheetBody = $("sheet-body");
   const FACES = { "Бабушка Ада": "A", "Рыбак Фёдор": "F", "Шахтёр Михей": "M", "Повелитель Багов": "B", "Кодомаг": "hero", "Дух Кода": "S",
-    "Кикимора Кира": "K", "Лягушонок Квак": "Q" };
+    "Кикимора Кира": "K", "Лягушонок Квак": "Q", "Сова Соня": "W", "Звездочёт Вадим": "V",
+    "Робот Болт": "R", "Почтальон Пётр": "P", "Стражница Вера": "C", "Механик Дина": "D" };
   function say(lines, done) {
     let i = 0; busy = true; held = null;
     const render = () => {
@@ -257,6 +258,14 @@
     const play = $("t-play");
     play.textContent = save.met || save.ch > 0 ? "Продолжить" : "Играть";
     $("title").hidden = false; play.focus();
+    // Шпаргалка: уроки всех пройденных квестов, чтобы перечитать правила в любой момент.
+    const notes = $("t-notes");
+    notes.hidden = !save.done.length;
+    notes.onclick = () => {
+      const items = CHAPTERS.flatMap(c => c.quests.filter(q => isDone(q.id)).map(q => `<li><b>${q.title}.</b> ${q.lesson}</li>`));
+      $("title").hidden = true;
+      modal(`<h2>Шпаргалка вайбкодера</h2><ol class="notes">${items.join("")}</ol><button id="m-ok">Назад</button>`, () => { busy = true; $("title").hidden = false; play.focus(); });
+    };
     play.onclick = () => {
       Sound.unlock();
       $("title").hidden = true;

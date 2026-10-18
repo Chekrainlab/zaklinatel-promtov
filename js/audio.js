@@ -41,6 +41,48 @@ window.Sound = (function () {
         [69, 72, 74, null], [77, null, 74, null], [72, null, 69, null], [72, null, null, null],
       ],
     },
+    { // Башня галлюцинаций: мечтательный ми минор со звёздным арпеджио.
+      bpm: 80, pluck: 3200,
+      chords: [
+        { root: 40, tones: [64, 67, 71, 74] },
+        { root: 36, tones: [60, 64, 67, 71] },
+        { root: 43, tones: [62, 67, 71, 74] },
+        { root: 38, tones: [62, 66, 69, 74] },
+      ],
+      arp: [0, 2, 1, 3, 2, 0, 3, 1],
+      melody: [
+        [79, null, 78, 76], [76, null, 74, null], [74, 76, 79, null], [78, null, null, null],
+        [83, null, 81, 79], [79, null, 76, null], [74, null, 76, 78], [76, null, null, null],
+      ],
+    },
+    { // Кодоград: бодрый фа мажор, город мастеров.
+      bpm: 104, pluck: 2800,
+      chords: [
+        { root: 41, tones: [65, 69, 72, 76] },
+        { root: 38, tones: [62, 65, 69, 72] },
+        { root: 46, tones: [62, 65, 70, 74] },
+        { root: 36, tones: [64, 67, 72, 76] },
+      ],
+      arp: [0, 1, 2, 1, 3, 1, 2, 1],
+      melody: [
+        [81, null, 79, 77], [77, null, 74, null], [74, 77, 79, null], [79, null, 76, null],
+        [81, 79, 81, 84], [82, null, 81, null], [79, 77, 76, 79], [77, null, null, null],
+      ],
+    },
+    { // Цитадель: героический ля минор для финала.
+      bpm: 96, pluck: 2200,
+      chords: [
+        { root: 45, tones: [64, 69, 72, 76] },
+        { root: 41, tones: [65, 69, 72, 77] },
+        { root: 48, tones: [64, 67, 72, 76] },
+        { root: 43, tones: [62, 67, 71, 74] },
+      ],
+      arp: [0, 1, 2, 3, 0, 1, 2, 3],
+      melody: [
+        [76, null, 72, 76], [77, null, 76, 72], [79, null, 76, 72], [74, null, null, null],
+        [76, 79, 81, null], [81, null, 79, 77], [76, null, 74, 72], [71, null, null, null],
+      ],
+    },
   ];
 
   function impulse(sec) {
