@@ -72,7 +72,7 @@ window.Platform = (function () {
       const res = await ysdk.leaderboards.getEntries(LEADERBOARD, { quantityTop: 10, includeUser: isAuthorized(), quantityAround: 1 });
       return {
         me: res.userRank || 0,
-        rows: res.entries.map(e => ({ rank: e.rank, score: e.score, name: e.player.publicName || "Игрок", me: e.rank === res.userRank })),
+        rows: res.entries.map(e => ({ rank: e.rank, score: e.score, name: e.player.publicName || "", me: e.rank === res.userRank })),
       };
     } catch (e) { console.warn("Таблица лидеров недоступна", e); return null; }
   }
@@ -124,5 +124,7 @@ window.Platform = (function () {
   }
 
   const hasSdk = () => !!ysdk;
-  return { init, ready, load, save, rewarded, interstitial, gameplay, hasSdk, isAuthorized, login, submitScore, topScores };
+  // Язык Яндекса (ru, en, uz…) для автоматического выбора языка игры.
+  const sdkLang = () => ysdk?.environment?.i18n?.lang || null;
+  return { sdkLang, init, ready, load, save, rewarded, interstitial, gameplay, hasSdk, isAuthorized, login, submitScore, topScores };
 })();

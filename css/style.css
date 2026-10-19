@@ -88,7 +88,7 @@ canvas#cv {
   .pad { position: fixed; left: max(10px, env(safe-area-inset-left, 0px)); bottom: 10px; z-index: 5; margin: 0; opacity: .85; }
 }
 @media (max-width: 480px) { .goal { gap: 8px; padding: 8px 10px 8px 8px; } .goal span { font-size: .88rem; } .goal small { padding: 6px 9px; font-size: .66rem; } .snd { width: 34px; height: 34px; } }
-@media (max-height: 520px) { .help { display: none; } .goal { padding-top: 6px; padding-bottom: 6px; } }
+@media (max-height: 520px) { .help, .title-card .kicker, .title-card h1 + p { display: none; } .help { display: none; } .goal { padding-top: 6px; padding-bottom: 6px; } }
 
 button {
   font-family: var(--head); font-weight: 800; font-size: 1rem; line-height: 1.2; border: 0; cursor: pointer; border-radius: 14px;
@@ -107,6 +107,7 @@ button.ghost { background: var(--card-2); color: var(--ink-soft); box-shadow: no
 /* Титульный экран */
 .title { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 16px; background: rgba(12, 14, 30, .55); backdrop-filter: blur(8px); }
 .title-card {
+  max-height: 100%; overflow-y: auto; position: relative; padding-top: 48px !important;
   max-width: 400px; width: 100%; text-align: center; display: flex; flex-direction: column; gap: 14px; padding: 32px 26px 26px;
   background: var(--card); color: var(--ink); border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
   animation: pop .3s ease-out;
@@ -181,6 +182,7 @@ button.ghost { background: var(--card-2); color: var(--ink-soft); box-shadow: no
 /* Окна */
 .overlay { position: fixed; inset: 0; background: rgba(10, 12, 28, .6); backdrop-filter: blur(6px); display: grid; place-items: center; z-index: 20; padding: 16px; }
 .modal {
+  max-height: 100%; overflow-y: auto;
   max-width: 400px; width: 100%; display: flex; flex-direction: column; gap: 14px; text-align: center; padding: 28px 22px 22px;
   background: var(--card); color: var(--ink); border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
   animation: pop .25s ease-out;
@@ -197,3 +199,26 @@ button.ghost { background: var(--card-2); color: var(--ink-soft); box-shadow: no
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01s !important; transition-duration: .01s !important; }
 }
+
+/* Выбор языка, «Промт дня», достижения, раздел для взрослых, всплывающее уведомление */
+.lang { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; }
+.title-card .lang button { margin: 0; padding: 5px 8px; font-size: .72rem; border-radius: 9px; background: var(--card-2); color: var(--ink-soft); box-shadow: none; font-family: var(--head); font-weight: 900; }
+.title-card .lang button.on { background: var(--brand); color: #fff; }
+.title-card button.daily { margin-top: 0; padding: 12px; font-size: 1rem; background: linear-gradient(135deg, var(--gold), var(--gold-2)); box-shadow: 0 8px 20px rgba(255, 138, 61, .3); }
+.title-card button.daily.done { background: var(--ok-soft); color: #1d7a62; box-shadow: none; }
+.streak { font-family: var(--head); font-weight: 800; color: var(--gold-2) !important; }
+.ach { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.ach li { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--card-2); opacity: .55; }
+.ach li.on { opacity: 1; background: #fff6e0; }
+.ach li span { font-size: 1.4rem; }
+.ach li b { display: block; font-family: var(--head); }
+.ach li small { color: var(--ink-soft); }
+.parents { text-align: left; display: flex; flex-direction: column; gap: 6px; line-height: 1.5; font-size: .92rem; }
+.parents h3 { font-family: var(--head); font-weight: 900; color: var(--brand); margin: 10px 0 0; font-size: 1rem; }
+.parents ul { margin: 0; padding-left: 20px; color: var(--ink-soft); }
+.toast {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 40; display: flex; flex-direction: column; align-items: center;
+  background: var(--card); color: var(--ink); padding: 10px 18px; border-radius: 16px; box-shadow: var(--shadow); animation: rise .25s ease-out; text-align: center;
+}
+.toast small { color: var(--ink-soft); font-size: .75rem; }
+.toast b { font-family: var(--head); }

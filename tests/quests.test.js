@@ -70,3 +70,48 @@ for (const [ch, chapter] of CHAPTERS.entries()) {
     for (const c of blockers) assert.ok(chapter.story.bump[c], `нет подсказки для «${c}»`);
   });
 }
+
+// ---------- Промт дня и переводы ----------
+const { DAILY, PARENTS } = require("../js/quests.js");
+
+test("промт дня: в каждом слоте ровно одна верная карточка", () => {
+  assert.ok(DAILY.length >= 7);
+  for (const q of DAILY) for (const s of q.slots) {
+    assert.strictEqual(s.opts.filter(o => o.ok).length, 1, `${q.title} / ${s.label}`);
+    for (const o of s.opts) if (!o.ok) assert.ok(o.fail, `${q.title} / ${o.t}`);
+  }
+  assert.strictEqual(PARENTS.length, CHAPTERS.length, "у каждой главы есть пояснение для взрослых");
+});
+
+global.document = { documentElement: {} };
+global.navigator = { language: "ru" };
+global.localStorage = { getItem: () => null, setItem() {} };
+require("../js/i18n.js");
+const { I18N } = window;
+for (const lang of ["en", "uz"]) {
+  require(`../js/lang/${lang}.js`);
+  test(`перевод ${lang}: повторяет структуру русского текста и ничего не теряет`, () => {
+    const pack = window.LANG_PACKS[lang];
+    assert.ok(pack, "нет пакета");
+    // Каждая строка оригинала должна иметь перевод на том же месте.
+    const same = (src, tr, path) => {
+      if (typeof src === "string") {
+        assert.strictEqual(typeof tr, "string", `${path}: нет перевода`);
+        assert.ok(tr.trim(), `${path}: пустой перевод`);
+        assert.ok(!/[а-яё]/i.test(tr), `${path}: остался русский текст`);
+        for (const ph of src.match(/\{\w+\}/g) || []) assert.ok(tr.includes(ph), `${path}: нет ${ph}`);
+        assert.strictEqual((tr.match(/<br>/g) || []).length, (src.match(/<br>/g) || []).length, `${path}: <br>`);
+        return;
+      }
+      if (Array.isArray(src)) { assert.strictEqual(tr?.length, src.length, `${path}: длина`); return src.forEach((x, i) => same(x, tr[i], `${path}[${i}]`)); }
+      if (src && typeof src === "object") for (const k of Object.keys(src)) if (!I18N.SKIP.has(k)) same(src[k], tr?.[k], `${path}.${k}`);
+    };
+    same(CHAPTERS, pack.chapters, "chapters");
+    same(DAILY, pack.daily, "daily");
+    same(PARENTS, pack.parents, "parents");
+    same(I18N.RU, pack.ui, "ui");
+    const names = new Set();
+    JSON.stringify(CHAPTERS, (k, v) => { if ((k === "who" || k === "guideName") && typeof v === "string") names.add(v); return v; });
+    for (const n of names) assert.ok(pack.names[n] && !/[а-яё]/i.test(pack.names[n]), `нет имени ${n}`);
+  });
+}

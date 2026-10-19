@@ -9,8 +9,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="goal paper"><small id="chap">Глава 1</small><span id="goal"></span>
-    <b class="stars" id="stars" title="Звёзды за задания">★ 0</b>
+  <div class="goal paper"><small id="chap"></small><span id="goal"></span>
+    <b class="stars" id="stars" data-i18n-title="starsTitle">★ 0</b>
     <button class="snd" id="snd" aria-label="Выключить звук">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/>
@@ -18,36 +18,46 @@
         <path class="mute" d="m16 9 6 6m0-6-6 6"/>
       </svg>
     </button></div>
-  <div class="stage" id="stage"><canvas id="cv" width="960" height="720" aria-label="Мир Кодолесья"></canvas></div>
+  <div class="stage" id="stage"><canvas id="cv" width="960" height="720" data-i18n-aria="world"></canvas></div>
   <div class="pad" id="pad">
-    <button class="u" data-d="0,-1" aria-label="Вверх">▲</button>
-    <button class="l" data-d="-1,0" aria-label="Влево">◀</button>
-    <button class="r" data-d="1,0" aria-label="Вправо">▶</button>
-    <button class="d" data-d="0,1" aria-label="Вниз">▼</button>
+    <button class="u" data-d="0,-1" data-i18n-aria="up">▲</button>
+    <button class="l" data-d="-1,0" data-i18n-aria="left">◀</button>
+    <button class="r" data-d="1,0" data-i18n-aria="right">▶</button>
+    <button class="d" data-d="0,1" data-i18n-aria="down">▼</button>
   </div>
-  <p class="help">Ходите стрелками или кнопками. Чтобы поговорить, подойдите к жителю вплотную.</p>
+  <p class="help" data-i18n="help"></p>
 </div>
 
 <div class="title" id="title" hidden>
   <div class="title-card">
-    <p class="kicker">Приключение о вайбкодинге</p>
-    <h1>Кодолесье</h1>
-    <p>Повелитель Багов украл Духа Кода. Верните его, научившись просить точно.</p>
+    <div class="lang" role="group" data-i18n-aria="language">
+      <button data-lang="ru">RU</button><button data-lang="en">EN</button><button data-lang="uz">UZ</button>
+    </div>
+    <p class="kicker" data-i18n="kicker"></p>
+    <h1 data-i18n="game"></h1>
+    <p data-i18n="tagline"></p>
     <p class="t-stars" id="t-stars" hidden></p>
-    <button id="t-play">Играть</button>
+    <button id="t-play"></button>
+    <button class="daily" id="t-daily"></button>
     <div class="t-row">
-      <button class="ghost" id="t-chapters" hidden>Главы</button>
-      <button class="ghost" id="t-notes" hidden>Шпаргалка</button>
-      <button class="ghost" id="t-top" hidden>Рекорды</button>
+      <button class="ghost" id="t-chapters" data-i18n="chapters" hidden></button>
+      <button class="ghost" id="t-notes" data-i18n="notes" hidden></button>
+      <button class="ghost" id="t-top" data-i18n="top" hidden></button>
+      <button class="ghost" id="t-ach" data-i18n="achievements"></button>
+      <button class="ghost" id="t-parents" data-i18n="parents"></button>
     </div>
   </div>
 </div>
 <div class="sheet" id="sheet" hidden><div id="sheet-body"></div></div>
 <div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast" hidden></div>
 
 <script src="js/audio.js"></script>
 <script src="js/world.js"></script>
 <script src="js/quests.js"></script>
+<script src="js/lang/en.js"></script>
+<script src="js/lang/uz.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/platform.js"></script>
 <script src="js/game.js"></script>
 </body>

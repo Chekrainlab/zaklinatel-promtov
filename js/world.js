@@ -1,7 +1,7 @@
 // Карты глав и векторная отрисовка: мягкие формы, градиенты и свет вместо пикселей.
 // Буквы карты: . трава, p тропа, T дерево, ~ вода, b место для моста, # скала,
 // d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка или ступень,
-// m мираж, c ящики. Вода по теме главы может быть звёздной пропастью или лавой.
+// m мираж, c ящики (в других главах сугробы или книги). Вода по теме главы может быть звёздной пропастью или лавой.
 // Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5),
 // E I Y (6), L o y (7), a g z (8); на их месте трава или то, что указано в under.
 window.World = (function () {
@@ -530,10 +530,17 @@ window.World = (function () {
       ctx.save(); ctx.globalCompositeOperation = "lighter";
       ctx.fillStyle = radial(ctx, 0, -28 + fy, 34, [[0, "rgba(124,245,200,.6)"], [1, "rgba(124,245,200,0)"]]);
       ctx.fillRect(-40, -70, 80, 80); ctx.restore();
-      ctx.beginPath(); ctx.moveTo(-16, -10 + fy); ctx.quadraticCurveTo(-18, -46 + fy, 0, -48 + fy); ctx.quadraticCurveTo(18, -46 + fy, 16, -10 + fy);
-      ctx.quadraticCurveTo(10, -4 + fy, 6, -10 + fy); ctx.quadraticCurveTo(0, -4 + fy, -6, -10 + fy); ctx.quadraticCurveTo(-10, -4 + fy, -16, -10 + fy);
-      ctx.fillStyle = "#b8ffe6"; ctx.fill();
-      ellipse(ctx, -5, -30 + fy, 2.6, 3.6, "#1d4d45"); ellipse(ctx, 5, -30 + fy, 2.6, 3.6, "#1d4d45");
+      // Кодик: круглый летающий ИИ-помощник с экраном-лицом и антенной.
+      ellipse(ctx, 0, -6, 10, 3, "rgba(20,60,50,.25)");
+      const g = ctx.createLinearGradient(0, -48 + fy, 0, -12 + fy); g.addColorStop(0, "#e6fff6"); g.addColorStop(1, "#8ff0cc");
+      circle(ctx, 0, -30 + fy, 18, g);
+      rr(ctx, -12, -38 + fy, 24, 15, 7); ctx.fillStyle = "#1d4d45"; ctx.fill();
+      const blink = Math.sin(t / 900) > .96 ? 1 : 5;
+      rr(ctx, -7, -33 + fy - blink / 2, 4, blink, 2); ctx.fillStyle = "#7cf5c8"; ctx.fill();
+      rr(ctx, 3, -33 + fy - blink / 2, 4, blink, 2); ctx.fill();
+      ctx.strokeStyle = "#4fd4a8"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -48 + fy); ctx.lineTo(0, -54 + fy); ctx.stroke();
+      circle(ctx, 0, -56 + fy, 3, "#ffcf4a");
+      ellipse(ctx, -21, -28 + fy, 4, 7, "#8ff0cc"); ellipse(ctx, 21, -28 + fy, 4, 7, "#8ff0cc");
       ctx.restore(); return;
     }
 
@@ -645,14 +652,12 @@ window.World = (function () {
     if (id === "hero") { rr(ctx, -13, -16 - b, 26, 4, 2); ctx.fillStyle = "#ffcf4a"; ctx.fill(); }
     if (id === "B") { ctx.beginPath(); ctx.moveTo(-18, -4 - b); ctx.lineTo(-13, -30 - b); ctx.lineTo(13, -30 - b); ctx.lineTo(18, -4 - b); ctx.closePath(); ctx.fillStyle = "#3d1233"; ctx.fill(); }
 
-    // Посох героя.
+    // Планшет героя: через него он говорит с Кодиком.
     if (id === "hero" && !o.portrait) {
-      ctx.strokeStyle = "#9a6a3a"; ctx.lineWidth = 3.5; ctx.lineCap = "round";
-      ctx.beginPath(); ctx.moveTo(16 * look, -6 - b); ctx.lineTo(18 * look, -44 - b); ctx.stroke();
-      ctx.save(); ctx.globalCompositeOperation = "lighter";
-      ctx.fillStyle = radial(ctx, 18 * look, -47 - b, 12, [[0, "rgba(124,245,200,.9)"], [1, "rgba(124,245,200,0)"]]);
-      ctx.fillRect(18 * look - 12, -59 - b, 24, 24); ctx.restore();
-      circle(ctx, 18 * look, -47 - b, 4, "#d8fff0");
+      ctx.save(); ctx.translate(15 * look, -22 - b); ctx.rotate(.15 * look);
+      rr(ctx, -6, -9, 12, 17, 3); ctx.fillStyle = "#2a2f45"; ctx.fill();
+      rr(ctx, -4, -7, 8, 12, 2); ctx.fillStyle = "#7cf5c8"; ctx.fill();
+      ctx.restore();
     }
 
     // Голова.
@@ -672,10 +677,10 @@ window.World = (function () {
 
     // Головные уборы.
     if (id === "hero") {
-      ellipse(ctx, 0, hy - 9, 19, 5, "#5136d6");
-      ctx.beginPath(); ctx.moveTo(-13, hy - 10); ctx.quadraticCurveTo(-4, hy - 30, 9 * look, hy - 40); ctx.quadraticCurveTo(6, hy - 22, 13, hy - 10); ctx.closePath();
-      ctx.fillStyle = "#6c4ff5"; ctx.fill();
-      circle(ctx, 3, hy - 20, 3, "#ffcf4a");
+      // Герой: фиолетовая кепка с жёлтым значком «</>».
+      ctx.beginPath(); ctx.arc(0, hy - 4, 15, Math.PI, 0); ctx.fillStyle = "#6c4ff5"; ctx.fill();
+      rr(ctx, -4 + look * 7, hy - 7, 18, 4, 2); ctx.fillStyle = "#5136d6"; ctx.fill();
+      circle(ctx, 0, hy - 12, 4, "#ffcf4a");
     }
     if (id === "A") {
       ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI, 0); ctx.fillStyle = "#eeeaf6"; ctx.fill();
@@ -684,11 +689,10 @@ window.World = (function () {
       ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
     }
     if (id === "V") {
-      // Звездочёт: синий колпак со звёздами.
-      ctx.beginPath(); ctx.moveTo(-14, hy - 8); ctx.quadraticCurveTo(-2, hy - 34, -10 * look, hy - 44); ctx.quadraticCurveTo(4, hy - 24, 14, hy - 8); ctx.closePath();
-      ctx.fillStyle = "#2c2f8a"; ctx.fill();
-      ellipse(ctx, 0, hy - 8, 17, 4.5, "#3b3f9e");
-      circle(ctx, -3, hy - 20, 2.2, "#ffe066"); circle(ctx, 3, hy - 13, 1.6, "#ffe066"); circle(ctx, -6 * look, hy - 31, 1.8, "#ffe066");
+      // Астроном: синий берет со значком-звездой.
+      ellipse(ctx, 0, hy - 10, 17, 7, "#2c2f8a");
+      circle(ctx, 0, hy - 17, 2.5, "#2c2f8a");
+      circle(ctx, -7 * look, hy - 11, 2.6, "#ffe066");
       ctx.beginPath(); ctx.moveTo(-7, hy + 6); ctx.quadraticCurveTo(0, hy + 22, 7, hy + 6); ctx.fillStyle = "#eef0ff"; ctx.fill();
     }
     if (id === "P") {
