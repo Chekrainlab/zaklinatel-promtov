@@ -83,6 +83,48 @@ window.Sound = (function () {
         [76, 79, 81, null], [81, null, 79, 77], [76, null, 74, 72], [71, null, null, null],
       ],
     },
+    { // Снежная мастерская: звонкий ре мажор, как колокольчики.
+      bpm: 84, pluck: 3800,
+      chords: [
+        { root: 50, tones: [62, 66, 69, 73] },
+        { root: 47, tones: [59, 62, 66, 69] },
+        { root: 43, tones: [59, 62, 67, 71] },
+        { root: 45, tones: [61, 64, 69, 73] },
+      ],
+      arp: [0, 2, 1, 3, 2, 1, 3, 2],
+      melody: [
+        [78, null, 76, 74], [73, null, 71, null], [74, 76, 78, null], [76, null, null, null],
+        [81, null, 78, 76], [74, null, 73, 71], [71, null, 74, 71], [73, null, null, null],
+      ],
+    },
+    { // Остров маяков: лёгкий соль мажор, как морской ветер.
+      bpm: 100, pluck: 2600,
+      chords: [
+        { root: 43, tones: [62, 67, 71, 74] },
+        { root: 40, tones: [64, 67, 71, 76] },
+        { root: 48, tones: [60, 64, 67, 72] },
+        { root: 50, tones: [62, 66, 69, 74] },
+      ],
+      arp: [0, null, 1, 2, null, 1, 3, 2],
+      melody: [
+        [79, null, 74, 76], [79, null, 83, null], [84, null, 79, 76], [78, null, 74, null],
+        [79, 81, 83, null], [83, null, 79, 76], [76, null, 72, 76], [74, null, null, null],
+      ],
+    },
+    { // Академия: торжественный ми-бемоль мажор для финала второй части.
+      bpm: 92, pluck: 2400,
+      chords: [
+        { root: 39, tones: [63, 67, 70, 74] },
+        { root: 36, tones: [60, 63, 67, 70] },
+        { root: 44, tones: [60, 63, 68, 72] },
+        { root: 46, tones: [62, 65, 70, 74] },
+      ],
+      arp: [0, 1, 2, 3, 2, 1, 2, 3],
+      melody: [
+        [79, null, 75, 79], [77, 75, 72, null], [75, null, 72, 68], [70, null, 74, null],
+        [75, 77, 79, null], [82, null, 79, 75], [77, null, 75, 72], [74, null, null, null],
+      ],
+    },
   ];
 
   function impulse(sec) {

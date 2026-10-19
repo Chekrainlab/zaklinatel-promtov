@@ -2,8 +2,8 @@
 // Буквы карты: . трава, p тропа, T дерево, ~ вода, b место для моста, # скала,
 // d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка или ступень,
 // m мираж, c ящики. Вода по теме главы может быть звёздной пропастью или лавой.
-// Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5);
-// на их месте трава или то, что указано в under.
+// Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5),
+// E I Y (6), L o y (7), a g z (8); на их месте трава или то, что указано в under.
 window.World = (function () {
   const MAPS = [
     { theme: "forest", start: { x: 4, y: 11 }, under: { B: "d" }, rows: [
@@ -91,6 +91,57 @@ window.World = (function () {
       "T..#.......N....#..T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
+    { theme: "snow", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTTT#G#TTTTTTTT",
+      "T..T....##Y##...T..T",
+      "T.......#...#......T",
+      "T..N.....ppp.....N.T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T....N....p....I...T",
+      "T..T.....pp.....T..T",
+      "T#########ccc######T",
+      "T.......ppp........T",
+      "T..H...pp...E...H..T",
+      "T..S..pp...........T",
+      "T....pp.....T......T",
+      "T.T......N......T..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "beach", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TT#G#TTTTTTTTTTTTTTT",
+      "T~#y#~~~~~~~~~~~~~~T",
+      "T~...~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T~~~~~~~~~~~~~~~~~~T",
+      "T....o.pppppp..n...T",
+      "T.n.......p.....T..T",
+      "TTTTTTTTTffffTTTTTTT",
+      "T....n...pp..N.....T",
+      "T..H....pp...L...H.T",
+      "T..S..ppp..........T",
+      "T....pp.....T......T",
+      "T.T......n.....T...T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "academy", start: { x: 4, y: 11 }, under: {}, rows: [
+      "TTTT#####G#####TTTTT",
+      "TTTT#H...z...H#TTTTT",
+      "TTTT#....p....#TTTTT",
+      "T~~~~~~~~b~~~~~~~~~T",
+      "T..N.....p.....g.N.T",
+      "T..T....pp.......T.T",
+      "T.......p..........T",
+      "THHHHHHccHHHHHHHHHHT",
+      "T......pp.........NT",
+      "T..N...p....a......T",
+      "T..S..pp......H....T",
+      "T....pp.....T......T",
+      "T..T.......N....T..T",
+      "T.....T.........H..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
   ];
   const THEMES = {
     forest: { grass: ["#9bd86f", "#6cbd58"], tuft: "rgba(40,110,45,.45)", water: ["#5ab8f0", "#3d9be0"], bank: "#ecd9a4",
@@ -106,9 +157,19 @@ window.World = (function () {
     lava: { grass: ["#5a4a52", "#2f262c"], stone: true, lampGlass: "#ffb070", water: ["#ff8a2a", "#d8461a"], bank: "#3a2d30", lavaGlow: true,
       leaf: ["#3c2f34", "#55424a", "#6e5560"], trunk: "#2a2024", path: ["#7d6a5c", "#a08a77"], bridge: "stone",
       rock: ["#6e6370", "#4a4050", "#2c2530"], lamp: "rgba(255,150,80,.5)", embers: true },
+    snow: { grass: ["#eef6ff", "#cddff0"], tuft: "rgba(110,150,200,.3)", water: ["#a6e1f5", "#6cc0e6"], bank: "#ffffff",
+      leaf: ["#2f6b5a", "#3b7d69", "#4a9079"], trunk: "#6b4a33", flowers: ["#ffffff", "#dff1ff", "#c7e6ff"], snow: true,
+      path: ["#c3d4e8", "#dbe7f4"], lamp: "rgba(200,230,255,.5)", lampGlass: "#e0f4ff", rock: ["#d5e2f0", "#a7b9cf", "#7d90a8"] },
+    beach: { grass: ["#f6e3a8", "#e8c983"], tuft: "rgba(160,130,60,.3)", water: ["#47c4ea", "#2186cc"], bank: "#fff4d2",
+      leaf: ["#2f9a5a", "#3fb46a", "#6fd08a"], flowers: ["#ffb3c7", "#ffffff", "#ffd27a"], kStyle: "stone",
+      path: ["#d4ae72", "#e6c891"], lamp: "rgba(255,230,150,.55)", lampGlass: "#fff1b0", rock: ["#c9b79a", "#9c8a70", "#6e6050"],
+      roofs: [["#4fb3e8", "#2a86c4"], ["#ffffff", "#d8e4ee"]] },
+    academy: { grass: ["#c5d67a", "#93b257"], tuft: "rgba(90,110,40,.35)", water: ["#5ab8f0", "#3d9be0"], bank: "#d9cfb8",
+      leaf: ["#d9622b", "#ee8f3a", "#f6c453"], flowers: ["#ffffff", "#ff9ec4", "#ffd54f"], books: true, leaves: true, bridge: "stone",
+      rock: ["#e0cfb4", "#b59e80", "#7d6a58"], roofs: [["#8a5cd6", "#6a3fb8"], ["#d9483a", "#b3352a"]], lampGlass: "#ffe7a0", lamp: "rgba(255,220,140,.5)" },
   };
   const TS = 48, W = 20, H = 15, CHAPTERS = MAPS.length;
-  const NPC = "AFMBSKQZWVXRPUCDJ";
+  const NPC = "AFMBSKQZWVXRPUCDJEIYLoyagz";
   const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N", "m", "c"]);
   const WATER = new Set(["~", "b", "=", "k"]);
   const PATHS = new Set(["p", "="]);
@@ -217,6 +278,12 @@ window.World = (function () {
         ctx.save(); ctx.translate(X + 24, Y + 23 + fy); ctx.beginPath();
         for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr2 = i % 2 ? 2.5 : 6; ctx.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2 * .6); }
         ctx.closePath(); ctx.fillStyle = "#ffb92e"; ctx.fill(); ctx.restore();
+      } else if (grid[y][x] === "k" && th.kStyle === "stone") {
+        // Камень в море: по таким перебираются на скалу.
+        ellipse(ctx, X + 24, Y + 31, 20, 9, "rgba(0,40,80,.3)");
+        ellipse(ctx, X + 24, Y + 26, 19, 12, "#9c8f84");
+        ellipse(ctx, X + 24, Y + 23, 16, 9, "#bfb3a6");
+        ellipse(ctx, X + 18, Y + 20, 5, 2.5, "rgba(255,255,255,.35)");
       } else if (grid[y][x] === "k") {
         ellipse(ctx, X + 24, Y + 30, 20, 11, "rgba(20,50,40,.3)");
         ellipse(ctx, X + 24, Y + 26, 19, 12, "#6b8a3e");
@@ -289,6 +356,7 @@ window.World = (function () {
     blob(-13, -26, 15, l0); blob(13, -26, 15, l0); blob(0, -38, 20, l0);
     blob(-10, -30, 12, l1); blob(8, -32, 13, l1); blob(-2, -42, 14, l2);
     blob(-6, -46, 6, "rgba(255,255,255,.22)");
+    if (th.snow) { blob(-1, -48, 12, "#f4faff"); blob(-12, -34, 7, "#eaf4ff"); blob(11, -35, 7, "#eaf4ff"); }
   }
   function drawHouse(ctx, x, y, th) {
     const roof = th.roofs ? th.roofs[rnd(x, y, 60) % th.roofs.length] : ["#ff7a5c", "#d9483a"];
@@ -365,9 +433,29 @@ window.World = (function () {
     }
     ctx.restore();
   }
-  function drawCrates(ctx, x, y) {
+  function drawCrates(ctx, x, y, th) {
     const X = x * TS, Y = y * TS;
     ellipse(ctx, X + 26, Y + 44, 22, 5, "rgba(0,0,0,.2)");
+    if (th.snow) {
+      // Сугроб: мягкие белые бугры с голубой тенью.
+      for (const [dx, dy, r] of [[12, 34, 14], [34, 34, 14], [23, 22, 16]]) {
+        circle(ctx, X + dx, Y + dy + 2, r, "#bcd3ea"); circle(ctx, X + dx, Y + dy, r, "#ffffff");
+      }
+      ellipse(ctx, X + 18, Y + 14, 6, 3, "rgba(200,225,255,.8)");
+      return;
+    }
+    if (th.books) {
+      // Стопки книг разных цветов.
+      const cols = ["#d9483a", "#3f6fd8", "#3c9d68", "#f0a830", "#8a5cd6"];
+      [[4, 6], [26, 4]].forEach(([bx, n], s) => {
+        for (let i = 0; i < n; i++) {
+          const w = 18 + rnd(x, y, 80 + i + s * 9) % 6;
+          rr(ctx, X + bx + (i % 2) * 2, Y + 40 - (i + 1) * 6, w, 6, 2); ctx.fillStyle = cols[(i + s * 2 + x) % cols.length]; ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.fillRect(X + bx + (i % 2) * 2 + 3, Y + 42 - (i + 1) * 6, w - 6, 1.5);
+        }
+      });
+      return;
+    }
     const box = (bx, by, w, h) => {
       rr(ctx, bx, by, w, h, 4); ctx.fillStyle = "#c98d4f"; ctx.fill();
       ctx.strokeStyle = "#8a5a2b"; ctx.lineWidth = 2.5; ctx.stroke();
@@ -388,6 +476,16 @@ window.World = (function () {
     }
     ctx.restore();
   }
+  // Снегопад или листопад: хлопья и листья медленно падают и кружатся.
+  function drawWeather(ctx, t, th) {
+    for (let i = 0; i < 22; i++) {
+      const fy = (t / (th.snow ? 28 : 40) + rnd(i, 4, 33)) % (H * TS + 40) - 20;
+      const fx = rnd(i, 5, 34) % (W * TS) + Math.sin(t / 900 + i) * 24;
+      if (th.snow) { circle(ctx, fx, fy, 1.8 + i % 3, "rgba(255,255,255,.85)"); continue; }
+      ctx.save(); ctx.translate(fx, fy); ctx.rotate(t / 600 + i);
+      ellipse(ctx, 0, 0, 6, 3, th.leaf[i % 3]); ctx.restore();
+    }
+  }
 
   // ---------- Персонажи в стиле «чиби» ----------
   const LOOKS = {
@@ -405,11 +503,18 @@ window.World = (function () {
     P: { skin: "#f2c39b", body: "#3f6fd8", body2: "#2c55b0" },
     C: { skin: "#ffd8b8", body: "#9aa3b5", body2: "#737c90" },
     D: { skin: "#f2c39b", body: "#e07a3a", body2: "#b85d26" },
+    E: { skin: "#ffd8b8", body: "#2fb5a8", body2: "#21918a" },
+    I: { skin: "#f2c39b", body: "#ff9a3c", body2: "#e07a1f" },
+    L: { skin: "#f2c39b", body: "#2c4f9e", body2: "#1d3a7a" },
+    o: { skin: "#c58af0", body: "#b072e8", body2: "#8a4fcf" },
+    a: { skin: "#ffd8b8", body: "#e2475b", body2: "#c03045" },
+    g: { skin: "#f2c39b", body: "#8a5a33", body2: "#6b4423" },
+    Y: { skin: "#e9e6f5", body: "#e9e6f5", body2: "#c9c2e6" },
   };
-  const ALIAS = { Z: "B", X: "B", U: "B", J: "B" };
+  const ALIAS = { Z: "B", X: "B", U: "B", J: "B", y: "Y", z: "Y" };
   function drawCharacter(ctx, id, cx, by, t, o = {}) {
     id = ALIAS[id] || id;
-    const s = (o.scale || 1) * (id === "B" ? 1.2 : 1), L = LOOKS[id];
+    const s = (o.scale || 1) * (id === "B" ? 1.2 : id === "Y" ? 1.1 : 1), L = LOOKS[id];
     const b = o.walk ? Math.abs(Math.sin(t / 85)) * 4 : Math.sin(t / 500 + cx) * 1.2;
     const look = o.flip ? -1 : 1;
     ctx.save(); ctx.translate(cx, by); ctx.scale(s, s);
@@ -464,6 +569,46 @@ window.World = (function () {
       circle(ctx, 0, -65 - b, 3.2, Math.sin(t / 300) > 0 ? "#ff6b6b" : "#ffb3b3");
       ctx.restore(); return;
     }
+    if (id === "Y") {
+      // Копирус: живой листок бумаги, за которым всегда тянется его бледная копия.
+      const fy = Math.sin(t / 350) * 3;
+      for (const [dx, a] of [[9, .35], [0, 1]]) {
+        ctx.save(); ctx.globalAlpha = a; ctx.translate(dx * look, -dx * .5);
+        ctx.beginPath(); ctx.moveTo(-15, -8 + fy); ctx.lineTo(-15, -52 + fy); ctx.lineTo(7, -52 + fy); ctx.lineTo(15, -44 + fy); ctx.lineTo(15, -8 + fy);
+        ctx.quadraticCurveTo(10, -2 + fy, 5, -8 + fy); ctx.quadraticCurveTo(0, -2 + fy, -5, -8 + fy); ctx.quadraticCurveTo(-10, -2 + fy, -15, -8 + fy);
+        ctx.closePath(); ctx.fillStyle = L.body; ctx.fill(); ctx.strokeStyle = "#9a92c0"; ctx.lineWidth = 2; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(7, -52 + fy); ctx.lineTo(7, -44 + fy); ctx.lineTo(15, -44 + fy); ctx.closePath(); ctx.fillStyle = L.body2; ctx.fill();
+        ctx.restore();
+      }
+      ctx.strokeStyle = "#b8b0dc"; ctx.lineWidth = 2; ctx.lineCap = "round";
+      for (const ly of [-22, -16]) { ctx.beginPath(); ctx.moveTo(-9, ly + fy); ctx.lineTo(9, ly + fy); ctx.stroke(); }
+      ellipse(ctx, -5 + look, -36 + fy, 2.8, 3.8, "#3a2f6a"); ellipse(ctx, 5 + look, -36 + fy, 2.8, 3.8, "#3a2f6a");
+      circle(ctx, -4 + look, -37.4 + fy, 1, "#fff"); circle(ctx, 6 + look, -37.4 + fy, 1, "#fff");
+      circle(ctx, look, -28 + fy, 2.4, "#6a5aa8");
+      ellipse(ctx, -10, -30 + fy, 3, 2, "rgba(255,120,160,.35)"); ellipse(ctx, 10, -30 + fy, 3, 2, "rgba(255,120,160,.35)");
+      ctx.restore(); return;
+    }
+    if (id === "o") {
+      // Осьминог: круглая голова, щупальца шевелятся.
+      if (!o.portrait) {
+        ctx.strokeStyle = L.body2; ctx.lineWidth = 5; ctx.lineCap = "round";
+        for (let i = 0; i < 5; i++) {
+          const ax = -12 + i * 6;
+          ctx.beginPath(); ctx.moveTo(ax, -14 - b); ctx.quadraticCurveTo(ax + Math.sin(t / 300 + i) * 6, -6, ax + (i - 2) * 3, -3); ctx.stroke();
+        }
+      }
+      const g = ctx.createLinearGradient(0, -50 - b, 0, -12 - b); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
+      ellipse(ctx, 0, -30 - b, 17, 19, g);
+      ellipse(ctx, -6, -42 - b, 5, 3, "rgba(255,255,255,.25)");
+      for (const sx of [-6, 6]) {
+        circle(ctx, sx, -30 - b, 5, "#fff");
+        circle(ctx, sx + look * 1.2, -30 - b, 2.6, "#2a1d3a"); circle(ctx, sx + look * 1.2 + 1, -31 - b, .9, "#fff");
+      }
+      ctx.strokeStyle = "#5a2f8a"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(look, -23 - b, 4, 0.3, Math.PI - 0.3); ctx.stroke();
+      ellipse(ctx, -11, -24 - b, 3, 2, "rgba(255,120,160,.4)"); ellipse(ctx, 11, -24 - b, 3, 2, "rgba(255,120,160,.4)");
+      ctx.restore(); return;
+    }
     if (id === "Q") {
       const g = ctx.createLinearGradient(0, -40 - b, 0, -2); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
       if (!o.portrait) { ellipse(ctx, -11, -4, 7, 4, L.body2); ellipse(ctx, 11, -4, 7, 4, L.body2); }
@@ -492,6 +637,11 @@ window.World = (function () {
     if (id === "D") { ctx.fillStyle = "#3f6fd8"; ctx.fillRect(-9, -22 - b, 18, 18); ctx.fillRect(-8, -30 - b, 3, 9); ctx.fillRect(5, -30 - b, 3, 9); }
     if (id === "C") { rr(ctx, -9, -26 - b, 18, 14, 4); ctx.fillStyle = "#c0c8d8"; ctx.fill(); circle(ctx, 0, -19 - b, 3, "#e24b5b"); }
     if (id === "V") { for (let i = 0; i < 3; i++) circle(ctx, -6 + i * 6, -12 - b - (i % 2) * 6, 1.6, "#ffe066"); }
+    if (id === "E") { rr(ctx, -13, -14 - b, 26, 4, 2); ctx.fillStyle = "#5a4030"; ctx.fill(); rr(ctx, 5, -17 - b, 4, 9, 1); ctx.fillStyle = "#c0c8d8"; ctx.fill(); }
+    if (id === "I") { rr(ctx, -6, -24 - b, 12, 10, 3); ctx.fillStyle = "#fff3d6"; ctx.fill(); ctx.fillStyle = "#ff9a3c"; ctx.font = "900 8px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillText("</>", 0, -16 - b); }
+    if (id === "L") { ctx.fillStyle = "rgba(255,255,255,.85)"; for (let i = 0; i < 3; i++) ctx.fillRect(-12, -25 - b + i * 7, 24, 2.5); }
+    if (id === "a") { ctx.fillStyle = "#7a4a2a"; ctx.fillRect(-10, -30 - b, 3, 20); ctx.fillRect(7, -30 - b, 3, 20); }
+    if (id === "g") { rr(ctx, 2, -22 - b, 13, 15, 2); ctx.fillStyle = "#c0392b"; ctx.fill(); ctx.fillStyle = "#fff3d6"; ctx.fillRect(4, -20 - b, 9, 11); }
     if (id === "hero") { rr(ctx, -13, -16 - b, 26, 4, 2); ctx.fillStyle = "#ffcf4a"; ctx.fill(); }
     if (id === "B") { ctx.beginPath(); ctx.moveTo(-18, -4 - b); ctx.lineTo(-13, -30 - b); ctx.lineTo(13, -30 - b); ctx.lineTo(18, -4 - b); ctx.closePath(); ctx.fillStyle = "#3d1233"; ctx.fill(); }
 
@@ -514,7 +664,7 @@ window.World = (function () {
     if (id !== "B") {
       circle(ctx, -4.2 + look * 1.2, hy - 2.2, 1, "#fff"); circle(ctx, 5.8 + look * 1.2, hy - 2.2, 1, "#fff");
       ellipse(ctx, -9, hy + 4, 3, 2, "rgba(255,120,120,.35)"); ellipse(ctx, 9, hy + 4, 3, 2, "rgba(255,120,120,.35)");
-      if (id !== "F") { ctx.strokeStyle = "#8a4a3a"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(look, hy + 4, 2.6, 0.3, Math.PI - 0.3); ctx.stroke(); }
+      if (id !== "F" && id !== "g") { ctx.strokeStyle = "#8a4a3a"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(look, hy + 4, 2.6, 0.3, Math.PI - 0.3); ctx.stroke(); }
     } else {
       ctx.save(); ctx.globalCompositeOperation = "lighter";
       circle(ctx, -5 + look, hy - 1, 6, "rgba(255,60,100,.35)"); circle(ctx, 5 + look, hy - 1, 6, "rgba(255,60,100,.35)"); ctx.restore();
@@ -559,6 +709,38 @@ window.World = (function () {
       for (let i = 0; i < 6; i++) circle(ctx, -12 + i * 4.8, hy - 11 + (i % 2) * 2, 5, "#7a3e1d");
       rr(ctx, -13, hy - 10, 26, 4, 2); ctx.fillStyle = "#4a4a55"; ctx.fill();
       circle(ctx, -5, hy - 8, 4, "#9fe3ff"); circle(ctx, 5, hy - 8, 4, "#9fe3ff");
+    }
+    if (id === "E") {
+      // Изобретательница: тёмные волосы с пучком и карандаш за ухом.
+      ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI, 0); ctx.fillStyle = "#6b3a1e"; ctx.fill();
+      circle(ctx, 0, hy - 17, 7, "#6b3a1e");
+      rr(ctx, 11, hy - 10, 3, 12, 1); ctx.fillStyle = "#ffcf4a"; ctx.fill();
+    }
+    if (id === "I") {
+      // Ученик: кепка и круглые очки.
+      ctx.beginPath(); ctx.arc(0, hy - 5, 14, Math.PI, 0); ctx.fillStyle = "#2f6cc4"; ctx.fill();
+      rr(ctx, -4 + look * 6, hy - 8, 16, 4, 2); ctx.fillStyle = "#1d4d9a"; ctx.fill();
+      ctx.strokeStyle = "#3a2f2a"; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.2, 0, 7); ctx.moveTo(9.2 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.2, 0, 7); ctx.stroke();
+    }
+    if (id === "L") {
+      // Маячница: белая морская шапочка с синей лентой.
+      ellipse(ctx, 0, hy - 10, 15, 5, "#ffffff");
+      rr(ctx, -10, hy - 21, 20, 11, 5); ctx.fillStyle = "#ffffff"; ctx.fill();
+      rr(ctx, -10, hy - 14, 20, 3, 1); ctx.fillStyle = "#2c55b0"; ctx.fill();
+    }
+    if (id === "a") {
+      // Ученица: косички с бантами.
+      ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI, 0); ctx.fillStyle = "#3a2418"; ctx.fill();
+      circle(ctx, -15, hy + 2, 5, "#3a2418"); circle(ctx, 15, hy + 2, 5, "#3a2418");
+      circle(ctx, -14, hy - 4, 3, "#ff6b8a"); circle(ctx, 14, hy - 4, 3, "#ff6b8a");
+    }
+    if (id === "g") {
+      // Библиотекарь: седая борода, очки и залысина.
+      ellipse(ctx, -13, hy - 4, 4, 6, "#d8d8e0"); ellipse(ctx, 13, hy - 4, 4, 6, "#d8d8e0");
+      ctx.beginPath(); ctx.arc(0, hy + 3, 11, 0.1, Math.PI - 0.1); ctx.fillStyle = "#f0f0f4"; ctx.fill();
+      ctx.strokeStyle = "#5a4030"; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
     }
     if (id === "K") {
       ctx.fillStyle = "#5c9e4a";
@@ -607,7 +789,7 @@ window.World = (function () {
       else if (c === "f") items.push({ z: y * TS + TS + 2, d: () => drawFog(ctx, x, y, t) });
       else if (c === "n" || c === "N") items.push({ z: y * TS + TS - 2, d: () => drawLantern(ctx, x, y, c === "N", t, th) });
       else if (c === "m") items.push({ z: y * TS + TS + 2, d: () => drawMirage(ctx, x, y, t) });
-      else if (c === "c") items.push({ z: y * TS + TS - 1, d: () => drawCrates(ctx, x, y) });
+      else if (c === "c") items.push({ z: y * TS + TS - 1, d: () => drawCrates(ctx, x, y, th) });
       else if (c === "H") items.push({ z: y * TS + TS, d: () => drawHouse(ctx, x, y, th) });
       else if (c === "G" || c === "O") items.push({ z: y * TS, d: () => drawGate(ctx, x, y, c === "O", t) });
       else if (c === "l" && (x + y) % 2 === 0) items.push({ z: y * TS + 20, d: () => drawTorch(ctx, x, y, t) });
@@ -618,6 +800,7 @@ window.World = (function () {
     } });
     items.sort((a, b) => a.z - b.z).forEach(i => i.d());
     if (th.fireflies || th.embers) drawFireflies(ctx, t, th);
+    if (th.snow || th.leaves) drawWeather(ctx, t, th);
   }
 
   function drawPortrait(ctx, id, size, t = 0) {
