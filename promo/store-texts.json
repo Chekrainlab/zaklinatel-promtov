@@ -1,0 +1,26 @@
+{
+  "ru": {
+    "title": "Кодолесье",
+    "short": "Приключение, где учатся просить ИИ точно",
+    "seo": "Кодолесье: приключение для детей и взрослых. Собирайте просьбы ИИ-помощнику из карточек и учитесь писать понятные промты.",
+    "description": "Повелитель Багов похитил Кодика, доброго робота-помощника, и в Кодолесье всё сломалось: мосты исчезли, башня тонет в тумане, а в Кодограде путаница. Кодик делает ровно то, что его попросили, поэтому помочь жителям можно только точной просьбой. Собирайте промты из карточек, стройте мосты, разгоняйте туман и выручайте жителей. Восемь глав, 24 задания и своя музыка в каждом мире. По пути вы узнаете правила, которыми пользуются настоящие разработчики, когда просят ИИ написать программу: говорить конкретно, давать примеры, проверять результат и беречь личные данные. Каждый день ждёт новый «Промт дня», а за точные просьбы вы получаете звёзды и достижения. Для родителей и учителей есть раздел с вопросами для разговора с ребёнком.",
+    "howto": "Ходите стрелками или WASD на компьютере и кнопками на экране телефона. Подойдите к жителю, чтобы поговорить и взять задание. Затем соберите просьбу Кодику: в каждой строке выберите самую точную карточку и нажмите «Попросить Кодика». Если просьба размытая, Кодик сделает не то, и вы увидите почему. Без ошибок получите три звезды. Помогите всем жителям главы, и откроется путь дальше. Пройденные главы можно переиграть ради звёзд, а все правила собраны в «Шпаргалке».",
+    "keywords": "промт, нейросеть, искусственный интеллект, программирование, обучение, приключение, для детей"
+  },
+  "en": {
+    "title": "Codewood",
+    "short": "An adventure where you learn to ask AI clearly",
+    "seo": "Codewood is an adventure for kids and grown-ups: build requests to a friendly AI helper from cards and learn to write clear prompts.",
+    "description": "The Bug Lord has kidnapped Kodik, a kind robot helper, and everything in Codewood has broken: bridges are gone, a tower is lost in fog and Code City is in a muddle. Kodik does exactly what you ask, so only a precise request can help the villagers. Build prompts from cards, raise bridges, clear the fog and help everyone out. Eight chapters, 24 quests and its own music in every world. Along the way you learn the rules real developers use when they ask AI to write a program: be specific, give examples, check the result and protect personal data. A new Daily prompt waits every day, and precise requests earn stars and achievements. Parents and teachers get a section with questions to talk over with children.",
+    "howto": "Walk with the arrow keys or WASD on a computer, or with the on-screen buttons on a phone. Walk up to a villager to talk and get a quest. Then build a request for Kodik: in each row pick the most precise card and press Ask Kodik. If the request is vague, Kodik does the wrong thing and you see why. No mistakes earns three stars. Help everyone in a chapter to open the way forward. Finished chapters can be replayed for stars, and every rule you learn is kept in the Cheat Sheet.",
+    "keywords": "prompt, ai, neural network, programming, coding, learning, adventure, kids"
+  },
+  "uz": {
+    "title": "Kod o'rmoni",
+    "short": "Sun'iy intellektdan aniq so'rashni o'rgatadigan sarguzasht",
+    "seo": "Kod o'rmoni bolalar va kattalar uchun sarguzasht: sun'iy intellekt yordamchisiga so'rovni kartochkalardan yig'ing va aniq prompt yozishni o'rganing.",
+    "description": "Xatolar Hukmdori mehribon robot yordamchi Kodikni o'g'irlab ketdi va Kod o'rmonida hamma narsa buzildi: ko'priklar yo'qoldi, minora tumanga cho'mdi, Kodshaharda esa chalkashlik. Kodik aynan nima so'ralsa, shuni bajaradi, shuning uchun aholiga faqat aniq so'rov bilan yordam berish mumkin. Promptlarni kartochkalardan yig'ing, ko'prik quring, tumanni tarqating va aholiga yordam bering. Sakkiz bob, 24 ta topshiriq va har bir dunyoda o'z musiqasi. Yo'l-yo'lakay haqiqiy dasturchilar sun'iy intellektdan dastur yozishni so'raganda foydalanadigan qoidalarni o'rganasiz: aniq gapirish, misol berish, natijani tekshirish va shaxsiy ma'lumotlarni asrash. Har kuni yangi «Kun prompti» kutadi, aniq so'rovlar uchun esa yulduzlar va yutuqlar beriladi. Ota-onalar va o'qituvchilar uchun bola bilan muhokama qilish savollari bor bo'lim mavjud.",
+    "howto": "Kompyuterda strelkalar yoki WASD, telefonda esa ekrandagi tugmalar bilan yuring. Gaplashish va topshiriq olish uchun aholidan biriga yaqin boring. So'ng Kodikka so'rov yig'ing: har bir qatorda eng aniq kartochkani tanlang va «Kodikdan so'rash» tugmasini bosing. So'rov noaniq bo'lsa, Kodik boshqa narsa qiladi va siz sababini ko'rasiz. Xatosiz bajarsangiz, uchta yulduz olasiz. Bobdagi barcha aholiga yordam bering, shunda keyingi yo'l ochiladi. O'tilgan boblarni yulduzlar uchun qayta o'ynash mumkin, barcha qoidalar esa «Eslatma»da jamlangan.",
+    "keywords": "prompt, sun'iy intellekt, neyrotarmoq, dasturlash, ta'lim, sarguzasht, bolalar uchun"
+  }
+}
