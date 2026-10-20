@@ -1,7 +1,7 @@
 // Карты глав и векторная отрисовка: мягкие формы, градиенты и свет вместо пикселей.
 // Буквы карты: . трава, p тропа, T дерево, ~ вода, b место для моста, # скала,
 // d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка или ступень,
-// m мираж, c ящики (в других главах сугробы или книги). Вода по теме главы может быть звёздной пропастью или лавой.
+// m мираж, c ящики (в других главах сугробы или книги), e мольберт, r антенна, ^ телескоп. Вода по теме главы может быть звёздной пропастью или лавой.
 // Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5),
 // E I Y (6), L o y (7), a g z (8), h j v (9), q s w (10), t u x (11); на их месте трава или то, что указано в under.
 window.World = (function () {
@@ -142,55 +142,58 @@ window.World = (function () {
       "T.....T.........H..T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
-    { theme: "studio", start: { x: 4, y: 12 }, under: {}, rows: [
-      "TTTTTTTTTT#G#TTTTTTT",
-      "T..N.....##v##..N..T",
-      "T........#...#.....T",
-      "T..H.......p....H..T",
-      "T~~~~~~~~~~b~~~~~~~T",
-      "T~~~~~~~~~~b~~~~~~~T",
-      "T....N.....p...j...T",
-      "T..T......pp....T..T",
-      "TTTTTTTTTcccTTTTTTTT",
-      "T........ppp.......T",
-      "T..H...pp...h...H..T",
-      "T..S..pp...........T",
-      "T....pp.....T......T",
-      "T.T......N......T..T",
+    // Часть 3: у каждой главы своя форма мира. Студия разделена каналом, путь идёт справа налево.
+    { theme: "studio", start: { x: 16, y: 13 }, under: {}, rows: [
+      "TTTTTTTTTTTTTTTTTTTT",
+      "T....#~~.e..H...e..T",
+      "G.v..#~~...........T",
+      "T....#~~.....H.....T",
+      "T.....bbpppp.....N.T",
+      "T....#~~.j.p..e....T",
+      "T.N..#~~...p.....H.T",
+      "T....#~~eTTccTTeTTTT",
+      "T....#~~....p......T",
+      "T.e..#~~..H.p...e..T",
+      "T....#~~....pp.h...T",
+      "T.H..#~~.N....pp...T",
+      "T....#~~..e....pp.ST",
+      "T..e.#~~.........p.T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
-    { theme: "net", start: { x: 4, y: 12 }, under: {}, rows: [
-      "TTTTTTTTTTTTTT#G#TTT",
-      "T..N..........#w#.NT",
-      "T..............p...T",
-      "T..H......H....p.H.T",
-      "T~~~~~~~~~~~~~~b~~~T",
-      "T....N....pppppp...T",
-      "T..T.....sp.....T..T",
-      "T.........p.......NT",
-      "TTTTTTTTTfffTTTTTTTT",
-      "T.......ppp........T",
-      "T..H...pp...q...H..T",
-      "T..S..pp...........T",
-      "T....pp.....T......T",
-      "T.T......N......T..T",
+    // Сетевой город: начало наверху слева, поток данных справа, ворота внизу.
+    { theme: "net", start: { x: 4, y: 2 }, under: {}, rows: [
       "TTTTTTTTTTTTTTTTTTTT",
+      "T..S...r.....~~..H.T",
+      "T.pppp.......~~....T",
+      "T.H..p..q..N.~~.r..T",
+      "T....pppp....~~....T",
+      "T.r.....p..H.~~.N..T",
+      "TTTTTTTffTTTT~~....T",
+      "T......pp....~~..r.T",
+      "T..H....p..r.~~....T",
+      "T.N.....pp...~~..H.T",
+      "T........pps.bb....T",
+      "T..r.....H...~~....T",
+      "T.H.....N....~~#w#.T",
+      "T.......r....~~#.#.T",
+      "TTTTTTTTTTTTTTTTGTTT",
     ] },
-    { theme: "observatory", start: { x: 4, y: 12 }, under: {}, rows: [
-      "TTTTTTTT#G#TTTTTTTTT",
-      "T..N...##x##....N..T",
-      "T......#...#.......T",
-      "T..H......p.....H..T",
-      "T~~~~~~~~~b~~~~~~~~T",
-      "T~~~~~~~~~b~~~~~~~~T",
-      "T....N....p....u...T",
-      "T..T......pp....T..T",
-      "TTTTTTTTTmmmTTTTTTTT",
-      "T........ppp.......T",
-      "T..H...pp...t...H..T",
-      "T..S..pp...........T",
-      "T....pp.....T......T",
-      "T.T......N......T..T",
+    // Обсерватория: начало внизу в центре, посередине звёздная пропасть, ворота наверху справа.
+    { theme: "observatory", start: { x: 8, y: 13 }, under: {}, rows: [
+      "TTTTTTTTTTTTTTTTGTTT",
+      "T..^...~~~~~~..#x#.T",
+      "T.N....~~~~~~....N.T",
+      "T...H..~~~~~~..H...T",
+      "T.....u~~~~~~......T",
+      "T..pppp~~~~~~pp....T",
+      "T..p...~~~~~~..^...T",
+      "T.^p...~~~~~~......T",
+      "T..p..N~~~~~~...N..T",
+      "TTTmmTTTTTTTTTTTTTTT",
+      "T..pp...t....H...^.T",
+      "T.H.pppppp....N....T",
+      "T.......p.S..^...H.T",
+      "T..^....p.......N..T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
   ];
@@ -239,7 +242,7 @@ window.World = (function () {
     return grid;
   }
   const NPC = "AFMBSKQZWVXRPUCDJEIYLoyagzhjvqswtux";
-  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N", "m", "c"]);
+  const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N", "m", "c", "e", "r", "^"]);
   const WATER = new Set(["~", "b", "=", "k"]);
   const PATHS = new Set(["p", "="]);
   const CAVE = new Set(["#", "d", "l", "G", "O"]);
@@ -1043,6 +1046,47 @@ window.World = (function () {
     ctx.beginPath(); ctx.moveTo(X - 22, Y + 2); ctx.lineTo(X, Y - 10); ctx.lineTo(X + 22, Y + 2); ctx.closePath(); ctx.fillStyle = "#d9483a"; ctx.fill();
   }
 
+  // Мольберт с картиной: у каждого свой рисунок.
+  function drawEasel(ctx, x, y) {
+    const X = x * TS + TS / 2, Y = y * TS;
+    ellipse(ctx, X + 2, Y + 44, 14, 4, "rgba(0,0,0,.2)");
+    ctx.strokeStyle = "#8a5a33"; ctx.lineWidth = 3; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(X - 10, Y + 44); ctx.lineTo(X - 2, Y + 4); ctx.moveTo(X + 10, Y + 44); ctx.lineTo(X + 2, Y + 4); ctx.moveTo(X, Y + 12); ctx.lineTo(X + 4, Y + 42); ctx.stroke();
+    rr(ctx, X - 14, Y + 6, 28, 22, 3); ctx.fillStyle = "#ffffff"; ctx.fill(); ctx.strokeStyle = "#c48b4f"; ctx.lineWidth = 2; ctx.stroke();
+    const k = rnd(x, y, 90) % 3;
+    if (k === 0) { circle(ctx, X + 6, Y + 13, 4, "#ffd54f"); ctx.fillStyle = "#6fd08a"; ctx.fillRect(X - 12, Y + 20, 24, 6); }
+    else if (k === 1) ["#ff6fb5", "#ffd54f", "#3fa7ff"].forEach((c, i) => { ctx.strokeStyle = c; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(X, Y + 27, 12 - i * 3, Math.PI, 0); ctx.stroke(); });
+    else { circle(ctx, X - 4, Y + 16, 5, "#ff6fb5"); circle(ctx, X + 5, Y + 19, 4, "#3fa7ff"); }
+    rr(ctx, X - 16, Y + 27, 32, 3, 1); ctx.fillStyle = "#8a5a33"; ctx.fill();
+  }
+  // Антенна связи: решётчатая мачта, мигающий огонёк и волны сигнала.
+  function drawTower(ctx, x, y, t) {
+    const X = x * TS + TS / 2, Y = y * TS;
+    ellipse(ctx, X + 2, Y + 44, 13, 4, "rgba(0,0,0,.25)");
+    ctx.strokeStyle = "#8fa0c8"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(X - 10, Y + 44); ctx.lineTo(X, Y - 6); ctx.lineTo(X + 10, Y + 44);
+    for (let i = 0; i < 4; i++) { const yy = Y + 40 - i * 11, w = 9 - i * 2; ctx.moveTo(X - w, yy); ctx.lineTo(X + w * .8, yy - 10); ctx.moveTo(X + w, yy); ctx.lineTo(X - w * .8, yy - 10); }
+    ctx.stroke();
+    const on = Math.sin(t / 250 + x) > 0;
+    circle(ctx, X, Y - 7, 3.5, on ? "#ff4d6d" : "#7a2a3a");
+    const ph = (t / 1200 + x * .3) % 1;
+    ctx.strokeStyle = `rgba(120,230,255,${.7 * (1 - ph)})`; ctx.lineWidth = 2;
+    for (const sd of [-1, 1]) { ctx.beginPath(); ctx.arc(X, Y - 7, 8 + ph * 14, sd > 0 ? -.6 : Math.PI - .6, sd > 0 ? .6 : Math.PI + .6); ctx.stroke(); }
+  }
+  // Телескоп на треноге смотрит в небо, на линзе играет блик.
+  function drawTelescope(ctx, x, y, t) {
+    const X = x * TS + TS / 2, Y = y * TS;
+    ellipse(ctx, X + 2, Y + 44, 14, 4, "rgba(0,0,0,.25)");
+    ctx.strokeStyle = "#5a4a3a"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(X, Y + 24); ctx.lineTo(X - 11, Y + 44); ctx.moveTo(X, Y + 24); ctx.lineTo(X + 11, Y + 44); ctx.moveTo(X, Y + 24); ctx.lineTo(X + 2, Y + 44); ctx.stroke();
+    ctx.save(); ctx.translate(X, Y + 22); ctx.rotate(-.7);
+    rr(ctx, -8, -6, 30, 12, 5); ctx.fillStyle = "#e6e9f5"; ctx.fill();
+    rr(ctx, 18, -8, 8, 16, 3); ctx.fillStyle = "#4a5ab8"; ctx.fill();
+    rr(ctx, -14, -4, 8, 8, 2); ctx.fill();
+    circle(ctx, 25, 0, 4, `rgba(255,255,220,${.5 + .5 * Math.sin(t / 400 + x)})`);
+    ctx.restore();
+  }
+
   // Пузырь «!» над жителем, которому нужна помощь.
   function drawMarker(ctx, cx, by, t) {
     const y = by - 78 + Math.sin(t / 250) * 3;
@@ -1068,6 +1112,9 @@ window.World = (function () {
       else if (c === "l" && (x + y) % 2 === 0) items.push({ z: y * TS + 20, d: () => drawTorch(ctx, x, y, t) });
       else if (c === "*") items.push({ z: y * TS + TS - 6, d: () => drawFlowerbed(ctx, x, y, t) });
       else if (c === "%") items.push({ z: y * TS + TS - 2, d: () => drawWell(ctx, x, y, t) });
+      else if (c === "e") items.push({ z: y * TS + TS - 2, d: () => drawEasel(ctx, x, y) });
+      else if (c === "r") items.push({ z: y * TS + TS - 2, d: () => drawTower(ctx, x, y, t) });
+      else if (c === "^") items.push({ z: y * TS + TS - 2, d: () => drawTelescope(ctx, x, y, t) });
     }
     for (const a of actors) items.push({ z: a.py + TS - 1, d: () => {
       drawCharacter(ctx, a.id, a.px + TS / 2, a.py + TS - 4, t, a);
