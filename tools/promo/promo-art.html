@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="file:///home/claude/zaklinatel-promtov/css/fonts.css">
+<style>body{margin:0;background:#000}canvas{display:block}</style></head><body>
+<canvas id="c"></canvas>
+<script src="file:///home/claude/zaklinatel-promtov/js/world.js"></script>
+<script>
+const [mode, lang = 'ru'] = location.hash.slice(1).split('-'), TXT = { ru: ['Кодолесье', 'Приключение, где учатся просить ИИ точно'], en: ['Codewood', 'An adventure where you learn to ask AI clearly'], uz: ["Kod o'rmoni", "Sun'iy intellektdan aniq so'rashni o'rgatadi"] }[lang], c = document.getElementById('c'), ctx = c.getContext('2d');
+const W = World;
+async function go() {
+  await document.fonts.load('900 80px Nunito', TXT[0]); await document.fonts.load('700 30px "Golos Text"', TXT[1]);
+  const t = 4200;
+  if (mode === 'icon') {
+    c.width = c.height = 512;
+    const g = ctx.createLinearGradient(0, 0, 512, 512); g.addColorStop(0, '#6c5cff'); g.addColorStop(1, '#22c4a8');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 512, 512);
+    ctx.fillStyle = W.radial(ctx, 256, 230, 260, [[0, 'rgba(255,255,255,.35)'], [1, 'rgba(255,255,255,0)']]); ctx.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 18; i++) { const x = (i * 97) % 512, y = (i * 173) % 512; ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.beginPath(); ctx.arc(x, y, 2 + i % 3, 0, 7); ctx.fill(); }
+    const p = document.createElement('canvas'); p.width = p.height = 420; W.drawPortrait(p.getContext('2d'), 'hero', 420, t);
+    ctx.drawImage(p, 60, 70);
+    const s = document.createElement('canvas'); s.width = s.height = 200; W.drawPortrait(s.getContext('2d'), 'S', 200, t);
+    ctx.drawImage(s, 330, 40);
+  } else if (mode === 'cover') {
+    c.width = 800; c.height = 470;
+    const sc = document.createElement('canvas'); sc.width = 960; sc.height = 720; const sx = sc.getContext('2d');
+    const b = W.build(0); b.grid[7][9] = '='; b.grid[7][10] = '=';
+    W.drawScene(sx, b.grid, [{ id: 'hero', px: 6 * 48, py: 9 * 48 }, { id: 'S', px: 7 * 48, py: 9 * 48 }, { id: 'F', px: 8 * 48, py: 8 * 48 }, { id: 'A', px: 3 * 48, py: 10 * 48 }], t, b.theme);
+    ctx.drawImage(sc, 60, 230, 800, 470, 0, 0, 800, 470);
+    const g = ctx.createLinearGradient(0, 0, 0, 470); g.addColorStop(0, 'rgba(20,16,60,.75)'); g.addColorStop(.45, 'rgba(20,16,60,.1)'); g.addColorStop(1, 'rgba(20,16,60,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 800, 470);
+    ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.shadowColor = 'rgba(30,20,90,.6)'; ctx.shadowBlur = 18;
+    ctx.font = '900 92px Nunito'; ctx.fillText(TXT[0], 400, 110);
+    ctx.shadowBlur = 8; ctx.font = '700 28px "Golos Text"'; ctx.fillText(TXT[1], 400, 158);
+  }
+  document.title = 'done';
+}
+go();
+</script></body></html>
