@@ -37,7 +37,7 @@ window.LANG_PACKS.uz = {
   "locked": "Yopiq",
   "replayHint": "O'tilgan bobni qayta o'ynab, barcha yulduzlarni yig'ish mumkin.",
   "back": "Orqaga",
-  "notes": "Eslatma",
+  "notes": "Albom",
   "notesTitle": "Vaybkoder eslatmasi",
   "notesEmpty": "Bu yerda o'yinda o'rganadigan qoidalaringiz paydo bo'ladi.",
   "top": "Rekordlar",
@@ -68,7 +68,7 @@ window.LANG_PACKS.uz = {
   "ach.part1": "Birinchi qism",
   "ach.part1.d": "Dastlabki 5 ta bobni o'ting.",
   "ach.part2": "Vaybkoding ustasi",
-  "ach.part2.d": "Barcha 8 ta bobni o'ting.",
+  "ach.part2.d": "Dastlabki 8 ta bobni o'ting.",
   "ach.allstars": "Barcha yulduzlar",
   "ach.allstars.d": "O'yindagi barcha yulduzlarni yig'ing.",
   "ach.daily1": "Kun prompti",
@@ -82,7 +82,89 @@ window.LANG_PACKS.uz = {
   "parentsIntro": "«Kod o'rmoni» bolalarga sun'iy intellekt bilan ishlashni o'rgatadi: aniq so'rash, javoblarni tekshirish va xavfsizlikni unutmaslik. O'yinda haqiqiy sun'iy intellekt yo'q: barcha javoblar oldindan yozilgan. Quyida har bir bob nimaga o'rgatishi va bola bilan suhbat uchun savollar berilgan.",
   "teaches": "Nimaga o'rgatadi:",
   "discuss": "Muhokama qiling:",
-  "language": "Til"
+  "language": "Til",
+  "ach.part3": "Haqiqat qo'riqchisi",
+  "ach.part3.d": "Barcha 11 ta bobni o'ting.",
+  "ach.style": "Moda ishqibozi",
+  "ach.style.d": "Kiyim javonida libosingizni almashtiring.",
+  "ach.hunt10": "O'tkir ko'z",
+  "ach.hunt10.d": "Bitta o'yinda 10 ta xato toping.",
+  "ach.builder": "Quruvchi",
+  "ach.builder.d": "O'z orolingizga 10 ta narsa qo'ying.",
+  "ach.boss1": "Birinchi g'alaba",
+  "ach.boss1.d": "Istalgan bossni yenging.",
+  "ach.bossAll": "Yovuzlar dahshati",
+  "ach.bossAll.d": "Barcha bosslarni yenging.",
+  "again": "Yana bir bor",
+  "close": "Yopish",
+  "exit": "Chiqish",
+  "you": "Siz",
+  "wardrobe": "Kiyim javoni",
+  "wr.hat": "Bosh kiyim",
+  "wr.color": "Kostyum",
+  "wr.bot": "Kodik",
+  "wr.hat.cap": "Kepka",
+  "wr.hat.beanie": "Shapkacha",
+  "wr.hat.headphones": "Quloqchinlar",
+  "wr.hat.cat": "Mushuk quloqchalari",
+  "wr.hat.cowboy": "Kovboy shlyapasi",
+  "wr.hat.crown": "Toj",
+  "wr.color.violet": "Binafsha",
+  "wr.color.blue": "Ko'k",
+  "wr.color.green": "Yashil",
+  "wr.color.orange": "To'q sariq",
+  "wr.color.red": "Qizil",
+  "wr.color.pink": "Pushti",
+  "wr.color.black": "Qora",
+  "wr.bot.mint": "Yalpizrang",
+  "wr.bot.sky": "Havorang",
+  "wr.bot.rose": "Pushti",
+  "wr.bot.lilac": "Nafarmon",
+  "wr.bot.gold": "Oltinrang",
+  "wrAd": "▶ reklama evaziga",
+  "wrHint": "Yangi narsalar yulduzlar bilan ochiladi. Sizda ★ {n}.",
+  "hunt": "Xatoni top",
+  "huntIntro": "Har bir promptda bitta noto'g'ri karta yashiringan. Uni toping! Bir daqiqada imkon qadar ko'proq xato topish kerak.",
+  "huntBest": "Rekord: {n}",
+  "huntStart": "Boshlash",
+  "huntScore": "Topildi: {n}",
+  "huntTask": "Iltimosdagi xatoni bosing:",
+  "huntHit": "To'g'ri!",
+  "huntMiss": "Xato mana bu yerda edi: «{t}».",
+  "huntOver": "Vaqt tugadi!",
+  "huntResult": "Topilgan xatolar: {n}.",
+  "huntMore": "Reklama evaziga yana 15 soniya",
+  "bosses": "Janglar",
+  "bossIntro": "O'tilgan boblarning yovuzlari bilan jang qiling. Ular sizni chalg'itmasidan oldin xatolarni toping!",
+  "bossTask": "Vaqt tugamasidan xatoni toping:",
+  "bossHit": "Nishonga tegdi!",
+  "bossSlow": "Ulgurmadingiz! Xato mana bu yerda edi: «{t}».",
+  "bossWin": "G'alaba!",
+  "bossWinText": "{name} yengildi. Bob qoidasi:",
+  "bossLose": "Taslim bo'lmang!",
+  "bossLoseText": "Yovuz sizni chalg'itdi. Yana urinib ko'ring!",
+  "bossLife": "Reklama evaziga yana bitta jon",
+  "islandHelp": "Orol katagini bosing yoki uni strelkalar bilan tanlab, Enter tugmasini bosing.",
+  "island": "O'z orolingiz",
+  "islandGoal": "Kodikdan biror narsa qurishni so'rash uchun orol katagini bosing.",
+  "islandBuild": "Bu yerda nima quramiz?",
+  "isWhat": "Nima qo'yamiz?",
+  "isPut": "bu yerga {item} qo'y",
+  "isClearDo": "bu katakdagi hamma narsani olib tashla",
+  "is.T": "daraxt",
+  "is.p": "so'qmoq",
+  "is.*": "gulzor",
+  "is.H": "uycha",
+  "is.N": "fonar",
+  "is.%": "quduq",
+  "is.#": "qoya",
+  "is.c": "qutilar",
+  "is.any": "biror narsa",
+  "is.clear": "olib tashlash",
+  "isAnyNote": "Kodik o'zi tanladi va {item} qo'ydi. Boshqasini xohlagan edingizmi? Aniq so'rang!",
+  "albumTitle": "Kartalar albomi",
+  "albumCount": "Yig'ilgan kartalar: {n} / {max}",
+  "albumBack": "Albomga qaytish"
  },
  "names": {
   "Кодер": "Koder",
@@ -106,7 +188,17 @@ window.LANG_PACKS.uz = {
   "Маячница Лина": "Mayoqchi Lina",
   "Осьминог Окто": "Sakkizoyoq Okto",
   "Ученица Аня": "O'quvchi Anya",
-  "Библиотекарь Гоша": "Kutubxonachi Gosha"
+  "Библиотекарь Гоша": "Kutubxonachi Gosha",
+  "Понимус": "Tushunus",
+  "Художница Мия": "Rassom Miya",
+  "Фотограф Лев": "Fotograf Lev",
+  "Фейкус": "Feykus",
+  "Связистка Нина": "Aloqachi Nina",
+  "Мальчик Сеня": "Senya",
+  "Фальшивый Кодик": "Soxta Kodik",
+  "Учёный Арсений": "Olim Arseniy",
+  "Журналистка Зара": "Jurnalist Zara",
+  "Проверус": "Tekshirus"
  },
  "chapters": [
   {
@@ -1845,7 +1937,7 @@ window.LANG_PACKS.uz = {
     "ending": {
      "title": "Siz vaybkoding ustasisiz!",
      "lesson": "Eslatma, ikkinchi qism:<br>10. Avval reja, keyin ish.<br>11. Xatoning aniq matnini bering.<br>12. Turli misollarda tekshiring.<br>13. Bir nechta variant so'rang va o'zingiz tanlang.<br>14. Suhbat cho'zildimi? Xulosa va yangi suhbat.<br>15. Tushunarsiz kodni ishga tushirmang.<br>16. Sun'iy intellekt bilan birga o'rganing, ko'chirmang.<br>17. Birovning mehnatini hurmat qiling va mualliflarni ko'rsating.",
-     "next": "Kod o'rmonini bosib o'tganingiz uchun rahmat! Barcha qoidalar bosh ekrandagi «Eslatma»da jamlangan."
+     "next": "Ammo hikoya tugamadi: Feykus allaqachon Bo'yoqlar studiyasida rasmlarni soxtalashtiryapti. Oldinga, uchinchi qismga!"
     }
    },
    "quests": [
@@ -2094,6 +2186,834 @@ window.LANG_PACKS.uz = {
       },
       {
        "text": "Tushunus! Menga yoqdi. Sizlar bilan birga o'qisam maylimi?"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Bo'yoqlar studiyasi",
+   "story": {
+    "intro": [
+     {
+      "text": "Tushunus endi hamma bilan birga o'qiyapti. Lekin Kod o'rmoniga yangi balo keldi."
+     },
+     {
+      "text": "Men Feykusni ko'rdim! U sun'iy intellekt yordamida soxta rasmlar yasab, ularni haqiqiy deb ko'rsatyapti."
+     },
+     {
+      "text": "U Bo'yoqlar studiyasini ostin-ustin qilib tashladi. Rassom Miya yaqinda, undan boshla."
+     }
+    ],
+    "find": "Kodik bilan gaplashing.",
+    "guideDone": "Studiya yana rasm chizyapti. Sening rasmlaring aniq va halol!",
+    "freed": "Bo'yoqlar studiyasi qutqarildi!",
+    "bump": {
+     "c": "Bo'yoq bankalari yo'lni to'sib qo'ydi. Rassom Miya yaqinda, bu uning bo'yoqlari.",
+     "~": "Rangli suvli kanal, sakrab o'tib bo'lmaydi. Fotograf Lev qanday o'tishni biladi.",
+     "G": "Studiya darvozasi qulflangan. Uning ortida Feykus yashirinib olgan."
+    },
+    "ending": {
+     "title": "Bo'yoqlar studiyasi qutqarildi!",
+     "lesson": "Rasmlar qoidalari:<br>1. Rasmni aniq tasvirlang: unda nima bor, qaysi uslubda, qanday ranglar va yozuvlar.<br>2. Rasmni qadamma-qadam o'zgartiring va nimani avvalgidek qoldirishni ayting.<br>3. Sun'iy intellekt yasagan rasmlarga halol izoh yozing va haqiqiy odamlarning soxta fotosini yasamang.",
+     "next": "Feykus Tarmoq shahriga qochib ketdi. Uni quvib yetamiz!"
+    }
+   },
+   "quests": [
+    {
+     "title": "Aniq rasm",
+     "goal": "Rassom Miyaga yordam bering: bo'yoq bankalari yo'lni to'sib qo'ydi.",
+     "intro": [
+      {
+       "text": "Menga bo'yoqlar yarmarkasi uchun plakat kerak. Sun'iy intellektdan «chiroyli chiz» deb so'ragan edim, dog'lardan iborat bo'tqa chiqdi!"
+      },
+      {
+       "text": "Hamma bo'yoqlar jahl bilan to'g'ri yo'lga ag'darilib ketdi. Plakatni aniq tasvirlashga yordam ber!"
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima chizish kerak?",
+       "opts": [
+        {
+         "t": "yarmarka plakati: mo'yqalamlar va kamalak"
+        },
+        {
+         "t": "biror chiroyli narsa",
+         "fail": "Kodik chiroyli changyutgich chizdi. Chiroyli, lekin bu yarmarka plakati emas."
+        },
+        {
+         "t": "hammasini birdaniga",
+         "fail": "Plakatga mo'yqalamlar, fillar, raketalar va sho'rva sig'di. Hech narsani tushunib bo'lmaydi."
+        }
+       ]
+      },
+      {
+       "label": "Qaysi uslubda?",
+       "opts": [
+        {
+         "t": "yorqin, multfilmdagidek, bolalar kitobidagidek"
+        },
+        {
+         "t": "istalganida",
+         "fail": "Jiddiy kulrang chizma chiqdi. Bayram uchun yaramaydi."
+        },
+        {
+         "t": "haqiqiy yarmarka fotosidek",
+         "fail": "Fotoga o'xshaydi, hamma yarmarka o'tib bo'libdi deb o'yladi. Qanday uslub kerakligini ayting."
+        }
+       ]
+      },
+      {
+       "label": "Qanday yozuv?",
+       "opts": [
+        {
+         "t": "«Bo'yoqlar yarmarkasi, shanba»"
+        },
+        {
+         "t": "yozuvsiz",
+         "fail": "Plakat chiroyli, lekin hech kim qayerga va qachon kelishni tushunmadi."
+        },
+        {
+         "t": "istalganini o'ylab top",
+         "fail": "Kodik «Paypoqlar arzon savdosi» deb yozdi. Yozuvni aniq aytgan ma'qul."
+        }
+       ]
+      }
+     ],
+     "lesson": "Rasmni aniq tasvirlang: unda nima chizilgan, qaysi uslubda, qanday ranglar va qanday yozuv.",
+     "after": [
+      {
+       "text": "Mana bu plakat! Bo'yoqlar tinchlanib, o'zlari javonlarga qaytdi. Kanal yonidagi Fotograf Lev ham yordam kutyapti."
+      }
+     ]
+    },
+    {
+     "title": "Kichik tuzatish",
+     "goal": "Kanal yonidagi Fotograf Levning oldiga boring va unga yordam bering.",
+     "intro": [
+      {
+       "text": "Kanal ustidagi eski ko'prikni suratga oldim. Sun'iy intellekt osmonni shafaq rangiga kiritsin degan edim, u esa butun fotoni qayta chizib qo'ydi!"
+      },
+      {
+       "text": "Endi fotodagi ko'prik boshqacha, unga qarab kim haqiqiysini quradi? Keling, to'g'ri so'raymiz."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nimani o'zgartirish kerak?",
+       "opts": [
+        {
+         "t": "fotodagi osmonni shafaq rangiga kirit"
+        },
+        {
+         "t": "fotoni yaxshiroq qil",
+         "fail": "Kodik «yaxshiroq»ni o'zicha tushundi: ajdaho qo'shdi. Aynan nimani o'zgartirishni ayting."
+        },
+        {
+         "t": "hammasini qaytadan chiz",
+         "fail": "Yana yangi foto. Unda eski ko'prik yo'q."
+        }
+       ]
+      },
+      {
+       "label": "Nimani qoldirish kerak?",
+       "opts": [
+        {
+         "t": "ko'prik va odamlarga tegma"
+        },
+        {
+         "t": "hammasini o'zgartirsang bo'ladi",
+         "fail": "Kodik shu bahonada ko'prikni yashilga bo'yab, odamlarni olib tashladi."
+        },
+        {
+         "t": "hech narsa demayman",
+         "fail": "Shusiz Kodik tegish mumkin bo'lmagan narsani ham o'zgartirib qo'ydi."
+        }
+       ]
+      },
+      {
+       "label": "Keyin-chi?",
+       "opts": [
+        {
+         "t": "nima o'zgarganini ko'rsat, men tekshiraman"
+        },
+        {
+         "t": "darrov gazetaga yubor",
+         "fail": "Gazetaga ortiqcha qayiqli foto ketdi. Avval o'zingiz tekshiring."
+        },
+        {
+         "t": "hech narsa kerak emas",
+         "fail": "Fonar g'oyib bo'lganini hech kim sezmadi. Tuzatishni tekshiring."
+        }
+       ]
+      }
+     ],
+     "lesson": "Rasmni qadamma-qadam o'zgartiring. Nimani o'zgartirish va nimani avvalgidek qoldirishni ayting, natijani esa tekshiring.",
+     "after": [
+      {
+       "text": "Shafaq joyida, ko'prik ham! Fotoga qarab haqiqiy ko'prik qurdim. Bor, Feykus darvoza ortida."
+      }
+     ]
+    },
+    {
+     "title": "Halol izoh",
+     "goal": "Ko'prikdan o'ting va darvoza yonidagi Feykus bilan gaplashing.",
+     "intro": [
+      {
+       "text": "Ha! Kodik bo'yoqlarni o'g'irlayotgan «foto» yasadim. Hamma ishondi, holbuki bunday bo'lmagan!"
+      },
+      {
+       "text": "Darvoza faqat halol rasm uchun ochiladi. Bu yerda esa halollari yo'q!"
+      },
+      {
+       "text": "Keling, studiya darvozasi uchun rasm yasaymiz. Faqat halol, barcha qoidalar bo'yicha."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima chizish kerak?",
+       "opts": [
+        {
+         "t": "studiya gerbi: mo'yqalam, palitra va yulduz"
+        },
+        {
+         "t": "Feykus bo'yoq o'g'irlayotgan foto",
+         "fail": "Feykus hech narsa o'g'irlamagan. Soxta foto — bu yolg'on, hatto yovuz haqida bo'lsa ham."
+        },
+        {
+         "t": "biror narsa",
+         "fail": "Kodik kaktus chizdi. Darvoza o'z gerbini tanimadi."
+        }
+       ]
+      },
+      {
+       "label": "Qanday?",
+       "opts": [
+        {
+         "t": "yorqin, kamalak ranglarida"
+        },
+        {
+         "t": "xohlaganingdek",
+         "fail": "Gerb jigarrang chiqdi. Qanday ranglar kerakligini ayting."
+        },
+        {
+         "t": "birovning gerbiga aynan o'xshatib",
+         "fail": "Bu qo'shni shaharning gerbi. Birovnikini ko'chirib bo'lmaydi."
+        }
+       ]
+      },
+      {
+       "label": "Nimani o'zgartirmaslik kerak?",
+       "opts": [
+        {
+         "t": "darvoza shaklini avvalgidek qoldir"
+        },
+        {
+         "t": "hammasini o'zgartir",
+         "fail": "Kodik darvozani derazaga aylantirdi. Derazadan o'tib bo'lmaydi."
+        },
+        {
+         "t": "farqi yo'q",
+         "fail": "Darvoza yumaloq bo'lib qoldi va ochilmayapti."
+        }
+       ]
+      },
+      {
+       "label": "Qanday izoh yozish kerak?",
+       "opts": [
+        {
+         "t": "«Rasm sun'iy intellekt yordamida yasalgan»"
+        },
+        {
+         "t": "«Haqiqiy foto»",
+         "fail": "Bu yolg'on, axir rasmni sun'iy intellekt chizgan. Izohni halol yozing."
+        },
+        {
+         "t": "hech qanday",
+         "fail": "Hamma buni foto deb o'yladi. Rasmni sun'iy intellekt yasaganini yozib qo'ying."
+        }
+       ]
+      },
+      {
+       "label": "Kimning yuzlari?",
+       "opts": [
+        {
+         "t": "haqiqiy odamlarning yuzlarisiz"
+        },
+        {
+         "t": "Miyaning yuzini so'ramasdan chiz",
+         "fail": "Miya xafa bo'ldi: uning yuzini ruxsatsiz chizishdi. Bunday qilib bo'lmaydi."
+        },
+        {
+         "t": "istalgan yo'lovchining yuzi",
+         "fail": "Haqiqiy odamlarni ularning roziligisiz chizib bo'lmaydi."
+        }
+       ]
+      }
+     ],
+     "lesson": "Sun'iy intellekt yasagan rasmlarga halol izoh yozing. Soxta foto yasamang va haqiqiy odamlarni ularning roziligisiz chizmang.",
+     "after": [
+      {
+       "text": "Gerb aniq, izoh halol, begona yuzlar yo'q. Darvoza ochilyapti!"
+      },
+      {
+       "text": "Voy! Halol rasmni soxtalashtirib bo'lmaydi. Mayli, Tarmoq shahrida meni hech kim fosh qilolmaydi!"
+      },
+      {
+       "text": "U qochib ketdi! Kodik, biz Tarmoq shahriga borishimiz kerak."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Tarmoq shahri",
+   "story": {
+    "intro": [
+     {
+      "text": "Tarmoq shahri. Bu yerda hamma onlayn yozishadi, o'ynaydi va o'qiydi."
+     },
+     {
+      "text": "Feykus ko'chalarni spam bilan to'ldirib tashladi: soxta xatlar va xabarlar bilan. Aloqachi Nina yaqinda, undan boshla."
+     }
+    ],
+    "find": "Kodik bilan gaplashing.",
+    "guideDone": "Shahar yana xavfsiz. Seni aldab bo'lmaydi!",
+    "freed": "Tarmoq shahri qutqarildi!",
+    "bump": {
+     "f": "Soxta xatlardan iborat spam-tuman, undan o'tib bo'lmaydi. Aloqachi Nina nima qilishni biladi.",
+     "~": "Shiddatli ma'lumotlar oqimi. Senya uning ustidan ko'prik qurmoqchi edi.",
+     "G": "Darvoza qulflangan. Uning yonida kimdir Kodikka juda o'xshaydi…"
+    },
+    "ending": {
+     "title": "Tarmoq shahri qutqarildi!",
+     "lesson": "Xavfsizlik qoidalari:<br>1. Agar xabar shoshiltirsa, sovrin va'da qilsa yoki parol so'rasa, bu aldov.<br>2. Sun'iy intellektga va notanishlarga manzil, maktab, telefon va parollarni aytmang.<br>3. Kim bilan gaplashayotganingizni tekshiring. Shubha qilsangiz, suhbatni yoping va kattalarni chaqiring.",
+     "next": "Feykus Faktlar rasadxonasiga shoshyapti. Ortidan!"
+    }
+   },
+   "quests": [
+    {
+     "title": "Spam-tuman",
+     "goal": "Aloqachi Ninaga yordam bering: spam-tuman ko'chani berkitib qo'ydi.",
+     "intro": [
+      {
+       "text": "Shaharni xatlar bosib ketdi: «Siz telefon yutib oldingiz! Zudlik bilan parolni yuboring!» Odamlar ishonib, tuzoqqa tushyapti."
+      },
+      {
+       "text": "Kodikdan aldovni farqlashni o'rgatishni so'ra. Shunda tuman tarqaladi."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "qaysi xatlar aldov ekanini tushunishga yordam ber"
+        },
+        {
+         "t": "men uchun hamma xatlarga javob ber",
+         "fail": "Kodik javob berdi, firibgarlar esa xursand bo'ldi: manzil ishlayapti! Xatlar yanada ko'paydi."
+        },
+        {
+         "t": "tekshir, balki rostdan yutgandirman",
+         "fail": "Siz qatnashmagan tanlovdan sovrin? Bunday bo'lmaydi."
+        }
+       ]
+      },
+      {
+       "label": "Qanday belgilar?",
+       "opts": [
+        {
+         "t": "parol so'rashadi, shoshiltirishadi, sovrin va'da qilishadi"
+        },
+        {
+         "t": "chiroyli rasmli xat",
+         "fail": "Rasm hech narsani isbotlamaydi: firibgarlar ham rasm chiza oladi."
+        },
+        {
+         "t": "bilmayman, o'zing top",
+         "fail": "Kodik «salom» so'zini aldov belgisi deb atadi. Haqiqiy belgilar kerak."
+        }
+       ]
+      },
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "javob bermaslik va kattalarga aytish"
+        },
+        {
+         "t": "havolaga o'tib tekshirish",
+         "fail": "Havola soxta saytga olib bordi. Shubhali xatlardagi havolalarga o'tmang."
+        },
+        {
+         "t": "do'stlarga yuborish",
+         "fail": "Endi do'stlar ham aldovni olishdi. Bunday xatlarni boshqalarga yubormang."
+        }
+       ]
+      }
+     ],
+     "lesson": "Agar xabar shoshiltirsa, sovrin va'da qilsa yoki parol so'rasa, bu aldov. Javob bermang, havolalarga o'tmang va kattalarga ayting.",
+     "after": [
+      {
+       "text": "Odamlar aldov belgilarini bilib oldi va spam erib ketdi! Ma'lumotlar oqimi yonidagi Senya ham yordam so'ragan edi."
+      }
+     ]
+    },
+    {
+     "title": "O'zim haqimda hikoya",
+     "goal": "Ma'lumotlar oqimi yonidagi Senyaning oldiga boring va unga yordam bering.",
+     "intro": [
+      {
+       "text": "Men onlayn robototexnika klubiga kiryapman! O'zim haqimda hikoya yozishim kerak, oqim ustidagi ko'prik esa yangi a'zolar uchun ochiladi."
+      },
+      {
+       "text": "Sun'iy intellektdan shunday so'ramoqchi edim: «Yulduzli ko'chasi, 5-uyda yashashimni, 12-maktabda o'qishimni yoz…» Shunday qilsa bo'ladimi?"
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "klub uchun o'zim haqimda hikoya yozishga yordam ber"
+        },
+        {
+         "t": "men haqimda topganingni hammasini yoz",
+         "fail": "O'zingiz haqingizda hamma narsani yig'ishni so'ramang. Nima bilan bo'lishishni o'zingiz hal qiling."
+        },
+        {
+         "t": "meni katta odam qilib ko'rsat",
+         "fail": "Klubni aldab bo'lmaydi: u yerda bolalarni va halol hikoyani kutishyapti."
+        }
+       ]
+      },
+      {
+       "label": "Nima haqida aytish kerak?",
+       "opts": [
+        {
+         "t": "men robotlarni va rasm chizishni yaxshi ko'raman"
+        },
+        {
+         "t": "manzilim va maktabim raqami",
+         "fail": "Tarmoqdagi notanishlar manzil va maktabni bilmasligi kerak. Bu shaxsiy ma'lumotlar."
+        },
+        {
+         "t": "o'yindagi parolim",
+         "fail": "Parolni hech kimga aytib bo'lmaydi, hatto sun'iy intellektga ham."
+        }
+       ]
+      },
+      {
+       "label": "Nimani yozmaslik kerak?",
+       "opts": [
+        {
+         "t": "manzil, maktab va telefonsiz"
+        },
+        {
+         "t": "hammasini yozsa bo'ladi",
+         "fail": "Hikoyani minglab notanishlar o'qidi. Endi ular Senya qayerda yashashini bilishadi."
+        },
+        {
+         "t": "faqat telefonni",
+         "fail": "Telefon ham shaxsiy ma'lumot. Uni tarmoqqa yozishmaydi."
+        }
+       ]
+      }
+     ],
+     "lesson": "Sun'iy intellektga va tarmoqdagi notanishlarga manzil, maktab, telefon va parollarni aytmang. Sizni qayerdan topish mumkinligi haqida emas, qiziqishlaringiz haqida gapiring.",
+     "after": [
+      {
+       "text": "Meni klubga qabul qilishdi! Hikoya qiziqarli va xavfsiz. Ko'prik ochiq, darvoza tomon bor."
+      }
+     ]
+    },
+    {
+     "title": "Kodikning egizagi",
+     "goal": "Ko'prikdan o'ting va darvoza yonidagi Kodik bilan nima gapligini aniqlang.",
+     "intro": [
+      {
+       "text": "Salom, bu menman, sening Kodiging! Darvoza qulflangan. Parolingni ayt, men uni ochaman. Faqat tezroq!"
+      },
+      {
+       "text": "Hoy, Kodik bu yerda — menman! Shoshilma. Keling, bu kimligini birga aniqlaymiz."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "bu haqiqiy Kodikmi, tekshir"
+        },
+        {
+         "t": "unga ishon, axir o'xshaydi-ku",
+         "fail": "O'xshash — haqiqiy degani emas. Aldamchilar ko'pincha tanish bo'lib ko'rinishadi."
+        },
+        {
+         "t": "u nima desa, shuni qil",
+         "fail": "Egizak allaqachon onangizning telefon raqamini so'rayapti. To'xtang!"
+        }
+       ]
+      },
+      {
+       "label": "Qanday tekshirish kerak?",
+       "opts": [
+        {
+         "t": "faqat ikkalamiz biladigan savolni ber"
+        },
+        {
+         "t": "ismini so'ra",
+         "fail": "«Kodik», — deb javob berdi egizak. Ismni soxtalashtirish oson."
+        },
+        {
+         "t": "rangiga qara",
+         "fail": "Egizakning rangi deyarli bir xil. Ishonchliroq tekshiruv kerak."
+        }
+       ]
+      },
+      {
+       "label": "Parol-chi?",
+       "opts": [
+        {
+         "t": "parolni hech kimga aytmayman"
+        },
+        {
+         "t": "xushmuomalalik bilan so'rasa, aytaman",
+         "fail": "Xushmuomalalik iltimosni halol qilmaydi. Parolni hech kimga aytishmaydi."
+        },
+        {
+         "t": "yarmini aytaman",
+         "fail": "Parolning yarmi ham aldamchiga sovg'a."
+        }
+       ]
+      },
+      {
+       "label": "Shubha qilsam-chi?",
+       "opts": [
+        {
+         "t": "suhbatni yopaman va kattalarni chaqiraman"
+        },
+        {
+         "t": "u bilan kechgacha bahslashaman",
+         "fail": "Egizak gapga solib, shoshiltiryapti. Suhbatni to'xtatgan ma'qul."
+        },
+        {
+         "t": "hech kimga aytmayman",
+         "fail": "Yolg'iz o'zi tushunib olish qiyin. Kattalarga ayting, ular yordam beradi."
+        }
+       ]
+      },
+      {
+       "label": "Keyin-chi?",
+       "opts": [
+        {
+         "t": "do'stlarimga bu aldov haqida aytib beraman"
+        },
+        {
+         "t": "indamay qo'ya qolaman",
+         "fail": "Egizak do'stingizni aldab ketdi. Boshqalarni ogohlantiring."
+        },
+        {
+         "t": "o'zim ham shunday hazil qilaman",
+         "fail": "Bu hazil emas, aldov. Bunday qilish mumkin emas."
+        }
+       ]
+      }
+     ],
+     "lesson": "Kim bilan gaplashayotganingizni tekshiring. Haqiqiy yordamchi hech qachon parol so'ramaydi va shoshiltirmaydi. Shubha qilsangiz, suhbatni yoping va kattalarni chaqiring.",
+     "after": [
+      {
+       "text": "Nima? Sen savol beryapsanmi? Bu nohaqlik… ya'ni, juda halol!"
+      },
+      {
+       "text": "Qara, egizak sochilib ketyapti! Bu kostyum kiygan Feykus edi."
+      },
+      {
+       "text": "Fosh qilishdi! Mayli, Faktlar rasadxonasida men haqiqat bilan to'qimani shunday aralashtirib yuboramanki, hech kim farqlay olmaydi!"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Faktlar rasadxonasi",
+   "story": {
+    "intro": [
+     {
+      "text": "Faktlar rasadxonasi. Bu yerda olimlar yulduzlarni kuzatib, nima haqiqat, nima emasligini tekshiradi."
+     },
+     {
+      "text": "Feykus saroblar yuboribdi: o'ylab topilgan faktlar to'g'ri yo'l ustida turibdi!"
+     },
+     {
+      "text": "Olim Arseniy yaqinda, saroblar yonida. Undan boshla."
+     }
+    ],
+    "find": "Kodik bilan gaplashing.",
+    "guideDone": "Sen haqiqatni to'qimadan farqlay olasan. Sen haqiqat qo'riqchisisan!",
+    "freed": "Faktlar rasadxonasi qutqarildi!",
+    "bump": {
+     "m": "O'ylab topilgan faktlardan iborat saroblar. Olim Arseniy ularni qanday tarqatishni biladi.",
+     "~": "Yulduzli jarlik. Jurnalist Zara undan qanday o'tishni biladi.",
+     "G": "Rasadxona darvozasi qulflangan. Feykus o'sha yerda, uning ortida."
+    },
+    "ending": {
+     "title": "Siz — haqiqat qo'riqchisisiz!",
+     "lesson": "Eslatma, uchinchi qism:<br>18. Rasmni aniq tasvirlang.<br>19. Rasmni qadamma-qadam o'zgartiring va nimani qoldirishni ayting.<br>20. Sun'iy intellekt yasagan rasmlarga halol izoh yozing.<br>21. Sovrin, shoshilish va parol so'rash — aldov belgilari.<br>22. Manzil, maktab, telefon va parollarni aytmang.<br>23. Kim bilan gaplashayotganingizni tekshiring.<br>24. Faktni fikrdan farqlang.<br>25. Yangiliklar uchun sun'iy intellektga o'z ma'lumotlaringizni bering va sanalarni tekshiring.<br>26. Yangilikni boshqalarga yuborishdan oldin uni birinchi bo'lib kim xabar qilganini toping.",
+     "next": "Kod o'rmonini bosib o'tganingiz uchun rahmat! Qoidalar «Albom»da jamlangan, «Xatoni top» va «Janglar»da esa sizni yangi sinovlar kutmoqda."
+    }
+   },
+   "quests": [
+    {
+     "title": "Fakt yoki fikr",
+     "goal": "Olim Arseniyga yordam bering: saroblar yo'lni berkitib qo'ydi.",
+     "intro": [
+      {
+       "text": "Feykus mening yulduzlar katalogimni aralashtirib yubordi. Unda «Mars — Quyoshdan to'rtinchi sayyora» va «Mars — eng chiroyli sayyora» yonma-yon turibdi."
+      },
+      {
+       "text": "Birinchisi — fakt, ikkinchisi — kimningdir fikri. Hammasi aralash ekan, saroblar yo'qolmaydi. Ajratishga yordam berasanmi?"
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "ro'yxatni faktlar va fikrlarga ajrat"
+        },
+        {
+         "t": "tushunarsiz narsalarni o'chirib tashla",
+         "fail": "Faktlar ham, fikrlar ham g'oyib bo'ldi. Katalog bo'shab qoldi."
+        },
+        {
+         "t": "hammasini haqiqat deb hisobla",
+         "fail": "Endi katalogda Mars rasman eng chiroyli deb yozilgan. Bu fakt emas, fikr."
+        }
+       ]
+      },
+      {
+       "label": "Qanday belgilash kerak?",
+       "opts": [
+        {
+         "t": "har biriga yozib qo'y: fakt yoki fikr"
+        },
+        {
+         "t": "hech qanday belgilama",
+         "fail": "O'quvchilar yana qayerda fakt, qayerda fikr ekanida adashib ketishdi."
+        },
+        {
+         "t": "fikrlarni fakt qilib ko'rsat",
+         "fail": "Saroblar aynan shunday paydo bo'ladi. Fikrni fikr deb atash kerak."
+        }
+       ]
+      },
+      {
+       "label": "Qanday tekshirish kerak?",
+       "opts": [
+        {
+         "t": "faktlarni ikkita turli manbada solishtir"
+        },
+        {
+         "t": "birinchi saytga ishon",
+         "fail": "Birinchi sayt Feykusning sayti bo'lib chiqdi. Boshqa manbalar bilan solishtiring."
+        },
+        {
+         "t": "tekshirma",
+         "fail": "Katalogda xato qoldi: Marsning beshta yo'ldoshi bor emish. Aslida ikkita."
+        }
+       ]
+      }
+     ],
+     "lesson": "Faktni fikrdan farqlang: faktni tekshirish mumkin, fikr esa har kimda o'ziga xos. Muhim faktlarni ikki-uchta ishonchli manbada solishtiring.",
+     "after": [
+      {
+       "text": "Faktlar alohida, fikrlar alohida, hammasi tekshirilgan. Saroblar erib ketdi! Jarlik yonidagi Jurnalist Zaraga ham yordam kerak."
+      }
+     ]
+    },
+    {
+     "title": "Yangi xabarlar",
+     "goal": "Yulduzli jarlik yonidagi Jurnalist Zaraning oldiga boring va unga yordam bering.",
+     "intro": [
+      {
+       "text": "Kecha kechqurun Oy tutilishi bo'ldi! Men rasadxona gazetasi uchun maqola yozyapman."
+      },
+      {
+       "text": "Sun'iy intellektdan kechagi tutilish haqida so'radim, u esa besh yil oldingi tutilish haqida gapirib berdi. Nega?"
+      },
+      {
+       "text": "Sun'iy intellekt qaysidir kungacha bo'lgan matnlarda o'rganadi va eng yangi xabarlarni bilmasligi mumkin. Keling, to'g'ri so'raymiz."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nima qilish kerak?",
+       "opts": [
+        {
+         "t": "kechagi tutilish haqida maqola yozishga yordam ber"
+        },
+        {
+         "t": "so'nggi yangiliklarni aytib ber",
+         "fail": "Kodik allaqachon ko'p yillik bo'lgan «so'nggi» yangiliklarni aytib berdi."
+        },
+        {
+         "t": "hammasi qanday bo'lganini o'ylab top",
+         "fail": "Kodik Oy yashil bo'lib qolgan deb o'ylab topdi. Maqolada haqiqat kerak."
+        }
+       ]
+      },
+      {
+       "label": "Qanday ma'lumotlar?",
+       "opts": [
+        {
+         "t": "mana kecha kechqurungi yozuvlarim va fotolarim"
+        },
+        {
+         "t": "sen baribir hammasini bilasan",
+         "fail": "Bilmaydi: sun'iy intellekt kecha kechqurun haqida ma'lumot olmagan."
+        },
+        {
+         "t": "hech qanday",
+         "fail": "Ma'lumotsiz Kodik taxmin qilishga majbur bo'ldi. Unga o'z yozuvlaringizni bering."
+        }
+       ]
+      },
+      {
+       "label": "Nimani hisobga olish kerak?",
+       "opts": [
+        {
+         "t": "bilimlaring eskirgan bo'lishi mumkin bo'lsa, ayt"
+        },
+        {
+         "t": "bilmasang ham, ishonch bilan yoz",
+         "fail": "Ishonchli ohang va sanada xato. Sun'iy intellekt halol ogohlantirsin."
+        },
+        {
+         "t": "sanalar muhim emas",
+         "fail": "Yangiliklarda sanalar juda muhim: tutilishni o'tgan yilgisi bilan adashtirishdi."
+        }
+       ]
+      }
+     ],
+     "lesson": "Sun'iy intellekt eng yangi xabarlarni bilmasligi mumkin. Yangiliklar uchun unga o'z ma'lumotlaringizni bering, eskirgan bilimlar haqida ogohlantirishini so'rang va sanalarni tekshiring.",
+     "after": [
+      {
+       "text": "Maqola aniq, sanasi to'g'ri! Yulduzlar jarlik ustida ko'prik bo'lib tizildi. Feykus darvoza yonida kutyapti."
+      }
+     ]
+    },
+    {
+     "title": "Bosh sinov",
+     "goal": "Yulduzlar ustidan o'ting va Feykusning bosh sinovidan o'ting.",
+     "intro": [
+      {
+       "text": "Shov-shuvli xabar! «Ertaga hamma yulduzlarni o'chirishadi!» Mana, fotosi ham bor. Hammaga yubor, tezroq!"
+      },
+      {
+       "text": "Bu rostmi yoki yo'qmi, isbotlasang, darvoza ochiladi. Garov o'ynaymiz, eplay olmaysan!"
+      },
+      {
+       "text": "Uchinchi qismda o'rganganlaringning hammasini birlashtir. Men yordam beraman."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Nimadan boshlash kerak?",
+       "opts": [
+        {
+         "t": "ishonish va yuborishga shoshilmaslik"
+        },
+        {
+         "t": "hammaga yuborish, balki rostdir",
+         "fail": "Xabar tarqalib ketdi va hamma qo'rqib ketdi. Avval tekshiring."
+        },
+        {
+         "t": "darrov ishonish",
+         "fail": "Feykus kulib o'tiribdi. Shov-shuvli xabarlarni tekshirish kerak."
+        }
+       ]
+      },
+      {
+       "label": "Xabar qayerdan?",
+       "opts": [
+        {
+         "t": "buni birinchi bo'lib kim xabar qilganini top"
+        },
+        {
+         "t": "qayerdanligi muhim emas",
+         "fail": "Muhim! Uni birinchi bo'lib Feykusning o'zi yozgan."
+        },
+        {
+         "t": "ko'pchilik yozyaptimi, demak rost",
+         "fail": "Ko'pchilik shunchaki bitta narsani bir-biriga yuborgan. Birlamchi manbani qidiring."
+        }
+       ]
+      },
+      {
+       "label": "Qanday tekshirish kerak?",
+       "opts": [
+        {
+         "t": "rasadxonalar va olimlarning saytlari bilan solishtir"
+        },
+        {
+         "t": "Feykusdan so'ra",
+         "fail": "Feykus o'zining xabarini o'zi tasdiqladi. Ishonchli manbalardan so'rang."
+        },
+        {
+         "t": "fotoga ishon",
+         "fail": "Fotoni ham soxtalashtirish mumkin. Ishonchli manbalar bo'yicha tekshiring."
+        }
+       ]
+      },
+      {
+       "label": "Foto-chi?",
+       "opts": [
+        {
+         "t": "foto sun'iy intellekt bilan yasalmaganmi, tekshir"
+        },
+        {
+         "t": "fotosi bor ekan, demak rost",
+         "fail": "Fotoni Feykusning iltimosi bilan sun'iy intellekt chizgan. Soxta fotolar juda o'xshash bo'lishi mumkin."
+        },
+        {
+         "t": "fotoga qarama",
+         "fail": "Bosh soxtalik aynan o'shanda edi!"
+        }
+       ]
+      },
+      {
+       "label": "Xulosa?",
+       "opts": [
+        {
+         "t": "nima rost, nima to'qima ekanini va nega shundayligini tushuntir"
+        },
+        {
+         "t": "shunchaki «feyk» de",
+         "fail": "Nega bu feyk ekanini hech kim tushunmadi. Sabablarini tushuntiring."
+        },
+        {
+         "t": "indama",
+         "fail": "Odamlar hamon yulduzlarni o'chirishidan qo'rqib yurishibdi. Haqiqatni aytib bering."
+        }
+       ]
+      }
+     ],
+     "lesson": "Ishonib, boshqalarga yuborishdan oldin: xabarni birinchi bo'lib kim aytganini toping, ishonchli manbalar bilan solishtiring va fotoni tekshiring. Shubha qilsangiz, yubormang.",
+     "after": [
+      {
+       "text": "Birlamchi manba — Feykus, olimlar buning aksini aytyapti, fotoni esa sun'iy intellekt yasagan. Yulduzlarni hech kim o'chirmaydi!"
+      },
+      {
+       "text": "Meni barcha qoidalar bo'yicha fosh qilishdi… Bilasizmi, tekshirish aldashdan ko'ra qiziqroq ekan."
+      },
+      {
+       "text": "Unda biz bilan qol! Yangiliklarni tekshirasan. Seni Tekshirus deb ataymiz!"
+      },
+      {
+       "text": "Tekshirus! Halol eshitiladi. Va'da beraman: endi birorta ham soxtalik yo'q!"
       }
      ]
     }
@@ -2707,6 +3627,27 @@ window.LANG_PACKS.uz = {
    "ask": [
     "Maslahat tayyor javobdan nimasi bilan farq qiladi? O'qish uchun qaysi biri foydaliroq?",
     "G'oya yoki rasm boshqa odamga tegishli ekanini qanday to'g'ri ko'rsatish kerak?"
+   ]
+  },
+  {
+   "teaches": "Sun'iy intellekt bilan rasmlar: aniq tasvir, qadamma-qadam tuzatish, halol izoh. Soxta foto yasash va haqiqiy odamlarni roziligisiz chizish mumkin emas.",
+   "ask": [
+    "Rasmni so'z bilan shunday tasvirlangki, boshqa odam deyarli xuddi shuni chizsin. Nimalarni aniqlashtirishga to'g'ri keldi?",
+    "Nega sun'iy intellekt yasagan rasmlarga izoh yozish muhim? Soxta foto nimasi bilan xavfli?"
+   ]
+  },
+  {
+   "teaches": "Tarmoqda xavfsizlik: aldov belgilari (sovrin, shoshilish, parol so'rash), aytish mumkin bo'lmagan shaxsiy ma'lumotlar va suhbatdoshni tekshirish.",
+   "ask": [
+    "Bolangizga firibgarlik xabarining namunasini ko'rsating. U qanday aldov belgilarini payqaydi?",
+    "Oilaviy «maxfiy savol» haqida va tarmoqda nimadir xavotirga solsa, kimga murojaat qilish haqida kelishib oling."
+   ]
+  },
+  {
+   "teaches": "Ma'lumotni tekshirish: fakt va fikr, sun'iy intellekt bilimlarining yangiligi, birlamchi manbani qidirish va bo'lishishdan oldin fotoni tekshirish.",
+   "ask": [
+    "Sevimli multfilmingiz haqida navbatma-navbat faktlar va fikrlarni ayting. Birini ikkinchisidan qanday farqlash mumkin?",
+    "Bitta yangilikni olib, uni birinchi bo'lib kim xabar qilganini va qayerda tekshirish mumkinligini birga toping."
    ]
   }
  ]

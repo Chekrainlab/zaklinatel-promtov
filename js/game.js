@@ -6,8 +6,10 @@
 
   // ch — номер главы, met — вступление главы уже показано, done — пройденные квесты всех глав,
   // stars — лучший результат за каждый квест (3 — с первой попытки), daily — серия «Промта дня»,
-  // ach — открытые достижения, hintUsed — в каких главах брали подсказку.
-  let save = { v: 3, ch: 0, met: false, done: [], pos: null, stars: {}, daily: { last: -1, streak: 0, best: 0, total: 0 }, ach: [], hintUsed: {} };
+  // ach — открытые достижения, hintUsed — в каких главах брали подсказку,
+  // look и owned — наряд и вещи, открытые за рекламу, hunt — рекорд «Найди ошибку», island — свой остров, boss — побеждённые боссы.
+  let save = { v: 3, ch: 0, met: false, done: [], pos: null, stars: {}, daily: { last: -1, streak: 0, best: 0, total: 0 }, ach: [], hintUsed: {},
+    look: { hat: "cap", color: "violet", bot: "mint" }, owned: [], hunt: { best: 0, games: 0 }, island: {}, boss: {} };
   // Тексты зависят от языка: CHAPTERS и остальное пересобираются при его смене.
   let CHAPTERS, DAILY, PARENTS;
   let chapter, grid, npcs, theme;
@@ -66,13 +68,22 @@
   const vignette = ctx.createRadialGradient(SW / 2, SH / 2, SH * .4, SW / 2, SH / 2, SH * .95);
   vignette.addColorStop(0, "rgba(10,6,30,0)"); vignette.addColorStop(1, "rgba(10,6,30,.4)");
   function draw(time) {
+    if (islandMode) {
+      World.drawScene(ctx, grid, [{ id: "S", px: cursor.x * TS, py: cursor.y * TS - 6 }], time, theme);
+      ctx.strokeStyle = `rgba(255,255,255,${.6 + .3 * Math.sin(time / 200)})`; ctx.lineWidth = 3; ctx.setLineDash([8, 6]);
+      ctx.strokeRect(cursor.x * TS + 3, cursor.y * TS + 3, TS - 6, TS - 6); ctx.setLineDash([]);
+      return drawSparks();
+    }
     const cur = currentQuest();
     const actors = Object.values(npcs).filter(n => !n.gone).map(n => ({
       id: n.id, px: n.x * TS, py: n.y * TS, marker: save.met && cur && cur.id === n.id,
     }));
     actors.push({ id: "hero", px: hero.px, py: hero.py, flip: hero.dir[0] < 0, walk: hero.moving });
     World.drawScene(ctx, grid, actors, time, theme);
-    // Искры — мягкие светящиеся точки.
+    drawSparks();
+  }
+  // Искры — мягкие светящиеся точки.
+  function drawSparks() {
     sparks = sparks.filter(s => (s.life -= 1 / 60) > 0);
     ctx.globalCompositeOperation = "lighter";
     for (const s of sparks) {
@@ -107,6 +118,7 @@
   // ---------- Движение ----------
   const npcAt = (x, y) => Object.values(npcs).find(n => !n.gone && n.x === x && n.y === y);
   function tryMove(dx, dy) {
+    if (islandMode) return busy || moveCursor(dx, dy);
     if (busy || hero.moving) return;
     hero.dir = [dx, dy];
     const nx = hero.x + dx, ny = hero.y + dy;
@@ -155,7 +167,8 @@
     "Садовница Кира": "K", "Лягушонок Квак": "Q", "Сова Соня": "W", "Астроном Вадим": "V",
     "Робот Болт": "R", "Почтальон Пётр": "P", "Стражница Вера": "C", "Механик Дина": "D", "Искатель багов": "B",
     "Изобретательница Эля": "E", "Ученик Илья": "I", "Копирус": "Y", "Маячница Лина": "L", "Осьминог Окто": "o",
-    "Ученица Аня": "a", "Библиотекарь Гоша": "g" };
+    "Ученица Аня": "a", "Библиотекарь Гоша": "g", "Понимус": "Y", "Художница Мия": "h", "Фотограф Лев": "j", "Фейкус": "v",
+    "Связистка Нина": "q", "Мальчик Сеня": "s", "Фальшивый Кодик": "w", "Учёный Арсений": "t", "Журналистка Зара": "u", "Проверус": "v" };
   function say(lines, done) {
     let i = 0; busy = true; held = null;
     const render = () => {
@@ -252,7 +265,8 @@
   }
 
   // ---------- Достижения ----------
-  const ACH = ["first", "perfect", "nohint", "part1", "part2", "allstars", "daily1", "streak3", "streak7"];
+  const ACH = ["first", "perfect", "nohint", "part1", "part2", "part3", "allstars", "daily1", "streak3", "streak7",
+    "style", "hunt10", "builder", "boss1", "bossAll"];
   const toasts = [];
   function unlock(id) {
     if (save.ach.includes(id)) return;
@@ -266,11 +280,11 @@
     setTimeout(() => { el.hidden = true; toasts.shift(); if (toasts.length) setTimeout(showToast, 300); }, 2600);
   }
   function checkAchievements() {
-    const chDone = c => c.quests.every(everDone);
     if (CHAPTERS.some(c => c.quests.some(everDone))) unlock("first");
     if (CHAPTERS.some(c => chapterStars(c) === c.quests.length * 3)) unlock("perfect");
     if (CHAPTERS.slice(0, 5).every(chDone)) unlock("part1");
-    if (CHAPTERS.every(chDone)) unlock("part2");
+    if (CHAPTERS.slice(0, 8).every(chDone)) unlock("part2");
+    if (CHAPTERS.every(chDone)) unlock("part3");
     if (totalStars() === maxStars()) unlock("allstars");
     if (save.daily.total > 0) unlock("daily1");
     if (save.daily.best >= 3) unlock("streak3");
@@ -318,8 +332,9 @@
 
   // ---------- Окна и реклама ----------
   const overlay = $("overlay");
-  function modal(html, onOk) {
-    busy = true; Platform.gameplay(false);
+  function modal(html, onOk, cls = "") {
+    busy = true; Platform.gameplay(false); stopTimer();
+    $("modal").className = `modal ${cls}`;
     $("modal").innerHTML = html; overlay.hidden = false;
     const ok = $("m-ok");
     $("modal").scrollTop = 0;
@@ -356,6 +371,263 @@
     });
   }
 
+  // ---------- Гардероб ----------
+  // Вещи открываются звёздами или просмотром рекламы ("ad"). Рисунок берёт наряд из World.outfit.
+  const WARDROBE = {
+    hat: [["cap", 0], ["beanie", 6], ["headphones", 15], ["cat", "ad"], ["cowboy", 30], ["crown", 60]],
+    color: [["violet", 0], ["blue", 3], ["green", 9], ["orange", "ad"], ["red", 20], ["pink", 24], ["black", 45]],
+    bot: [["mint", 0], ["sky", 12], ["rose", "ad"], ["lilac", 36], ["gold", 50]],
+  };
+  const owns = (kind, id, need) => need === 0 || (need === "ad" ? save.owned.includes(`${kind}:${id}`) : totalStars() >= need);
+  const applyLook = () => Object.assign(World.outfit, save.look);
+  function wardrobeMenu(tab = "hat") {
+    $("title").hidden = true;
+    const swatch = (kind, id) => kind === "color" ? `<i class="sw" style="background:${World.COLORS[id][0]}"></i>`
+      : kind === "bot" ? `<i class="sw" style="background:${World.BOTS[id][2]}"></i>` : "";
+    modal(`<h2>${t("wardrobe")}</h2>
+      <div class="wr-preview"><canvas id="wr-hero" width="120" height="120"></canvas><canvas id="wr-bot" width="120" height="120"></canvas></div>
+      <div class="tabs">${Object.keys(WARDROBE).map(k => `<button data-tab="${k}" class="${k === tab ? "on" : ""}">${t("wr." + k)}</button>`).join("")}</div>
+      <div class="items">${WARDROBE[tab].map(([id, need]) => {
+        const have = owns(tab, id, need), on = save.look[tab] === id;
+        return `<button class="item ${on ? "on" : ""} ${have ? "" : need === "ad" ? "ad-item" : "locked"}" data-id="${id}" data-need="${need}">
+          ${swatch(tab, id)}<span>${t(`wr.${tab}.${id}`)}</span>${have ? "" : `<small>${need === "ad" ? t("wrAd") : `🔒 ★ ${need}`}</small>`}</button>`;
+      }).join("")}</div>
+      <p class="wr-hint">${t("wrHint", { n: totalStars() })}</p>
+      <button id="m-ok" class="ghost">${t("back")}</button>`, backToTitle);
+    World.drawPortrait($("wr-hero").getContext("2d"), "hero", 120, performance.now());
+    World.drawPortrait($("wr-bot").getContext("2d"), "S", 120, performance.now());
+    for (const b of document.querySelectorAll(".tabs button")) b.onclick = () => { Sound.sfx("click"); wardrobeMenu(b.dataset.tab); };
+    for (const b of document.querySelectorAll(".items .item")) b.onclick = () => {
+      const id = b.dataset.id, need = b.dataset.need === "ad" ? "ad" : +b.dataset.need;
+      const wear = () => { save.look[tab] = id; applyLook(); unlock("style"); Platform.save(save); Sound.sfx("magic"); wardrobeMenu(tab); };
+      if (owns(tab, id, need)) return wear();
+      if (need === "ad") return rewarded(() => { save.owned.push(`${tab}:${id}`); wear(); });
+      Sound.sfx("bump");
+    };
+  }
+
+  // ---------- Мини-игры: «Найди ошибку» и битвы с боссами ----------
+  // Раунд — промт из пройденного задания, где одна карточка заменена неверной. Игрок нажимает на неверную.
+  function makeRound(pool) {
+    const q = pool[Math.floor(Math.random() * pool.length)], k = Math.floor(Math.random() * q.slots.length);
+    const pick = a => a[Math.floor(Math.random() * a.length)];
+    return { q, k, parts: q.slots.map((s, i) => pick(s.opts.filter(o => i === k ? !o.ok : o.ok))) };
+  }
+  const roundHtml = (r, shown) => `<div class="hunt-q"><small>${r.q.title}</small>
+    <p>${t("addressee")}, ${r.parts.map((o, i) => `<button class="frag ${shown != null && i === r.k ? "bad" : ""} ${shown === i && i !== r.k ? "miss" : ""}" data-i="${i}" ${shown != null ? "disabled" : ""}>${o.t}</button>`).join(", ")}.</p></div>`;
+  const huntPool = () => [...CHAPTERS.flatMap(c => c.quests.filter(everDone)), ...DAILY];
+  let gameTimer = null;
+  const stopTimer = () => { clearInterval(gameTimer); gameTimer = null; };
+  // Таймер тикает только пока вкладка видна.
+  function runTimer(tick) { stopTimer(); let last = performance.now(); gameTimer = setInterval(() => { const now = performance.now(); if (!document.hidden) tick((now - last) / 1000); last = now; }, 100); }
+
+  function huntMenu() {
+    $("title").hidden = true;
+    modal(`<h2>${t("hunt")}</h2><p>${t("huntIntro")}</p><p class="streak">${t("huntBest", { n: save.hunt.best })}</p>
+      <button id="h-go">${t("huntStart")}</button><button id="m-ok" class="ghost">${t("back")}</button>`, backToTitle);
+    $("h-go").onclick = () => { Sound.unlock(); playHunt(); };
+  }
+  function playHunt() {
+    const pool = huntPool();
+    let left = 60, score = 0, round = makeRound(pool), feedback = null, extra = false;
+    Sound.play("boss");
+    const render = () => {
+      $("modal").innerHTML = `<div class="hunt-top"><b>${t("huntScore", { n: score })}</b><span id="h-time">⏱ ${Math.ceil(left)}</span></div>
+        <div class="timer"><i id="h-bar" style="width:${left / 60 * 100}%"></i></div>
+        <p class="hunt-task">${t("huntTask")}</p>${roundHtml(round, feedback && feedback.i)}
+        ${feedback ? `<div class="${feedback.hit ? "lesson" : "result"}">${feedback.text}</div>` : ""}
+        ${feedback && !feedback.hit ? `<button id="h-next">${t("next")}</button>` : ""}`;
+      for (const b of document.querySelectorAll(".frag")) b.onclick = () => answer(+b.dataset.i);
+      if ($("h-next")) { $("h-next").onclick = nextRound; $("h-next").focus(); }
+    };
+    const nextRound = () => { feedback = null; round = makeRound(pool); render(); };
+    const answer = i => {
+      const hit = i === round.k, bad = round.parts[round.k];
+      if (hit) { score++; Sound.sfx("win"); } else { left = Math.max(0, left - 5); Sound.sfx("fail"); }
+      feedback = { i, hit, text: `${hit ? t("huntHit") : t("huntMiss", { t: bad.t })} ${bad.fail}` };
+      render();
+      if (hit) setTimeout(() => { if (feedback && feedback.hit) nextRound(); }, 1600);
+    };
+    const finish = () => {
+      stopTimer();
+      save.hunt.games++; save.hunt.best = Math.max(save.hunt.best, score);
+      if (score >= 10) unlock("hunt10");
+      Platform.save(save); Sound.sfx("fanfare");
+      modal(`<h2>${t("huntOver")}</h2><div class="big-num">${score}</div><p>${t("huntResult", { n: score })}</p>
+        <p class="streak">${t("huntBest", { n: save.hunt.best })}</p>
+        ${extra ? "" : `<button class="ad" id="h-more">${t("huntMore")}</button>`}
+        <button id="h-again">${t("again")}</button><button id="m-ok" class="ghost">${t("back")}</button>`, () => { Sound.play(save.ch); backToTitle(); Platform.interstitial(); });
+      if ($("h-more")) $("h-more").onclick = () => rewarded(() => { extra = true; left = 15; save.hunt.games--; start(); });
+      $("h-again").onclick = () => { overlay.hidden = true; playHunt(); };
+    };
+    const start = () => {
+      modal(""); Platform.gameplay(true); render();
+      runTimer(dt => {
+        if (feedback) return;
+        left -= dt;
+        const tm = $("h-time"), bar = $("h-bar");
+        if (tm) tm.textContent = `⏱ ${Math.max(0, Math.ceil(left))}`;
+        if (bar) bar.style.width = `${Math.max(0, left / 60 * 100)}%`;
+        if (left <= 0) finish();
+      });
+    };
+    start();
+  }
+
+  // Злодей главы — тот, кто даёт её последнее задание.
+  const villain = c => c.quests.find(q => q.final);
+  const chDone = c => c.quests.every(everDone);
+  function bossMenu() {
+    $("title").hidden = true;
+    modal(`<h2>${t("bosses")}</h2><p>${t("bossIntro")}</p><div class="bosses">${CHAPTERS.map((c, i) => {
+      const v = villain(c), open = chDone(c);
+      return `<button data-i="${i}" ${open ? "" : "disabled"}><canvas width="56" height="56" data-face="${open ? v.id : ""}"></canvas>
+        <span><b>${open ? name(v.who) : t("locked")}</b><small>${t("chapter", { n: c.n })}. ${c.name}</small></span>${save.boss[i] ? "<em>🏆</em>" : ""}</button>`;
+    }).join("")}</div><button id="m-ok" class="ghost">${t("back")}</button>`, backToTitle);
+    for (const cv2 of document.querySelectorAll(".bosses canvas")) if (cv2.dataset.face) World.drawPortrait(cv2.getContext("2d"), cv2.dataset.face, 56, 0);
+    for (const b of document.querySelectorAll(".bosses button")) b.onclick = () => { Sound.unlock(); playBoss(+b.dataset.i); };
+  }
+  function playBoss(ci) {
+    const c = CHAPTERS[ci], v = villain(c), pool = c.quests, ROUND = 12;
+    let bossHp = 5, hp = 3, left = ROUND, round = makeRound(pool), feedback = null, revived = false;
+    Sound.play("boss");
+    const hearts = (n, max, ch) => ch.repeat(n) + `<i>${ch.repeat(max - n)}</i>`;
+    const render = hitBoss => {
+      $("modal").innerHTML = `<div class="boss-head"><canvas id="b-face" class="${hitBoss ? "shake" : ""}" width="96" height="96"></canvas>
+        <div><b>${name(v.who)}</b><div class="hp boss-hp">${hearts(bossHp, 5, "■")}</div><div class="hp">${t("you")} ${hearts(hp, 3, "♥")}</div></div></div>
+        <div class="timer"><i id="b-bar" style="width:${left / ROUND * 100}%"></i></div>
+        <p class="hunt-task">${t("bossTask")}</p>${roundHtml(round, feedback && feedback.i)}
+        ${feedback ? `<div class="${feedback.hit ? "lesson" : "result"}">${feedback.text}</div><button id="b-next">${t("next")}</button>` : ""}`;
+      World.drawPortrait($("b-face").getContext("2d"), v.id, 96, performance.now());
+      for (const b of document.querySelectorAll(".frag")) b.onclick = () => answer(+b.dataset.i);
+      if ($("b-next")) { $("b-next").onclick = next; $("b-next").focus(); }
+    };
+    const next = () => {
+      if (bossHp <= 0) return win();
+      if (hp <= 0) return lose();
+      feedback = null; left = ROUND; round = makeRound(pool); render();
+    };
+    const answer = i => {
+      const hit = i === round.k, bad = round.parts[round.k];
+      if (hit) { bossHp--; Sound.sfx("magic"); } else { hp--; Sound.sfx("fail"); }
+      feedback = { i: i < 0 ? round.k : i, hit, text: `${hit ? t("bossHit") : i < 0 ? t("bossSlow", { t: bad.t }) : t("huntMiss", { t: bad.t })} ${bad.fail}` };
+      render(hit);
+    };
+    const win = () => {
+      stopTimer(); save.boss[ci] = true; unlock("boss1");
+      if (CHAPTERS.every((_, i) => save.boss[i])) unlock("bossAll");
+      Platform.save(save); Sound.sfx("fanfare");
+      modal(`<h2>${t("bossWin")}</h2><div class="big-stars">🏆</div><p>${t("bossWinText", { name: name(v.who) })}</p><div class="lesson">${v.lesson}</div>
+        <button id="m-ok">${t("next")}</button>`, () => { Sound.play(save.ch); bossMenu(); Platform.interstitial(); });
+    };
+    const lose = () => {
+      stopTimer();
+      modal(`<h2>${t("bossLose")}</h2><p>${t("bossLoseText")}</p>
+        ${revived ? "" : `<button class="ad" id="b-life">${t("bossLife")}</button>`}
+        <button id="b-again">${t("again")}</button><button id="m-ok" class="ghost">${t("back")}</button>`, () => { Sound.play(save.ch); bossMenu(); });
+      if ($("b-life")) $("b-life").onclick = () => rewarded(() => { revived = true; hp = 1; start(); });
+      $("b-again").onclick = () => { overlay.hidden = true; playBoss(ci); };
+    };
+    const start = () => {
+      modal(""); Platform.gameplay(true); feedback = null; left = ROUND; round = makeRound(pool); render();
+      runTimer(dt => {
+        if (feedback) return;
+        left -= dt;
+        const bar = $("b-bar"); if (bar) bar.style.width = `${Math.max(0, left / ROUND * 100)}%`;
+        if (left <= 0) answer(-1);
+      });
+    };
+    start();
+  }
+
+  // ---------- Свой остров ----------
+  // Игрок ставит предметы, выбирая карточку для Кодика. Новые предметы открываются с главами.
+  const ISLAND_ITEMS = [["T", 0], ["p", 0], ["*", 0], ["H", 1], ["N", 2], ["%", 4], ["#", 5], ["c", 6]];
+  let islandMode = false;
+  const cursor = { x: 9, y: 7 };
+  let lastCursor = 0;
+  const islandOpen = ([, need]) => CHAPTERS.slice(0, need).every(chDone);
+  function enterIsland() {
+    $("title").hidden = true; islandMode = true; busy = false; held = null;
+    grid = World.island(save.island); npcs = {}; theme = World.THEMES.forest; sparks = [];
+    $("chap").textContent = t("island"); $("goal").textContent = t("islandGoal");
+    $("island-exit").hidden = false; document.querySelector(".help").textContent = t("islandHelp");
+    Sound.play(0); Platform.gameplay(true);
+  }
+  function leaveIsland() {
+    islandMode = false; $("island-exit").hidden = true; sheet.hidden = true;
+    document.querySelector(".help").textContent = t("help");
+    loadChapter(save.ch); backToTitle();
+  }
+  const inIsland = (x, y) => World.island()[y]?.[x] === ".";
+  function moveCursor(dx, dy) {
+    if (Date.now() - lastCursor < 140) return;
+    lastCursor = Date.now();
+    const nx = cursor.x + dx, ny = cursor.y + dy;
+    if (inIsland(nx, ny)) { cursor.x = nx; cursor.y = ny; Sound.sfx("blip"); }
+  }
+  function islandBuilder() {
+    busy = true; held = null;
+    let pick = null, note = "";
+    const items = [...ISLAND_ITEMS.map(it => ({ c: it[0], open: islandOpen(it), need: it[1] })), { c: "any", open: true }, { c: "clear", open: true }];
+    const label = c => t("is." + c);
+    const render = () => {
+      const what = pick == null ? `<span class="gap">[${t("isWhat").toLowerCase().replace("?", "")}]</span>`
+        : `<em>${pick === "clear" ? t("isClearDo") : t("isPut", { item: label(pick) })}</em>`;
+      sheetBody.innerHTML = `<div class="builder"><h3>${t("islandBuild")}</h3>
+        <div class="slot"><small>${t("isWhat")}</small><div class="cards">${items.map(it => `<button class="card ${pick === it.c ? "on" : ""}" data-c="${it.c}" ${it.open ? "" : "disabled"}>
+          ${it.open ? label(it.c) : `🔒 ${label(it.c)} · ${t("chapter", { n: it.need })}`}</button>`).join("")}</div></div>
+        <div class="preview">${t("addressee")}, ${what}.</div>${note ? `<div class="lesson">${note}</div>` : ""}
+        <div class="row"><button class="grow" id="i-do" ${pick == null ? "disabled" : ""}>${t("ask")}</button><button class="ghost" id="i-close">${t("close")}</button></div></div>`;
+      for (const b of sheetBody.querySelectorAll(".card")) b.onclick = () => { Sound.sfx("click"); pick = b.dataset.c; note = ""; render(); };
+      $("i-do").onclick = () => {
+        let c = pick;
+        if (c === "any") {
+          const open = items.filter(it => it.open && it.c.length === 1);
+          c = open[Math.floor(Math.random() * open.length)].c;
+          note = t("isAnyNote", { item: label(c) });
+        }
+        const k = `${cursor.x},${cursor.y}`;
+        if (c === "clear") delete save.island[k]; else save.island[k] = c;
+        grid = World.island(save.island); burst(cursor.x, cursor.y, "#ffe7a0", 12); Sound.sfx("magic");
+        if (Object.keys(save.island).length >= 10) unlock("builder");
+        Platform.save(save);
+        if (note) { pick = null; render(); } else { sheet.hidden = true; busy = false; }
+      };
+      $("i-close").onclick = () => { sheet.hidden = true; busy = false; };
+    };
+    sheet.hidden = false; render();
+  }
+  cv.addEventListener("click", e => {
+    if (!islandMode || busy) return;
+    const r = cv.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) / r.width * W), y = Math.floor((e.clientY - r.top) / r.height * H);
+    if (!inIsland(x, y)) return;
+    cursor.x = x; cursor.y = y; islandBuilder();
+  });
+  addEventListener("keydown", e => { if (islandMode && !busy && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); islandBuilder(); } });
+
+  // ---------- Альбом карточек ----------
+  // Каждое пройденное задание — карточка с жителем и правилом. Три звезды дают золотую рамку.
+  function albumMenu(open = null) {
+    $("title").hidden = true;
+    const all = CHAPTERS.flatMap(c => c.quests), got = all.filter(everDone);
+    if (open) {
+      const q = all.find(x => x.id === open), s = save.stars[q.id] || 0;
+      modal(`<div class="acard big ${s === 3 ? "gold" : ""}"><canvas width="120" height="120" data-face="${FACES[q.who] || "S"}"></canvas>
+        <b>${q.title}</b><small>${name(q.who)}</small><div class="big-stars">${starRow(s)}</div></div>
+        <div class="lesson">${q.lesson}</div><button id="m-ok" class="ghost">${t("albumBack")}</button>`, () => albumMenu());
+    } else {
+      modal(`<h2>${t("albumTitle")}</h2><p>${t("albumCount", { n: got.length, max: all.length })}</p>
+        <div class="album">${all.map(q => everDone(q)
+          ? `<button class="acard ${save.stars[q.id] === 3 ? "gold" : ""}" data-id="${q.id}"><canvas width="64" height="64" data-face="${FACES[q.who] || "S"}"></canvas><b>${q.title}</b><small>${starRow(save.stars[q.id] || 0)}</small></button>`
+          : `<div class="acard locked"><span>?</span></div>`).join("")}</div>
+        ${got.length ? "" : `<p>${t("notesEmpty")}</p>`}<button id="m-ok" class="ghost">${t("back")}</button>`, backToTitle, "wide");
+      for (const b of document.querySelectorAll(".album button")) b.onclick = () => { Sound.sfx("click"); albumMenu(b.dataset.id); };
+    }
+    for (const c of document.querySelectorAll("#modal canvas[data-face]")) World.drawPortrait(c.getContext("2d"), c.dataset.face, c.width, 0);
+  }
+
   // ---------- Главное меню ----------
   const unlocked = i => i === 0 || CHAPTERS[i - 1].quests.every(everDone);
   function backToTitle() { busy = true; sheet.hidden = true; Platform.gameplay(false); showTitle(); }
@@ -381,13 +653,6 @@
       }
       busy = false; Platform.gameplay(true); startChapter();
     };
-  }
-
-  function notesMenu() {
-    const items = CHAPTERS.flatMap(c => c.quests.filter(everDone).map(q => `<li><b>${q.title}.</b> ${q.lesson}</li>`));
-    $("title").hidden = true;
-    modal(`<h2>${t("notesTitle")}</h2>${items.length ? `<ol class="notes">${items.join("")}</ol>` : `<p>${t("notesEmpty")}</p>`}
-      <button id="m-ok">${t("back")}</button>`, backToTitle);
   }
 
   function parentsMenu() {
@@ -422,6 +687,7 @@
     $("t-daily").classList.toggle("done", dailyDoneToday());
     $("t-chapters").hidden = !any;
     $("t-notes").hidden = !any;
+    $("t-boss").hidden = !CHAPTERS.some(chDone);
     $("t-top").hidden = !Platform.hasSdk() && !any;
     for (const b of document.querySelectorAll(".lang button")) b.classList.toggle("on", b.dataset.lang === I18N.lang);
     $("title").hidden = false; play.focus();
@@ -445,11 +711,13 @@
     I18N.detect(Platform.sdkLang());
     applyLang();
     const data = await Platform.load();
-    if (data && data.v === 3) save = { ...save, ...data, stars: data.stars || {}, daily: { ...save.daily, ...data.daily }, ach: data.ach || [], hintUsed: data.hintUsed || {} };
+    if (data && data.v === 3) save = { ...save, ...data, stars: data.stars || {}, daily: { ...save.daily, ...data.daily }, ach: data.ach || [], hintUsed: data.hintUsed || {},
+      look: { ...save.look, ...data.look }, owned: data.owned || [], hunt: { ...save.hunt, ...data.hunt }, island: data.island || {}, boss: data.boss || {} };
     else if (data && data.v === 2) save = { ...save, done: data.done || [], pos: data.pos, met: !!data.metAda };
     if (!CHAPTERS[save.ch]) save.ch = 0;
     // Глава пройдена, а переход не сохранился (старые сохранения) — сразу в следующую.
     while (CHAPTERS[save.ch + 1] && CHAPTERS[save.ch].quests.every(q => save.done.includes(q.id))) { save.ch++; save.met = false; save.pos = null; }
+    applyLook();
     loadChapter(save.ch);
     fit(); updateStars();
     Platform.ready();
@@ -457,11 +725,16 @@
     requestAnimationFrame(loop);
     const play = $("t-play");
     $("t-chapters").onclick = chaptersMenu;
-    $("t-notes").onclick = notesMenu;
+    $("t-notes").onclick = () => albumMenu();
     $("t-top").onclick = topMenu;
     $("t-daily").onclick = () => { Sound.unlock(); dailyMenu(); };
     $("t-ach").onclick = achievementsMenu;
     $("t-parents").onclick = parentsMenu;
+    $("t-wardrobe").onclick = () => wardrobeMenu();
+    $("t-hunt").onclick = huntMenu;
+    $("t-boss").onclick = bossMenu;
+    $("t-island").onclick = () => { Sound.unlock(); enterIsland(); };
+    $("island-exit").onclick = leaveIsland;
     for (const b of document.querySelectorAll(".lang button")) b.onclick = () => {
       if (b.dataset.lang === I18N.lang) return;
       I18N.set(b.dataset.lang, true);

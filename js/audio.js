@@ -125,6 +125,62 @@ window.Sound = (function () {
         [75, 77, 79, null], [82, null, 79, 75], [77, null, 75, 72], [74, null, null, null],
       ],
     },
+    { // Студия красок: игривый си-бемоль мажор с прыгающим арпеджио.
+      bpm: 108, pluck: 3000,
+      chords: [
+        { root: 46, tones: [62, 65, 70, 74] },
+        { root: 43, tones: [62, 67, 70, 74] },
+        { root: 39, tones: [63, 67, 70, 75] },
+        { root: 41, tones: [62, 65, 69, 72] },
+      ],
+      arp: [0, 2, 1, 3, 0, 2, 3, 1],
+      melody: [
+        [82, 79, 77, null], [79, null, 74, null], [75, 77, 79, 82], [81, null, null, null],
+        [82, null, 84, 82], [79, null, 77, 79], [75, null, 74, 72], [70, null, null, null],
+      ],
+    },
+    { // Сетевой город: электронный до минор с ровным пульсом.
+      bpm: 112, pluck: 4200,
+      chords: [
+        { root: 36, tones: [60, 63, 67, 70] },
+        { root: 44, tones: [60, 63, 68, 72] },
+        { root: 39, tones: [63, 67, 70, 74] },
+        { root: 43, tones: [62, 65, 67, 71] },
+      ],
+      arp: [0, 1, 2, 3, 0, 1, 2, 3],
+      melody: [
+        [75, null, 74, 72], [70, null, 72, null], [75, null, 79, null], [77, null, null, null],
+        [79, null, 77, 75], [74, null, 75, null], [72, null, 70, 71], [72, null, null, null],
+      ],
+    },
+    { // Обсерватория: просторный ля мажор, как ночное небо.
+      bpm: 76, pluck: 3400,
+      chords: [
+        { root: 45, tones: [61, 64, 69, 73] },
+        { root: 42, tones: [61, 66, 69, 73] },
+        { root: 38, tones: [62, 66, 69, 74] },
+        { root: 40, tones: [64, 68, 71, 74] },
+      ],
+      arp: [0, 3, 2, 1, 3, 2, 1, 2],
+      melody: [
+        [81, null, 80, 78], [76, null, 73, null], [74, 76, 78, null], [76, null, null, null],
+        [85, null, 83, 81], [78, null, 81, null], [80, null, 76, 78], [81, null, null, null],
+      ],
+    },
+    { // Битва с боссом: быстрый и напористый ре минор.
+      bpm: 132, pluck: 2000,
+      chords: [
+        { root: 38, tones: [62, 65, 69, 74] },
+        { root: 46, tones: [62, 65, 70, 74] },
+        { root: 36, tones: [60, 64, 67, 72] },
+        { root: 45, tones: [61, 64, 69, 73] },
+      ],
+      arp: [0, 0, 2, 0, 1, 0, 3, 2],
+      melody: [
+        [74, 74, 77, 74], [72, null, 70, null], [72, 72, 76, 72], [73, null, 69, null],
+        [77, 77, 81, 77], [79, null, 77, 74], [76, 77, 79, 76], [74, null, null, null],
+      ],
+    },
   ];
 
   function impulse(sec) {
@@ -209,7 +265,9 @@ window.Sound = (function () {
     if (!timer) timer = setInterval(tick, 50);
   }
 
+  // «boss» — последняя песня в списке, её играют в битвах.
   function play(n) {
+    if (n === "boss") n = SONGS.length - 1;
     if (!SONGS[n] || (n === song && step > 0)) return;
     song = n; step = 0; nextT = 0;
   }

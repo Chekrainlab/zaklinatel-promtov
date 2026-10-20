@@ -3,7 +3,7 @@
 // d тёмная пещера, G ворота, H дом, f туман, n фонарь (N — горящий), k кочка или ступень,
 // m мираж, c ящики (в других главах сугробы или книги). Вода по теме главы может быть звёздной пропастью или лавой.
 // Жители: A F M B (глава 1), S K Q Z (2), W V X (3), R P U (4), C D J (5),
-// E I Y (6), L o y (7), a g z (8); на их месте трава или то, что указано в under.
+// E I Y (6), L o y (7), a g z (8), h j v (9), q s w (10), t u x (11); на их месте трава или то, что указано в under.
 window.World = (function () {
   const MAPS = [
     { theme: "forest", start: { x: 4, y: 11 }, under: { B: "d" }, rows: [
@@ -142,6 +142,57 @@ window.World = (function () {
       "T.....T.........H..T",
       "TTTTTTTTTTTTTTTTTTTT",
     ] },
+    { theme: "studio", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTTTT#G#TTTTTTT",
+      "T..N.....##v##..N..T",
+      "T........#...#.....T",
+      "T..H.......p....H..T",
+      "T~~~~~~~~~~b~~~~~~~T",
+      "T~~~~~~~~~~b~~~~~~~T",
+      "T....N.....p...j...T",
+      "T..T......pp....T..T",
+      "TTTTTTTTTcccTTTTTTTT",
+      "T........ppp.......T",
+      "T..H...pp...h...H..T",
+      "T..S..pp...........T",
+      "T....pp.....T......T",
+      "T.T......N......T..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "net", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTTTTTTTT#G#TTT",
+      "T..N..........#w#.NT",
+      "T..............p...T",
+      "T..H......H....p.H.T",
+      "T~~~~~~~~~~~~~~b~~~T",
+      "T....N....pppppp...T",
+      "T..T.....sp.....T..T",
+      "T.........p.......NT",
+      "TTTTTTTTTfffTTTTTTTT",
+      "T.......ppp........T",
+      "T..H...pp...q...H..T",
+      "T..S..pp...........T",
+      "T....pp.....T......T",
+      "T.T......N......T..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
+    { theme: "observatory", start: { x: 4, y: 12 }, under: {}, rows: [
+      "TTTTTTTT#G#TTTTTTTTT",
+      "T..N...##x##....N..T",
+      "T......#...#.......T",
+      "T..H......p.....H..T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T~~~~~~~~~b~~~~~~~~T",
+      "T....N....p....u...T",
+      "T..T......pp....T..T",
+      "TTTTTTTTTmmmTTTTTTTT",
+      "T........ppp.......T",
+      "T..H...pp...t...H..T",
+      "T..S..pp...........T",
+      "T....pp.....T......T",
+      "T.T......N......T..T",
+      "TTTTTTTTTTTTTTTTTTTT",
+    ] },
   ];
   const THEMES = {
     forest: { grass: ["#9bd86f", "#6cbd58"], tuft: "rgba(40,110,45,.45)", water: ["#5ab8f0", "#3d9be0"], bank: "#ecd9a4",
@@ -167,9 +218,27 @@ window.World = (function () {
     academy: { grass: ["#c5d67a", "#93b257"], tuft: "rgba(90,110,40,.35)", water: ["#5ab8f0", "#3d9be0"], bank: "#d9cfb8",
       leaf: ["#d9622b", "#ee8f3a", "#f6c453"], flowers: ["#ffffff", "#ff9ec4", "#ffd54f"], books: true, leaves: true, bridge: "stone",
       rock: ["#e0cfb4", "#b59e80", "#7d6a58"], roofs: [["#8a5cd6", "#6a3fb8"], ["#d9483a", "#b3352a"]], lampGlass: "#ffe7a0", lamp: "rgba(255,220,140,.5)" },
+    studio: { grass: ["#cfe88a", "#93cf6a"], tuft: "rgba(70,120,40,.35)", water: ["#8ad8ff", "#4aa8f0"], bank: "#fff1d6",
+      leaf: ["#ff7aa8", "#ffb04a", "#7ad06a"], flowers: ["#ff6fb5", "#ffd54f", "#7ac8ff"], paint: true, bridge: "stone",
+      roofs: [["#ff6fb5", "#e04c95"], ["#ffd54f", "#e0a42a"], ["#7ac8ff", "#4f9be0"]], path: ["#e8c9a0", "#f6e2c4"],
+      rock: ["#f0d8f0", "#c8a8d8", "#8a6aa8"], lampGlass: "#fff1b0", lamp: "rgba(255,220,160,.5)" },
+    net: { grass: ["#34466e", "#1f2a48"], stone: true, water: ["#3ad6ff", "#1a7fd0"], bank: "#56679a", net: true, fireflies: true,
+      leaf: ["#2fb5a8", "#3fd0c0", "#7af0e0"], trunk: "#2a3350", roofs: [["#ff5cc8", "#c93aa0"], ["#3ad6ff", "#1a8fd6"], ["#a0ff7a", "#5ac83a"]],
+      path: ["#5a6a98", "#7d8dbb"], rock: ["#6a7aa8", "#46557f", "#2a3456"], lampGlass: "#a0f0ff", lamp: "rgba(80,220,255,.5)", bridge: "stone" },
+    observatory: { grass: ["#46677a", "#26394a"], tuft: "rgba(160,210,255,.3)", water: ["#26336e", "#121a44"], bank: "#8494c2", void: true,
+      leaf: ["#2e5e6e", "#3f7a8a", "#5aa0b0"], trunk: "#3a3040", flowers: ["#fff6b0", "#bfe9ff", "#ffffff"], fireflies: true, kStyle: "star",
+      path: ["#8a9ab8", "#aab8d2"], rock: ["#a6b2d0", "#6c7a9c", "#404c6c"], roofs: [["#4a5ab8", "#2f3a8a"]],
+      lampGlass: "#fff1b0", lamp: "rgba(255,230,160,.5)" },
   };
+  // «Свой остров»: вода по краям, в середине трава. Игрок застраивает его сам.
   const TS = 48, W = 20, H = 15, CHAPTERS = MAPS.length;
-  const NPC = "AFMBSKQZWVXRPUCDJEIYLoyagz";
+  function island(cells = {}) {
+    const grid = Array.from({ length: H }, (_, y) => Array.from({ length: W }, (_, x) =>
+      x < 2 || y < 2 || x >= W - 2 || y >= H - 2 || (x === 2 && (y === 2 || y === H - 3)) || (x === W - 3 && (y === 2 || y === H - 3)) ? "~" : "."));
+    for (const [k, c] of Object.entries(cells)) { const [x, y] = k.split(",").map(Number); if (grid[y] && grid[y][x] === ".") grid[y][x] = c; }
+    return grid;
+  }
+  const NPC = "AFMBSKQZWVXRPUCDJEIYLoyagzhjvqswtux";
   const SOLID = new Set(["T", "~", "#", "H", "b", "d", "G", "f", "n", "N", "m", "c"]);
   const WATER = new Set(["~", "b", "=", "k"]);
   const PATHS = new Set(["p", "="]);
@@ -395,12 +464,20 @@ window.World = (function () {
   }
 
   // Туман: клубы, которые медленно дышат.
-  function drawFog(ctx, x, y, t) {
-    const X = x * TS + TS / 2, Y = y * TS + TS / 2;
+  function drawFog(ctx, x, y, t, th = {}) {
+    const X = x * TS + TS / 2, Y = y * TS + TS / 2, col = th.net ? "255,190,235" : "240,248,245";
     for (let i = 0; i < 4; i++) {
       const a = t / 1400 + i * 1.7 + x, r = 22 + (i % 2) * 6;
-      ctx.fillStyle = radial(ctx, X + Math.cos(a) * 12, Y + Math.sin(a) * 8 - 6, r * 1.4, [[0, "rgba(240,248,245,.85)"], [1, "rgba(240,248,245,0)"]]);
+      ctx.fillStyle = radial(ctx, X + Math.cos(a) * 12, Y + Math.sin(a) * 8 - 6, r * 1.4, [[0, `rgba(${col},.85)`], [1, `rgba(${col},0)`]]);
       ctx.fillRect(X - 60, Y - 60, 120, 120);
+    }
+    if (!th.net) return;
+    // Спам: в тумане кружат непрошеные письма.
+    for (let i = 0; i < 2; i++) {
+      const a = t / 900 + i * 3 + x * 2, ex = X + Math.cos(a) * 14 - 8, ey = Y + Math.sin(a * 1.3) * 10 - 12;
+      rr(ctx, ex, ey, 16, 11, 2); ctx.fillStyle = "#ffffff"; ctx.fill();
+      ctx.strokeStyle = "#e0559a"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(ex + 8, ey + 6); ctx.lineTo(ex + 16, ey); ctx.stroke();
+      circle(ctx, ex + 15, ey, 3, "#ff4d6d");
     }
   }
   function drawLantern(ctx, x, y, lit, t, th) {
@@ -444,6 +521,19 @@ window.World = (function () {
       ellipse(ctx, X + 18, Y + 14, 6, 3, "rgba(200,225,255,.8)");
       return;
     }
+    if (th.paint) {
+      // Банки с краской: разноцветные потёки по бокам.
+      const cols = ["#ff6fb5", "#3fa7ff", "#ffd54f", "#6fd08a"];
+      [[4, 20, 18, 22], [26, 24, 16, 18], [14, 4, 16, 18]].forEach(([bx, by, w, h], i) => {
+        const col = cols[(i + x) % cols.length];
+        rr(ctx, X + bx, Y + by, w, h, 3); ctx.fillStyle = "#d8dde8"; ctx.fill();
+        ellipse(ctx, X + bx + w / 2, Y + by, w / 2, 3.5, col);
+        rr(ctx, X + bx + 3, Y + by, 4, 8 + i * 2, 2); ctx.fillStyle = col; ctx.fill();
+        rr(ctx, X + bx + w - 7, Y + by, 4, 5, 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.fillRect(X + bx + w - 4, Y + by + 5, 2, h - 8);
+      });
+      return;
+    }
     if (th.books) {
       // Стопки книг разных цветов.
       const cols = ["#d9483a", "#3f6fd8", "#3c9d68", "#f0a830", "#8a5cd6"];
@@ -470,7 +560,7 @@ window.World = (function () {
       let fx = (rnd(i, 1, 30) % (W * TS)) + Math.sin(t / 1700 + i) * 40, fy = (rnd(i, 2, 31) % (H * TS)) + Math.cos(t / 1300 + i * 2) * 30;
       // Искры над лавой поднимаются вверх и гаснут.
       if (th.embers) fy = H * TS - ((t / 25 + rnd(i, 3, 32)) % (H * TS));
-      const a = .4 + .4 * Math.sin(t / 300 + i * 3), col = th.embers ? "255,170,80" : th.void ? "220,200,255" : "230,255,150";
+      const a = .4 + .4 * Math.sin(t / 300 + i * 3), col = th.embers ? "255,170,80" : th.net ? "120,230,255" : th.void ? "220,200,255" : "230,255,150";
       ctx.fillStyle = radial(ctx, fx, fy, 9, [[0, `rgba(${col},${a})`], [1, `rgba(${col},0)`]]);
       ctx.fillRect(fx - 9, fy - 9, 18, 18);
     }
@@ -510,11 +600,30 @@ window.World = (function () {
     a: { skin: "#ffd8b8", body: "#e2475b", body2: "#c03045" },
     g: { skin: "#f2c39b", body: "#8a5a33", body2: "#6b4423" },
     Y: { skin: "#e9e6f5", body: "#e9e6f5", body2: "#c9c2e6" },
+    h: { skin: "#ffd8b8", body: "#ff6fb5", body2: "#e04c95" },
+    j: { skin: "#f2c39b", body: "#2fa58f", body2: "#21806e" },
+    q: { skin: "#ffd8b8", body: "#3f6fd8", body2: "#2c55b0" },
+    s: { skin: "#f2c39b", body: "#6fcf4a", body2: "#4fae2f" },
+    t: { skin: "#ffd8b8", body: "#f4f6fb", body2: "#cfd6e4" },
+    u: { skin: "#c98a5e", body: "#ef6a3a", body2: "#cc4f22" },
+    v: { skin: "#ffffff", body: "#6a3fb8", body2: "#3a1f6e" },
   };
-  const ALIAS = { Z: "B", X: "B", U: "B", J: "B", y: "Y", z: "Y" };
+  const ALIAS = { Z: "B", X: "B", U: "B", J: "B", y: "Y", z: "Y", x: "v" };
+  // Гардероб: цвет костюма и головной убор героя, окраска Кодика. Игра меняет look, рисунок подхватывает сразу.
+  const COLORS = {
+    violet: ["#6c4ff5", "#5136d6"], blue: ["#3f86e8", "#2f6cc4"], green: ["#3fae6a", "#2d8a51"], orange: ["#ff8a3d", "#e0702a"],
+    red: ["#ef4f6b", "#c9304d"], pink: ["#ff6fb5", "#e04c95"], black: ["#3a3f55", "#262a3c"],
+  };
+  const BOTS = {
+    mint: ["#e6fff6", "#8ff0cc", "#7cf5c8", "#4fd4a8", "124,245,200"], sky: ["#eaf4ff", "#8fc8ff", "#8fd3ff", "#4f9be0", "120,190,255"],
+    rose: ["#fff0f7", "#ffa8d2", "#ff9ccc", "#e06aa6", "255,150,200"], gold: ["#fffbe6", "#ffd66b", "#ffe27a", "#e0a42a", "255,214,107"],
+    lilac: ["#f4ecff", "#c4a6ff", "#c9b0ff", "#8f6ae0", "190,160,255"],
+  };
+  const outfit = { hat: "cap", color: "violet", bot: "mint" };
   function drawCharacter(ctx, id, cx, by, t, o = {}) {
     id = ALIAS[id] || id;
-    const s = (o.scale || 1) * (id === "B" ? 1.2 : id === "Y" ? 1.1 : 1), L = LOOKS[id];
+    const s = (o.scale || 1) * (id === "B" ? 1.2 : id === "Y" || id === "v" ? 1.1 : 1);
+    const L = id === "hero" ? { ...LOOKS.hero, body: COLORS[outfit.color][0], body2: COLORS[outfit.color][1] } : LOOKS[id];
     const b = o.walk ? Math.abs(Math.sin(t / 85)) * 4 : Math.sin(t / 500 + cx) * 1.2;
     const look = o.flip ? -1 : 1;
     ctx.save(); ctx.translate(cx, by); ctx.scale(s, s);
@@ -525,25 +634,33 @@ window.World = (function () {
       ctx.fillStyle = radial(ctx, 0, -30, 40 + Math.sin(t / 250) * 4, [[0, "rgba(180,60,200,.35)"], [1, "rgba(120,20,140,0)"]]);
       ctx.fillRect(-50, -80, 100, 90); ctx.restore();
     }
-    if (id === "S") {
-      const fy = Math.sin(t / 300) * 4;
+    if (id === "S" || id === "w") {
+      // Кодик: круглый летающий ИИ-помощник с экраном-лицом и антенной. «w» — его подделка с красными глазами.
+      const fake = id === "w", K = fake ? BOTS.mint : BOTS[outfit.bot] || BOTS.mint;
+      const fy = Math.sin(t / 300) * 4, gx = fake && Math.sin(t / 90) > .8 ? 2 : 0;
       ctx.save(); ctx.globalCompositeOperation = "lighter";
-      ctx.fillStyle = radial(ctx, 0, -28 + fy, 34, [[0, "rgba(124,245,200,.6)"], [1, "rgba(124,245,200,0)"]]);
+      ctx.fillStyle = radial(ctx, 0, -28 + fy, 34, [[0, fake ? "rgba(255,80,110,.45)" : `rgba(${K[4]},.6)`], [1, "rgba(0,0,0,0)"]]);
       ctx.fillRect(-40, -70, 80, 80); ctx.restore();
-      // Кодик: круглый летающий ИИ-помощник с экраном-лицом и антенной.
+      ctx.translate(gx, 0);
       ellipse(ctx, 0, -6, 10, 3, "rgba(20,60,50,.25)");
-      const g = ctx.createLinearGradient(0, -48 + fy, 0, -12 + fy); g.addColorStop(0, "#e6fff6"); g.addColorStop(1, "#8ff0cc");
+      const g = ctx.createLinearGradient(0, -48 + fy, 0, -12 + fy); g.addColorStop(0, K[0]); g.addColorStop(1, K[1]);
       circle(ctx, 0, -30 + fy, 18, g);
       rr(ctx, -12, -38 + fy, 24, 15, 7); ctx.fillStyle = "#1d4d45"; ctx.fill();
       const blink = Math.sin(t / 900) > .96 ? 1 : 5;
-      rr(ctx, -7, -33 + fy - blink / 2, 4, blink, 2); ctx.fillStyle = "#7cf5c8"; ctx.fill();
+      rr(ctx, -7, -33 + fy - blink / 2, 4, blink, 2); ctx.fillStyle = fake ? "#ff4d6d" : K[2]; ctx.fill();
       rr(ctx, 3, -33 + fy - blink / 2, 4, blink, 2); ctx.fill();
-      ctx.strokeStyle = "#4fd4a8"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -48 + fy); ctx.lineTo(0, -54 + fy); ctx.stroke();
-      circle(ctx, 0, -56 + fy, 3, "#ffcf4a");
-      ellipse(ctx, -21, -28 + fy, 4, 7, "#8ff0cc"); ellipse(ctx, 21, -28 + fy, 4, 7, "#8ff0cc");
+      if (fake) { ctx.strokeStyle = "#ff4d6d"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-8, -37 + fy); ctx.lineTo(-3, -35 + fy); ctx.moveTo(8, -37 + fy); ctx.lineTo(3, -35 + fy); ctx.stroke(); }
+      ctx.strokeStyle = K[3]; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -48 + fy); ctx.lineTo(0, -54 + fy); ctx.stroke();
+      circle(ctx, 0, -56 + fy, 3, fake ? "#ff4d6d" : "#ffcf4a");
+      ellipse(ctx, -21, -28 + fy, 4, 7, K[1]); ellipse(ctx, 21, -28 + fy, 4, 7, K[1]);
+      if (fake) {
+        // Помехи на корпусе: подделка выдаёт себя рябью.
+        ctx.globalAlpha = .5; ctx.fillStyle = "#ff4d6d";
+        for (let i = 0; i < 3; i++) ctx.fillRect(-16, -44 + fy + ((t / 40 + i * 9) % 28), 32, 1.5);
+        ctx.globalAlpha = 1;
+      }
       ctx.restore(); return;
     }
-
     if (id === "W") {
       // Сова: круглое пёрышко-тело, большие глаза и очки библиотекаря.
       const g = ctx.createLinearGradient(0, -48 - b, 0, -2); g.addColorStop(0, L.body); g.addColorStop(1, L.body2);
@@ -574,6 +691,27 @@ window.World = (function () {
       rr(ctx, 3 + look * 1.5, -47 - b, 4, blink, 2); ctx.fill();
       ctx.strokeStyle = "#8593a8"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -56 - b); ctx.lineTo(0, -63 - b); ctx.stroke();
       circle(ctx, 0, -65 - b, 3.2, Math.sin(t / 300) > 0 ? "#ff6b6b" : "#ffb3b3");
+      ctx.restore(); return;
+    }
+    if (id === "v") {
+      // Фейкус: плащ и белая маска. Маска дрожит и двоится, как подделанная картинка.
+      const fy = Math.sin(t / 380) * 3, gl = Math.sin(t / 90) > .85 ? 3 : 0;
+      const cg = ctx.createLinearGradient(0, -52 + fy, 0, -4); cg.addColorStop(0, L.body); cg.addColorStop(1, L.body2);
+      ctx.beginPath(); ctx.moveTo(-18, -4); ctx.quadraticCurveTo(-16, -40 + fy, 0, -54 + fy); ctx.quadraticCurveTo(16, -40 + fy, 18, -4);
+      ctx.quadraticCurveTo(9, -9, 0, -4); ctx.quadraticCurveTo(-9, -9, -18, -4); ctx.closePath(); ctx.fillStyle = cg; ctx.fill();
+      const mask = (dx, col, a) => {
+        ctx.save(); ctx.globalAlpha = a; ctx.translate(dx, 0);
+        ctx.beginPath(); ctx.ellipse(0, -36 + fy, 11, 13, 0, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); ctx.restore();
+      };
+      if (gl) { mask(-gl, "#ff4d8a", .6); mask(gl, "#3ad6ff", .6); }
+      mask(0, "#ffffff", 1);
+      // Одна половина улыбается, другая хмурится: никогда не знаешь, чему верить.
+      ellipse(ctx, -4.5 + look, -38 + fy, 2.4, 3.2, "#2a1d3a"); ellipse(ctx, 4.5 + look, -38 + fy, 2.4, 3.2, "#2a1d3a");
+      ctx.strokeStyle = "#2a1d3a"; ctx.lineWidth = 1.6; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.arc(-3 + look, -31 + fy, 3, 0.2, Math.PI - 0.2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(3 + look, -27 + fy, 3, Math.PI + 0.2, -0.2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -49 + fy); ctx.lineTo(0, -23 + fy); ctx.strokeStyle = "rgba(106,63,184,.35)"; ctx.stroke();
+      circle(ctx, 0, -56 + fy, 3.2, "#ffd54f");
       ctx.restore(); return;
     }
     if (id === "Y") {
@@ -650,6 +788,35 @@ window.World = (function () {
     if (id === "a") { ctx.fillStyle = "#7a4a2a"; ctx.fillRect(-10, -30 - b, 3, 20); ctx.fillRect(7, -30 - b, 3, 20); }
     if (id === "g") { rr(ctx, 2, -22 - b, 13, 15, 2); ctx.fillStyle = "#c0392b"; ctx.fill(); ctx.fillStyle = "#fff3d6"; ctx.fillRect(4, -20 - b, 9, 11); }
     if (id === "hero") { rr(ctx, -13, -16 - b, 26, 4, 2); ctx.fillStyle = "#ffcf4a"; ctx.fill(); }
+    if (id === "h") {
+      // Палитра с каплями краски.
+      ellipse(ctx, 8, -16 - b, 9, 6, "#f3e2c4");
+      ["#ff4d6d", "#3fa7ff", "#ffd54f", "#6fd08a"].forEach((c, i) => circle(ctx, 4 + (i % 2) * 6, -19 - b + (i >> 1) * 5, 1.8, c));
+    }
+    if (id === "j") {
+      // Фотоаппарат на ремешке.
+      ctx.strokeStyle = "#2a2f45"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-9, -29 - b); ctx.lineTo(0, -20 - b); ctx.lineTo(9, -29 - b); ctx.stroke();
+      rr(ctx, -8, -22 - b, 16, 11, 3); ctx.fillStyle = "#2a2f45"; ctx.fill();
+      circle(ctx, 0, -16.5 - b, 3.6, "#7ac8ff"); circle(ctx, 1, -17.5 - b, 1.2, "#fff");
+    }
+    if (id === "q") { rr(ctx, -6, -24 - b, 12, 9, 2); ctx.fillStyle = "#ffffff"; ctx.fill(); circle(ctx, 0, -19.5 - b, 2.5, "#3ad6ff"); }
+    if (id === "s") {
+      // Телефон в руке.
+      rr(ctx, 9 * look - 3, -22 - b, 7, 12, 2); ctx.fillStyle = "#2a2f45"; ctx.fill();
+      rr(ctx, 9 * look - 2, -21 - b, 5, 9, 1); ctx.fillStyle = "#a0f0ff"; ctx.fill();
+    }
+    if (id === "t") {
+      // Халат учёного с пуговицами и лупой в кармане.
+      ctx.fillStyle = "#cfd6e4"; ctx.fillRect(-1, -30 - b, 2, 26);
+      circle(ctx, 0, -22 - b, 1.5, "#8593a8"); circle(ctx, 0, -14 - b, 1.5, "#8593a8");
+      circle(ctx, -7, -16 - b, 3.5, "rgba(122,200,255,.6)"); ctx.strokeStyle = "#8a5a33"; ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    if (id === "u") {
+      // Блокнот и микрофон журналистки.
+      rr(ctx, 4, -24 - b, 10, 13, 2); ctx.fillStyle = "#fff8e0"; ctx.fill();
+      ctx.fillStyle = "#c9b98a"; for (let i = 0; i < 3; i++) ctx.fillRect(6, -21 - b + i * 3, 6, 1);
+      rr(ctx, -12, -24 - b, 3, 10, 1); ctx.fillStyle = "#3a3f55"; ctx.fill(); circle(ctx, -10.5, -25 - b, 3, "#5a5f75");
+    }
     if (id === "B") { ctx.beginPath(); ctx.moveTo(-18, -4 - b); ctx.lineTo(-13, -30 - b); ctx.lineTo(13, -30 - b); ctx.lineTo(18, -4 - b); ctx.closePath(); ctx.fillStyle = "#3d1233"; ctx.fill(); }
 
     // Планшет героя: через него он говорит с Кодиком.
@@ -676,12 +843,7 @@ window.World = (function () {
     }
 
     // Головные уборы.
-    if (id === "hero") {
-      // Герой: фиолетовая кепка с жёлтым значком «</>».
-      ctx.beginPath(); ctx.arc(0, hy - 4, 15, Math.PI, 0); ctx.fillStyle = "#6c4ff5"; ctx.fill();
-      rr(ctx, -4 + look * 7, hy - 7, 18, 4, 2); ctx.fillStyle = "#5136d6"; ctx.fill();
-      circle(ctx, 0, hy - 12, 4, "#ffcf4a");
-    }
+    if (id === "hero") drawHat(ctx, outfit.hat, hy, look, L, t);
     if (id === "A") {
       ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI, 0); ctx.fillStyle = "#eeeaf6"; ctx.fill();
       circle(ctx, 0, hy - 17, 7, "#eeeaf6");
@@ -746,6 +908,44 @@ window.World = (function () {
       ctx.strokeStyle = "#5a4030"; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
     }
+    if (id === "h") {
+      // Художница: рыжие волосы и берет с хвостиком.
+      ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI, 0); ctx.fillStyle = "#e0702a"; ctx.fill();
+      ellipse(ctx, -14, hy + 3, 4, 7, "#e0702a"); ellipse(ctx, 14, hy + 3, 4, 7, "#e0702a");
+      ctx.save(); ctx.translate(3 * look, hy - 12); ctx.rotate(-.2 * look); ellipse(ctx, 0, 0, 15, 6, "#d9483a"); ctx.restore();
+      circle(ctx, 3 * look, hy - 18, 2.4, "#d9483a");
+    }
+    if (id === "j") {
+      // Фотограф: кепка козырьком назад и короткая стрижка.
+      ctx.beginPath(); ctx.arc(0, hy - 4, 14, Math.PI, 0); ctx.fillStyle = "#3a3f55"; ctx.fill();
+      rr(ctx, -12 - look * 6, hy - 8, 14, 4, 2); ctx.fillStyle = "#262a3c"; ctx.fill();
+    }
+    if (id === "q") {
+      // Связистка: хвостик и гарнитура с микрофоном.
+      ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI, 0); ctx.fillStyle = "#2a1d1a"; ctx.fill();
+      ellipse(ctx, -14 * look, hy + 6, 4, 9, "#2a1d1a");
+      ctx.strokeStyle = "#3a3f55"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, hy - 2, 16, Math.PI * 1.05, -0.05); ctx.stroke();
+      rr(ctx, 13, hy - 6, 5, 10, 2); ctx.fillStyle = "#3a3f55"; ctx.fill();
+      ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(15, hy + 4); ctx.quadraticCurveTo(14, hy + 10, 6, hy + 9); ctx.stroke();
+      circle(ctx, 6, hy + 9, 2, "#3ad6ff");
+    }
+    if (id === "s") {
+      // Мальчик Сеня: взъерошенные волосы.
+      for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.moveTo(-12 + i * 6, hy - 8); ctx.lineTo(-9 + i * 6, hy - 19 + (i % 2) * 3); ctx.lineTo(-6 + i * 6, hy - 8); ctx.fillStyle = "#c98a3e"; ctx.fill(); }
+      ctx.beginPath(); ctx.arc(0, hy - 4, 14, Math.PI, 0); ctx.fillStyle = "#c98a3e"; ctx.fill();
+    }
+    if (id === "t") {
+      // Учёный: седые волосы по бокам и круглые очки.
+      ellipse(ctx, -13, hy - 6, 5, 6, "#e8e8f0"); ellipse(ctx, 13, hy - 6, 5, 6, "#e8e8f0");
+      circle(ctx, -6, hy - 13, 4, "#e8e8f0"); circle(ctx, 6, hy - 13, 4, "#e8e8f0");
+      ctx.strokeStyle = "#3a3f55"; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.arc(-5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.moveTo(9.4 + look * 1.2, hy - 1); ctx.arc(5 + look * 1.2, hy - 1, 4.4, 0, 7); ctx.stroke();
+    }
+    if (id === "u") {
+      // Журналистка: кудрявые волосы и пресс-карта.
+      for (let i = 0; i < 7; i++) circle(ctx, -15 + i * 5, hy - 9 + Math.abs(3 - i) * 1.5, 5.5, "#2a1d1a");
+      circle(ctx, -15, hy + 1, 5, "#2a1d1a"); circle(ctx, 15, hy + 1, 5, "#2a1d1a");
+    }
     if (id === "K") {
       ctx.fillStyle = "#5c9e4a";
       ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI * 1.05, -0.05); ctx.fill();
@@ -774,6 +974,75 @@ window.World = (function () {
     ctx.restore();
   }
 
+  // Головные уборы героя из гардероба. look — направление взгляда (1 или -1).
+  function drawHat(ctx, hat, hy, lk, L, t) {
+    if (hat === "beanie") {
+      // Вязаная шапка с помпоном.
+      ctx.beginPath(); ctx.arc(0, hy - 3, 15, Math.PI, 0); ctx.fillStyle = L.body; ctx.fill();
+      rr(ctx, -15, hy - 6, 30, 6, 3); ctx.fillStyle = L.body2; ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 1.5;
+      for (let i = -9; i <= 9; i += 6) { ctx.beginPath(); ctx.moveTo(i, hy - 7); ctx.lineTo(i, hy - 15); ctx.stroke(); }
+      circle(ctx, 0, hy - 19, 5, "#ffffff");
+    } else if (hat === "headphones") {
+      // Наушники с жёлтыми чашками.
+      ctx.beginPath(); ctx.arc(0, hy - 2, 16, Math.PI * 1.05, -0.05); ctx.strokeStyle = L.body2; ctx.lineWidth = 4; ctx.stroke();
+      rr(ctx, -19, hy - 6, 8, 13, 4); ctx.fillStyle = "#ffcf4a"; ctx.fill();
+      rr(ctx, 11, hy - 6, 8, 13, 4); ctx.fill();
+      for (let i = 0; i < 4; i++) circle(ctx, -10 + i * 6.5, hy - 12 + (i % 2) * 2, 4.5, "#5a3a2a");
+    } else if (hat === "cat") {
+      // Ободок с кошачьими ушками.
+      for (let i = 0; i < 5; i++) circle(ctx, -10 + i * 5, hy - 11 + (i % 2) * 2, 4.5, "#5a3a2a");
+      ctx.beginPath(); ctx.arc(0, hy - 2, 15, Math.PI * 1.1, -0.1); ctx.strokeStyle = L.body; ctx.lineWidth = 3; ctx.stroke();
+      for (const sx of [-1, 1]) {
+        ctx.beginPath(); ctx.moveTo(sx * 13, hy - 9); ctx.lineTo(sx * 11, hy - 24); ctx.lineTo(sx * 3, hy - 14); ctx.closePath(); ctx.fillStyle = L.body; ctx.fill();
+        ctx.beginPath(); ctx.moveTo(sx * 11, hy - 12); ctx.lineTo(sx * 10, hy - 20); ctx.lineTo(sx * 6, hy - 14); ctx.closePath(); ctx.fillStyle = "#ffb3d1"; ctx.fill();
+      }
+    } else if (hat === "cowboy") {
+      // Широкополая шляпа.
+      ellipse(ctx, 0, hy - 9, 23, 5, "#a0703f");
+      rr(ctx, -11, hy - 24, 22, 16, [8, 8, 2, 2]); ctx.fillStyle = "#b9824a"; ctx.fill();
+      rr(ctx, -11, hy - 13, 22, 3, 1); ctx.fillStyle = L.body; ctx.fill();
+    } else if (hat === "crown") {
+      // Золотая корона мастера: за все звёзды.
+      for (let i = 0; i < 5; i++) circle(ctx, -10 + i * 5, hy - 11 + (i % 2) * 2, 4.5, "#5a3a2a");
+      ctx.beginPath(); ctx.moveTo(-12, hy - 10);
+      [-12, -8, -4, 0, 4, 8, 12].forEach((px, i) => ctx.lineTo(px, hy - (i % 2 ? 16 : 25)));
+      ctx.lineTo(12, hy - 10); ctx.closePath(); ctx.fillStyle = "#ffcf4a"; ctx.fill();
+      circle(ctx, 0, hy - 15, 2.5, "#ef4f6b"); circle(ctx, -7, hy - 14, 1.8, "#4fd1c5"); circle(ctx, 7, hy - 14, 1.8, "#4fd1c5");
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = .5 + .5 * Math.sin(t / 300);
+      circle(ctx, 9, hy - 24, 2, "#fff"); ctx.restore();
+    } else {
+      // Кепка с жёлтым значком (по умолчанию).
+      ctx.beginPath(); ctx.arc(0, hy - 4, 15, Math.PI, 0); ctx.fillStyle = L.body; ctx.fill();
+      rr(ctx, -4 + lk * 7, hy - 7, 18, 4, 2); ctx.fillStyle = L.body2; ctx.fill();
+      circle(ctx, 0, hy - 12, 4, "#ffcf4a");
+    }
+  }
+
+  // Объекты «Своего острова»: клумба и колодец.
+  function drawFlowerbed(ctx, x, y, t) {
+    const X = x * TS, Y = y * TS;
+    ellipse(ctx, X + 24, Y + 34, 20, 9, "#7a4f2e"); ellipse(ctx, X + 24, Y + 32, 18, 7, "#5a3a22");
+    const cols = ["#ff6b8a", "#ffd54f", "#ffffff", "#b388ff", "#ff9a3c"];
+    for (let i = 0; i < 7; i++) {
+      const fx = X + 10 + (i * 37) % 28, fy = Y + 22 + (i * 13) % 12 + Math.sin(t / 700 + i) * .8;
+      ctx.strokeStyle = "#3f8f4a"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(fx, fy + 10); ctx.lineTo(fx, fy + 2); ctx.stroke();
+      for (let k = 0; k < 5; k++) circle(ctx, fx + Math.cos(k * 1.26) * 3.2, fy + Math.sin(k * 1.26) * 3.2, 2.6, cols[(i + x + y) % cols.length]);
+      circle(ctx, fx, fy, 1.8, "#fff3b0");
+    }
+  }
+  function drawWell(ctx, x, y, t) {
+    const X = x * TS + TS / 2, Y = y * TS;
+    ellipse(ctx, X + 3, Y + 44, 20, 5, "rgba(20,50,40,.3)");
+    rr(ctx, X - 17, Y + 22, 34, 20, 6); ctx.fillStyle = "#a9a1b8"; ctx.fill();
+    ctx.strokeStyle = "#7d758d"; ctx.lineWidth = 1.5;
+    for (const ly of [28, 35]) { ctx.beginPath(); ctx.moveTo(X - 16, Y + ly); ctx.lineTo(X + 16, Y + ly); ctx.stroke(); }
+    ellipse(ctx, X, Y + 22, 17, 6, "#7d758d"); ellipse(ctx, X, Y + 22, 13, 4, "#3d9be0");
+    ellipse(ctx, X - 4, Y + 21, 4, 1.2, "rgba(255,255,255," + (.4 + .3 * Math.sin(t / 400)) + ")");
+    rr(ctx, X - 16, Y - 2, 3, 24, 1); ctx.fillStyle = "#8a5a33"; ctx.fill(); rr(ctx, X + 13, Y - 2, 3, 24, 1); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(X - 22, Y + 2); ctx.lineTo(X, Y - 10); ctx.lineTo(X + 22, Y + 2); ctx.closePath(); ctx.fillStyle = "#d9483a"; ctx.fill();
+  }
+
   // Пузырь «!» над жителем, которому нужна помощь.
   function drawMarker(ctx, cx, by, t) {
     const y = by - 78 + Math.sin(t / 250) * 3;
@@ -790,13 +1059,15 @@ window.World = (function () {
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       const c = grid[y][x];
       if (c === "T") items.push({ z: y * TS + TS, d: () => drawTree(ctx, x, y, t, th) });
-      else if (c === "f") items.push({ z: y * TS + TS + 2, d: () => drawFog(ctx, x, y, t) });
+      else if (c === "f") items.push({ z: y * TS + TS + 2, d: () => drawFog(ctx, x, y, t, th) });
       else if (c === "n" || c === "N") items.push({ z: y * TS + TS - 2, d: () => drawLantern(ctx, x, y, c === "N", t, th) });
       else if (c === "m") items.push({ z: y * TS + TS + 2, d: () => drawMirage(ctx, x, y, t) });
       else if (c === "c") items.push({ z: y * TS + TS - 1, d: () => drawCrates(ctx, x, y, th) });
       else if (c === "H") items.push({ z: y * TS + TS, d: () => drawHouse(ctx, x, y, th) });
       else if (c === "G" || c === "O") items.push({ z: y * TS, d: () => drawGate(ctx, x, y, c === "O", t) });
       else if (c === "l" && (x + y) % 2 === 0) items.push({ z: y * TS + 20, d: () => drawTorch(ctx, x, y, t) });
+      else if (c === "*") items.push({ z: y * TS + TS - 6, d: () => drawFlowerbed(ctx, x, y, t) });
+      else if (c === "%") items.push({ z: y * TS + TS - 2, d: () => drawWell(ctx, x, y, t) });
     }
     for (const a of actors) items.push({ z: a.py + TS - 1, d: () => {
       drawCharacter(ctx, a.id, a.px + TS / 2, a.py + TS - 4, t, a);
@@ -813,5 +1084,5 @@ window.World = (function () {
     drawCharacter(ctx, id, size / 2, size * .5 + 42 * s, t, { scale: s, portrait: true });
   }
 
-  return { TS, W, H, CHAPTERS, SOLID, build, drawScene, drawPortrait, radial };
+  return { TS, W, H, CHAPTERS, SOLID, build, drawScene, drawPortrait, radial, outfit, COLORS, BOTS, island, THEMES };
 })();

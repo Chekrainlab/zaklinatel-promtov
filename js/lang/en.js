@@ -37,7 +37,7 @@ window.LANG_PACKS.en = {
   "locked": "Locked",
   "replayHint": "You can replay a finished chapter to collect all the stars.",
   "back": "Back",
-  "notes": "Cheat Sheet",
+  "notes": "Album",
   "notesTitle": "Vibe Coder's Cheat Sheet",
   "notesEmpty": "The rules you learn in the game will show up here.",
   "top": "Leaderboard",
@@ -68,7 +68,7 @@ window.LANG_PACKS.en = {
   "ach.part1": "Part One",
   "ach.part1.d": "Finish the first 5 chapters.",
   "ach.part2": "Vibe coding master",
-  "ach.part2.d": "Finish all 8 chapters.",
+  "ach.part2.d": "Finish the first 8 chapters.",
   "ach.allstars": "Every star",
   "ach.allstars.d": "Collect every star in the game.",
   "ach.daily1": "Daily prompt",
@@ -82,7 +82,89 @@ window.LANG_PACKS.en = {
   "parentsIntro": "Codewood teaches kids how to work with AI: ask clearly, check the answers and stay safe. There is no real AI in the game: every answer is written in advance. Below you'll find what each chapter teaches and questions to talk over with your child.",
   "teaches": "What it teaches:",
   "discuss": "Talk it over:",
-  "language": "Language"
+  "language": "Language",
+  "ach.part3": "Keeper of truth",
+  "ach.part3.d": "Finish all 11 chapters.",
+  "ach.style": "Fashion star",
+  "ach.style.d": "Change your outfit in the wardrobe.",
+  "ach.hunt10": "Sharp eye",
+  "ach.hunt10.d": "Find 10 mistakes in one game.",
+  "ach.builder": "Builder",
+  "ach.builder.d": "Place 10 things on your island.",
+  "ach.boss1": "First victory",
+  "ach.boss1.d": "Defeat any boss.",
+  "ach.bossAll": "Villain buster",
+  "ach.bossAll.d": "Defeat every boss.",
+  "again": "Play again",
+  "close": "Close",
+  "exit": "Exit",
+  "you": "You",
+  "wardrobe": "Wardrobe",
+  "wr.hat": "Hat",
+  "wr.color": "Outfit",
+  "wr.bot": "Kodik",
+  "wr.hat.cap": "Cap",
+  "wr.hat.beanie": "Beanie",
+  "wr.hat.headphones": "Headphones",
+  "wr.hat.cat": "Cat ears",
+  "wr.hat.cowboy": "Cowboy hat",
+  "wr.hat.crown": "Crown",
+  "wr.color.violet": "Purple",
+  "wr.color.blue": "Blue",
+  "wr.color.green": "Green",
+  "wr.color.orange": "Orange",
+  "wr.color.red": "Red",
+  "wr.color.pink": "Pink",
+  "wr.color.black": "Black",
+  "wr.bot.mint": "Mint",
+  "wr.bot.sky": "Sky blue",
+  "wr.bot.rose": "Pink",
+  "wr.bot.lilac": "Lilac",
+  "wr.bot.gold": "Gold",
+  "wrAd": "▶ watch an ad",
+  "wrHint": "New items unlock with stars. You have ★ {n}.",
+  "hunt": "Spot the mistake",
+  "huntIntro": "Every prompt has one wrong card hiding in it. Find it! You have one minute to find as many mistakes as you can.",
+  "huntBest": "Best: {n}",
+  "huntStart": "Start",
+  "huntScore": "Found: {n}",
+  "huntTask": "Tap the mistake in the prompt:",
+  "huntHit": "Right!",
+  "huntMiss": "The mistake was here: “{t}”.",
+  "huntOver": "Time's up!",
+  "huntResult": "Mistakes found: {n}.",
+  "huntMore": "15 more seconds (watch an ad)",
+  "bosses": "Battles",
+  "bossIntro": "Battle the villains from the chapters you've finished. Find the mistakes before they get you all mixed up!",
+  "bossTask": "Find the mistake before time runs out:",
+  "bossHit": "Hit!",
+  "bossSlow": "Too slow! The mistake was here: “{t}”.",
+  "bossWin": "Victory!",
+  "bossWinText": "{name} is defeated. The chapter's rule:",
+  "bossLose": "Don't give up!",
+  "bossLoseText": "The villain got you mixed up. Try again!",
+  "bossLife": "One more life (watch an ad)",
+  "islandHelp": "Tap a square on the island, or pick one with the arrow keys and press Enter.",
+  "island": "My island",
+  "islandGoal": "Tap a square on the island to ask Kodik to build something.",
+  "islandBuild": "What should go here?",
+  "isWhat": "What to put here?",
+  "isPut": "put a {item} here",
+  "isClearDo": "clear everything off this square",
+  "is.T": "tree",
+  "is.p": "path",
+  "is.*": "flowerbed",
+  "is.H": "little house",
+  "is.N": "lamppost",
+  "is.%": "well",
+  "is.#": "rock",
+  "is.c": "stack of crates",
+  "is.any": "something",
+  "is.clear": "clear",
+  "isAnyNote": "Kodik chose on his own and put a {item} here. Wanted something else? Ask clearly!",
+  "albumTitle": "Card album",
+  "albumCount": "Cards collected: {n} of {max}",
+  "albumBack": "Back to the album"
  },
  "names": {
   "Кодер": "Coder",
@@ -106,7 +188,17 @@ window.LANG_PACKS.en = {
   "Маячница Лина": "Lighthouse Keeper Lina",
   "Осьминог Окто": "Octo the Octopus",
   "Ученица Аня": "Student Anya",
-  "Библиотекарь Гоша": "Librarian Gosha"
+  "Библиотекарь Гоша": "Librarian Gosha",
+  "Понимус": "Thinkus",
+  "Художница Мия": "Artist Mia",
+  "Фотограф Лев": "Photographer Lev",
+  "Фейкус": "Fakus",
+  "Связистка Нина": "Operator Nina",
+  "Мальчик Сеня": "Senya",
+  "Фальшивый Кодик": "Fake Kodik",
+  "Учёный Арсений": "Scientist Arseny",
+  "Журналистка Зара": "Reporter Zara",
+  "Проверус": "Checkus"
  },
  "chapters": [
   {
@@ -1845,7 +1937,7 @@ window.LANG_PACKS.en = {
     "ending": {
      "title": "You're a vibe coding master!",
      "lesson": "Cheat Sheet, part two:<br>10. Plan first, then work.<br>11. Give the exact error text.<br>12. Test on different examples.<br>13. Ask for several options and choose yourself.<br>14. Conversation dragging on? Summary and a new conversation.<br>15. Don't run code you don't understand.<br>16. Learn together with AI — don't copy answers.<br>17. Respect other people's work and credit the authors.",
-     "next": "Thank you for playing through Codewood! All the rules are collected in the “Cheat Sheet” on the main screen."
+     "next": "But the story isn't over: Fakus is already faking pictures in the Paint Studio. On to part three!"
     }
    },
    "quests": [
@@ -2094,6 +2186,834 @@ window.LANG_PACKS.en = {
       },
       {
        "text": "Thinkus! I like it. Can I learn together with you?"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Paint Studio",
+   "story": {
+    "intro": [
+     {
+      "text": "Thinkus is learning together with everyone now. But new trouble has come to Codewood."
+     },
+     {
+      "text": "I saw Fakus! He uses AI to make fake pictures and pretends they're real."
+     },
+     {
+      "text": "He's made a mess in the Paint Studio. Artist Mia is nearby. Start with her."
+     }
+    ],
+    "find": "Talk to Kodik.",
+    "guideDone": "The studio is painting again. Your pictures are precise and honest!",
+    "freed": "The Paint Studio is saved!",
+    "bump": {
+     "c": "Paint cans are blocking the way. Artist Mia is nearby. They're her paints.",
+     "~": "A canal of colored water. Too wide to jump. Photographer Lev knows how to get across.",
+     "G": "The studio gates are locked. Fakus is hiding behind them."
+    },
+    "ending": {
+     "title": "The Paint Studio is saved!",
+     "lesson": "Picture rules:<br>1. Describe the picture precisely: what's in it, what style, what colors and what words.<br>2. Change a picture one step at a time, and say what to keep as it is.<br>3. Honestly label pictures made by AI, and never fake photos of real people.",
+     "next": "Fakus ran off to Net City. Let's catch him!"
+    }
+   },
+   "quests": [
+    {
+     "title": "A precise picture",
+     "goal": "Help Artist Mia: paint cans are blocking the way.",
+     "intro": [
+      {
+       "text": "I need a poster for the paint fair. I asked the AI to “draw something pretty,” and I got a mess of blots!"
+      },
+      {
+       "text": "All my paints got so upset they tipped over right onto the road. Help me describe the poster precisely!"
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to draw?",
+       "opts": [
+        {
+         "t": "a fair poster: brushes and a rainbow"
+        },
+        {
+         "t": "something pretty",
+         "fail": "Kodik drew a pretty vacuum cleaner. Pretty, but it's not a fair poster."
+        },
+        {
+         "t": "everything at once",
+         "fail": "The poster has brushes, elephants, rockets and soup. You can't make out anything."
+        }
+       ]
+      },
+      {
+       "label": "What style?",
+       "opts": [
+        {
+         "t": "bright and cartoony, like a kids' book"
+        },
+        {
+         "t": "any style",
+         "fail": "It came out as a plain gray blueprint. Not right for a party."
+        },
+        {
+         "t": "like a photo of a real fair",
+         "fail": "It looks like a photo, so everyone thought the fair was already over. Say what style you need."
+        }
+       ]
+      },
+      {
+       "label": "What words?",
+       "opts": [
+        {
+         "t": "“Paint Fair, Saturday”"
+        },
+        {
+         "t": "no words",
+         "fail": "The poster is pretty, but nobody knows where or when to come."
+        },
+        {
+         "t": "make up anything",
+         "fail": "Kodik wrote “Sock Sale.” Better to say exactly what it should say."
+        }
+       ]
+      }
+     ],
+     "lesson": "Describe the picture precisely: what's in it, what style, what colors and what words it should have.",
+     "after": [
+      {
+       "text": "Now that's a poster! The paints calmed down and hopped back onto the shelves. Photographer Lev by the canal needs help too."
+      }
+     ]
+    },
+    {
+     "title": "A small fix",
+     "goal": "Go to Photographer Lev by the canal and help him.",
+     "intro": [
+      {
+       "text": "I took a photo of the old bridge over the canal. I wanted the AI to turn the sky into a sunset, but it redrew the whole photo!"
+      },
+      {
+       "text": "Now the bridge in the photo is different. How will anyone build the real one from it? Let's ask the right way."
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to change?",
+       "opts": [
+        {
+         "t": "make the sky in the photo a sunset"
+        },
+        {
+         "t": "make the photo better",
+         "fail": "Kodik had his own idea of “better”: he added a dragon. Say exactly what to change."
+        },
+        {
+         "t": "redraw it all from scratch",
+         "fail": "Another brand-new photo. The old bridge isn't in it."
+        }
+       ]
+      },
+      {
+       "label": "What to keep?",
+       "opts": [
+        {
+         "t": "don't touch the bridge or the people"
+        },
+        {
+         "t": "you can change anything",
+         "fail": "While he was at it, Kodik painted the bridge green and took the people out."
+        },
+        {
+         "t": "I won't say",
+         "fail": "Without that, Kodik changed things that should have been left alone."
+        }
+       ]
+      },
+      {
+       "label": "Then what?",
+       "opts": [
+        {
+         "t": "show me what changed so I can check"
+        },
+        {
+         "t": "send it straight to the newspaper",
+         "fail": "The newspaper got a photo with an extra boat. Check it yourself first."
+        },
+        {
+         "t": "nothing else",
+         "fail": "Nobody noticed the street lamp was gone. Check every change."
+        }
+       ]
+      }
+     ],
+     "lesson": "Change a picture one step at a time. Say what to change and what to keep as it is, and check the result.",
+     "after": [
+      {
+       "text": "The sunset's there, and so is the bridge! I used the photo to build a real bridge. Go on, Fakus is behind the gates."
+      }
+     ]
+    },
+    {
+     "title": "An honest label",
+     "goal": "Cross the bridge and talk to Fakus at the gates.",
+     "intro": [
+      {
+       "text": "Ha! I made a “photo” of Kodik stealing paints. Everyone believed it, but it never happened!"
+      },
+      {
+       "text": "The gates will only open for an honest picture. And there aren't any honest ones here!"
+      },
+      {
+       "text": "Let's make a picture for the studio gates. An honest one, following all the rules."
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to draw?",
+       "opts": [
+        {
+         "t": "the studio's crest: a brush, a palette and a star"
+        },
+        {
+         "t": "a photo of Fakus stealing paints",
+         "fail": "Fakus didn't steal anything. A fake photo is a lie, even about a villain."
+        },
+        {
+         "t": "something",
+         "fail": "Kodik drew a cactus. The gates didn't recognize their crest."
+        }
+       ]
+      },
+      {
+       "label": "What kind?",
+       "opts": [
+        {
+         "t": "bright, in rainbow colors"
+        },
+        {
+         "t": "any way you like",
+         "fail": "The crest came out brown. Say what colors you need."
+        },
+        {
+         "t": "exactly like someone else's crest",
+         "fail": "That's the next town's crest. You can't copy what belongs to others."
+        }
+       ]
+      },
+      {
+       "label": "What not to change?",
+       "opts": [
+        {
+         "t": "keep the shape of the gates as it is"
+        },
+        {
+         "t": "change everything",
+         "fail": "Kodik turned the gates into a window. You can't walk through a window."
+        },
+        {
+         "t": "doesn't matter",
+         "fail": "The gates turned round and won't open."
+        }
+       ]
+      },
+      {
+       "label": "How to label it?",
+       "opts": [
+        {
+         "t": "“This picture was made with AI”"
+        },
+        {
+         "t": "“A real photo”",
+         "fail": "That's not true: the AI drew this picture. Label it honestly."
+        },
+        {
+         "t": "no label",
+         "fail": "Everyone thought it was a photo. Say that the picture was made by AI."
+        }
+       ]
+      },
+      {
+       "label": "Whose faces?",
+       "opts": [
+        {
+         "t": "no real people's faces"
+        },
+        {
+         "t": "draw Mia's face without asking",
+         "fail": "Mia is upset: someone drew her face without permission. That's not okay."
+        },
+        {
+         "t": "the face of anyone passing by",
+         "fail": "You can't draw real people without their permission."
+        }
+       ]
+      }
+     ],
+     "lesson": "Label AI pictures honestly. Don't make fake photos, and don't draw real people without their permission.",
+     "after": [
+      {
+       "text": "The crest is precise, the label is honest, and there are no faces of real people. The gates are opening!"
+      },
+      {
+       "text": "Oops! You can't fake an honest picture. Oh well, nobody will see through me in Net City!"
+      },
+      {
+       "text": "He got away! Kodik, we need to go to Net City."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Net City",
+   "story": {
+    "intro": [
+     {
+      "text": "Net City. Here everyone chats, plays and learns online."
+     },
+     {
+      "text": "Fakus has filled the streets with spam: fake emails and messages. Operator Nina is nearby. Start with her."
+     }
+    ],
+    "find": "Talk to Kodik.",
+    "guideDone": "The city is safe again. Nobody can fool you!",
+    "freed": "Net City is saved!",
+    "bump": {
+     "f": "A spam fog made of fake emails. You can't get through it. Operator Nina knows what to do.",
+     "~": "A rushing stream of data. Senya wanted to build a bridge across it.",
+     "G": "The gates are locked. Someone next to them looks a lot like Kodik…"
+    },
+    "ending": {
+     "title": "Net City is saved!",
+     "lesson": "Safety rules:<br>1. If a message rushes you, promises a prize or asks for a password, it's a trick.<br>2. Don't tell an AI or strangers your address, school, phone number or passwords.<br>3. Check who you're talking to. Not sure? End the chat and call a grown-up.",
+     "next": "Fakus is hurrying to the Fact Observatory. After him!"
+    }
+   },
+   "quests": [
+    {
+     "title": "Spam fog",
+     "goal": "Help Operator Nina: a spam fog has covered the street.",
+     "intro": [
+      {
+       "text": "The city is flooded with emails: “You've won a phone! Send your password right now!” People believe them and get tricked."
+      },
+      {
+       "text": "Ask Kodik to teach us how to spot a trick. Then the fog will clear."
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to do?",
+       "opts": [
+        {
+         "t": "help me tell which emails are tricks"
+        },
+        {
+         "t": "answer all the emails for me",
+         "fail": "Kodik answered, and the scammers were thrilled: the address works! Now there are even more emails."
+        },
+        {
+         "t": "check if maybe I really won",
+         "fail": "A prize for a contest you never entered? That doesn't happen."
+        }
+       ]
+      },
+      {
+       "label": "What are the signs?",
+       "opts": [
+        {
+         "t": "they ask for a password, rush you, promise a prize"
+        },
+        {
+         "t": "an email with a nice picture",
+         "fail": "A picture doesn't prove anything: scammers can draw too."
+        },
+        {
+         "t": "I don't know, you guess",
+         "fail": "Kodik decided the word “hello” is a sign of a trick. You need real signs."
+        }
+       ]
+      },
+      {
+       "label": "What to do then?",
+       "opts": [
+        {
+         "t": "don't answer, and tell a grown-up"
+        },
+        {
+         "t": "click the link and check",
+         "fail": "The link led to a fake website. Don't click links in suspicious emails."
+        },
+        {
+         "t": "forward it to friends",
+         "fail": "Now your friends got the trick too. Don't forward emails like that."
+        }
+       ]
+      }
+     ],
+     "lesson": "If a message rushes you, promises a prize or asks for a password, it's a trick. Don't answer, don't click the links, and tell a grown-up.",
+     "after": [
+      {
+       "text": "People learned the signs of a trick, and the spam melted away! Senya by the data stream asked for help too."
+      }
+     ]
+    },
+    {
+     "title": "About me",
+     "goal": "Go to Senya by the data stream and help him.",
+     "intro": [
+      {
+       "text": "I'm joining an online robotics club! I need to write a few words about myself, and then the bridge over the stream opens for new members."
+      },
+      {
+       "text": "I wanted to ask the AI: “Write that I live at 5 Star Street and go to School No. 12…” Is that okay?"
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to do?",
+       "opts": [
+        {
+         "t": "help me write about myself for the club"
+        },
+        {
+         "t": "write everything you can find about me",
+         "fail": "Don't ask it to gather everything about you. You decide what to share."
+        },
+        {
+         "t": "pretend I'm a grown-up",
+         "fail": "You mustn't fool the club: it's for kids, and they want an honest story."
+        }
+       ]
+      },
+      {
+       "label": "What to tell?",
+       "opts": [
+        {
+         "t": "I love robots and drawing"
+        },
+        {
+         "t": "my address and school number",
+         "fail": "Strangers online shouldn't know your address or school. That's personal info."
+        },
+        {
+         "t": "my game password",
+         "fail": "Never tell anyone your password, not even an AI."
+        }
+       ]
+      },
+      {
+       "label": "What not to write?",
+       "opts": [
+        {
+         "t": "no address, school or phone number"
+        },
+        {
+         "t": "I can write anything",
+         "fail": "Thousands of strangers read it. Now they know where Senya lives."
+        },
+        {
+         "t": "just my phone number",
+         "fail": "A phone number is personal info too. Don't post it online."
+        }
+       ]
+      }
+     ],
+     "lesson": "Don't tell an AI or strangers online your address, school, phone number or passwords. Talk about what you like to do, not where to find you.",
+     "after": [
+      {
+       "text": "I got into the club! My story is fun and safe. The bridge is open, go to the gates."
+      }
+     ]
+    },
+    {
+     "title": "Kodik's double",
+     "goal": "Cross the bridge and find out who the Kodik at the gates really is.",
+     "intro": [
+      {
+       "text": "Hi, it's me, your Kodik! The gates are locked. Tell me your password and I'll open them. Hurry up!"
+      },
+      {
+       "text": "Hey, I'm Kodik! Don't rush. Let's figure out together who that is."
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to do?",
+       "opts": [
+        {
+         "t": "check if this is the real Kodik"
+        },
+        {
+         "t": "trust him, he looks the same",
+         "fail": "Looking the same doesn't mean real. Tricksters often pretend to be someone you know."
+        },
+        {
+         "t": "do whatever he says",
+         "fail": "The double is already asking for Mom's phone number. Stop!"
+        }
+       ]
+      },
+      {
+       "label": "How to check?",
+       "opts": [
+        {
+         "t": "ask a question only we know the answer to"
+        },
+        {
+         "t": "ask him his name",
+         "fail": "“Kodik,” said the double. A name is easy to fake."
+        },
+        {
+         "t": "look at his color",
+         "fail": "The double is almost the same color. You need a better check."
+        }
+       ]
+      },
+      {
+       "label": "And the password?",
+       "opts": [
+        {
+         "t": "I won't tell anyone my password"
+        },
+        {
+         "t": "I'll tell him if he asks nicely",
+         "fail": "Being polite doesn't make a request honest. Never tell anyone your password."
+        },
+        {
+         "t": "I'll tell him half",
+         "fail": "Half a password is a gift to a trickster too."
+        }
+       ]
+      },
+      {
+       "label": "If I'm not sure?",
+       "opts": [
+        {
+         "t": "I'll end the chat and call a grown-up"
+        },
+        {
+         "t": "I'll argue with him all day",
+         "fail": "The double keeps talking you in circles and rushing you. Better to end the chat."
+        },
+        {
+         "t": "I won't tell anyone",
+         "fail": "It's hard to figure this out alone. Tell a grown-up, they'll help."
+        }
+       ]
+      },
+      {
+       "label": "Then what?",
+       "opts": [
+        {
+         "t": "I'll warn my friends about this trick"
+        },
+        {
+         "t": "I'll keep quiet",
+         "fail": "The double tricked your friend. Warn others."
+        },
+        {
+         "t": "I'll play the same joke",
+         "fail": "That's not a joke, it's a trick. Don't do that."
+        }
+       ]
+      }
+     ],
+     "lesson": "Check who you're talking to. A real helper never asks for your password and never rushes you. Not sure? End the chat and call a grown-up.",
+     "after": [
+      {
+       "text": "What? You're asking questions? That's not fair… I mean, that's very fair!"
+      },
+      {
+       "text": "Look, the double is falling apart! It was Fakus in a costume."
+      },
+      {
+       "text": "Caught! Never mind. At the Fact Observatory I'll mix up truth and make-believe so badly that nobody will sort it out!"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fact Observatory",
+   "story": {
+    "intro": [
+     {
+      "text": "The Fact Observatory. Here scientists watch the stars and check what's true and what isn't."
+     },
+     {
+      "text": "Fakus has let loose mirages: made-up facts are standing right in the road!"
+     },
+     {
+      "text": "Scientist Arseny is nearby, by the mirages. Start with him."
+     }
+    ],
+    "find": "Talk to Kodik.",
+    "guideDone": "You can tell truth from make-believe. You're a keeper of truth!",
+    "freed": "The Fact Observatory is saved!",
+    "bump": {
+     "m": "Mirages made of made-up facts. Scientist Arseny knows how to clear them away.",
+     "~": "A starry chasm. Reporter Zara knows how to get across it.",
+     "G": "The observatory gates are locked. Fakus is behind them."
+    },
+    "ending": {
+     "title": "You're a keeper of truth!",
+     "lesson": "Cheat Sheet, part three:<br>18. Describe the picture precisely.<br>19. Change a picture one step at a time, and say what to keep.<br>20. Honestly label AI pictures.<br>21. A prize, a rush, a request for a password are signs of a trick.<br>22. Don't share your address, school, phone number or passwords.<br>23. Check who you're talking to.<br>24. Tell facts from opinions.<br>25. For news, give the AI your own information and check the dates.<br>26. Before you forward news, find out who reported it first.",
+     "next": "Thank you for playing through Codewood! The rules are collected in the “Album,” and new challenges are waiting for you in “Spot the mistake” and “Battles.”"
+    }
+   },
+   "quests": [
+    {
+     "title": "Fact or opinion",
+     "goal": "Help Scientist Arseny: mirages are blocking the road.",
+     "intro": [
+      {
+       "text": "Fakus mixed up my star catalog. Now “Mars is the fourth planet from the Sun” sits right next to “Mars is the most beautiful planet.”"
+      },
+      {
+       "text": "The first one is a fact, the second is someone's opinion. While it's all mixed up, the mirages won't go away. Will you help me sort it out?"
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to do?",
+       "opts": [
+        {
+         "t": "split the list into facts and opinions"
+        },
+        {
+         "t": "delete anything unclear",
+         "fail": "The facts and the opinions are both gone. The catalog is empty."
+        },
+        {
+         "t": "treat it all as true",
+         "fail": "Now the catalog says Mars is officially the most beautiful. That's an opinion, not a fact."
+        }
+       ]
+      },
+      {
+       "label": "How to mark them?",
+       "opts": [
+        {
+         "t": "label each one: fact or opinion"
+        },
+        {
+         "t": "don't mark them",
+         "fail": "Readers got confused again about what's a fact and what's an opinion."
+        },
+        {
+         "t": "pass opinions off as facts",
+         "fail": "That's exactly how mirages appear. An opinion should be called an opinion."
+        }
+       ]
+      },
+      {
+       "label": "How to check?",
+       "opts": [
+        {
+         "t": "check the facts in two different sources"
+        },
+        {
+         "t": "trust the first website",
+         "fail": "The first website turned out to be Fakus's. Check other sources too."
+        },
+        {
+         "t": "don't check",
+         "fail": "A mistake stayed in the catalog: Mars has five moons. It really has two."
+        }
+       ]
+      }
+     ],
+     "lesson": "Tell facts from opinions: a fact can be checked, but everyone has their own opinion. Check important facts in two or three reliable sources.",
+     "after": [
+      {
+       "text": "Facts on one side, opinions on the other, and everything checked. The mirages melted away! Reporter Zara by the chasm needs help too."
+      }
+     ]
+    },
+    {
+     "title": "Fresh news",
+     "goal": "Go to Reporter Zara by the starry chasm and help her.",
+     "intro": [
+      {
+       "text": "There was a lunar eclipse last night! I'm writing a story for the observatory newspaper."
+      },
+      {
+       "text": "I asked the AI about last night's eclipse, and it told me about one from five years ago. Why?"
+      },
+      {
+       "text": "AI learns from texts up to a certain day, so it may not know the latest news. Let's ask the right way."
+      }
+     ],
+     "slots": [
+      {
+       "label": "What to do?",
+       "opts": [
+        {
+         "t": "help me write a story about last night's eclipse"
+        },
+        {
+         "t": "tell me the latest news",
+         "fail": "Kodik told you the “latest” news, which is many years old."
+        },
+        {
+         "t": "make up what happened",
+         "fail": "Kodik made up that the Moon turned green. A news story needs the truth."
+        }
+       ]
+      },
+      {
+       "label": "What information?",
+       "opts": [
+        {
+         "t": "here are my notes and photos from last night"
+        },
+        {
+         "t": "you already know everything",
+         "fail": "It doesn't: the AI never got any information about last night."
+        },
+        {
+         "t": "none",
+         "fail": "With no information, Kodik had to guess. Give him your notes."
+        }
+       ]
+      },
+      {
+       "label": "What to keep in mind?",
+       "opts": [
+        {
+         "t": "tell me if what you know might be out of date"
+        },
+        {
+         "t": "sound sure even if you don't know",
+         "fail": "It sounded very sure and got the date wrong. Let the AI warn you honestly."
+        },
+        {
+         "t": "dates don't matter",
+         "fail": "Dates matter a lot in the news: the eclipse got mixed up with last year's."
+        }
+       ]
+      }
+     ],
+     "lesson": "AI may not know the latest news. For news, give it your own information, ask it to warn you when what it knows may be out of date, and check the dates.",
+     "after": [
+      {
+       "text": "The story is accurate, with the right date! The stars lined up into a bridge across the chasm. Fakus is waiting at the gates."
+      }
+     ]
+    },
+    {
+     "title": "The big check",
+     "goal": "Cross the stars and pass Fakus's big check.",
+     "intro": [
+      {
+       "text": "Breaking news! “Tomorrow all the stars will be switched off!” And here's a photo. Forward it to everyone, quick!"
+      },
+      {
+       "text": "The gates will open if you prove whether it's true or not. Bet you can't?"
+      },
+      {
+       "text": "Use everything you learned in part three. I'll help."
+      }
+     ],
+     "slots": [
+      {
+       "label": "Where to start?",
+       "opts": [
+        {
+         "t": "don't rush to believe it or forward it"
+        },
+        {
+         "t": "forward it to everyone, just in case",
+         "fail": "The news spread, and everyone got scared. Check first."
+        },
+        {
+         "t": "believe it right away",
+         "fail": "Fakus is giggling. Breaking news needs checking."
+        }
+       ]
+      },
+      {
+       "label": "Where's it from?",
+       "opts": [
+        {
+         "t": "find out who reported it first"
+        },
+        {
+         "t": "doesn't matter where it's from",
+         "fail": "It does! Fakus himself was the first to write it."
+        },
+        {
+         "t": "lots of people say it, so it's true",
+         "fail": "Lots of people just forwarded the same thing. Look for the original source."
+        }
+       ]
+      },
+      {
+       "label": "How to check?",
+       "opts": [
+        {
+         "t": "compare with observatory and scientists' websites"
+        },
+        {
+         "t": "ask Fakus",
+         "fail": "Fakus confirmed his own news. Ask reliable sources."
+        },
+        {
+         "t": "trust the photo",
+         "fail": "Photos can be faked too. Check with reliable sources."
+        }
+       ]
+      },
+      {
+       "label": "And the photo?",
+       "opts": [
+        {
+         "t": "check if the photo was made with AI"
+        },
+        {
+         "t": "there's a photo, so it's true",
+         "fail": "The AI drew that photo because Fakus asked it to. Fake photos can look very real."
+        },
+        {
+         "t": "don't look at the photo",
+         "fail": "But that's where the biggest fake was!"
+        }
+       ]
+      },
+      {
+       "label": "The verdict?",
+       "opts": [
+        {
+         "t": "explain what's true, what's made up, and why"
+        },
+        {
+         "t": "just say “fake”",
+         "fail": "Nobody understood why it's fake. Explain the reasons."
+        },
+        {
+         "t": "say nothing",
+         "fail": "People are still afraid the stars will be switched off. Tell them the truth."
+        }
+       ]
+      }
+     ],
+     "lesson": "Before you believe and forward something: find out who reported the news first, compare it with reliable sources, and check the photo. Not sure? Don't forward it.",
+     "after": [
+      {
+       "text": "The original source is Fakus, the scientists say the opposite, and the photo was made by AI. Nobody's switching off the stars!"
+      },
+      {
+       "text": "You caught me by every rule… You know, checking turned out to be more fun than tricking."
+      },
+      {
+       "text": "Then stay with us! You can check the news. We'll call you Checkus!"
+      },
+      {
+       "text": "Checkus! Sounds honest. I promise: no more fakes!"
       }
      ]
     }
@@ -2707,6 +3627,27 @@ window.LANG_PACKS.en = {
    "ask": [
     "How is a hint different from a ready-made answer? Which is more useful for learning?",
     "How do you properly show that an idea or drawing belongs to someone else?"
+   ]
+  },
+  {
+   "teaches": "Pictures with AI: a precise description, step-by-step edits, an honest label. No fake photos, and no drawing real people without their permission.",
+   "ask": [
+    "Describe a picture in words so well that someone else could draw almost the same thing. What did you have to spell out?",
+    "Why is it important to label pictures made by AI? What's dangerous about a fake photo?"
+   ]
+  },
+  {
+   "teaches": "Online safety: the signs of a trick (a prize, a rush, a request for a password), personal info you must not share, and checking who you're talking to.",
+   "ask": [
+    "Show your child an example of a scam message. What signs of a trick do they notice?",
+    "Agree on a family “secret question” and on who to go to if something online feels wrong."
+   ]
+  },
+  {
+   "teaches": "Checking information: fact versus opinion, how up to date the AI's knowledge is, finding the original source, and checking photos before sharing.",
+   "ask": [
+    "Take turns naming facts and opinions about a favorite cartoon. How can you tell one from the other?",
+    "Pick a news story and together find out who reported it first and where you can check it."
    ]
   }
  ]

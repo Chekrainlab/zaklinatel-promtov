@@ -10,6 +10,7 @@
 <body>
 <div class="wrap">
   <div class="goal paper"><small id="chap"></small><span id="goal"></span>
+    <button class="exit" id="island-exit" data-i18n="exit" hidden></button>
     <b class="stars" id="stars" data-i18n-title="starsTitle">★ 0</b>
     <button class="snd" id="snd" aria-label="Выключить звук">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -39,6 +40,12 @@
     <p class="t-stars" id="t-stars" hidden></p>
     <button id="t-play"></button>
     <button class="daily" id="t-daily"></button>
+    <div class="t-games">
+      <button id="t-hunt" data-i18n="hunt"></button>
+      <button id="t-boss" data-i18n="bosses" hidden></button>
+      <button id="t-island" data-i18n="island"></button>
+      <button id="t-wardrobe" data-i18n="wardrobe"></button>
+    </div>
     <div class="t-row">
       <button class="ghost" id="t-chapters" data-i18n="chapters" hidden></button>
       <button class="ghost" id="t-notes" data-i18n="notes" hidden></button>
